@@ -8,10 +8,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#FFFFFF"
         android:orientation="vertical"
-        android:weightSum="24" >
+        android:weightSum="24">
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="#000000" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:text="@string/about"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
@@ -23,8 +38,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:orientation="vertical"
-        android:weightSum="28"
-        >
+        android:weightSum="28">
 
         <ImageView
             android:layout_width="match_parent"
