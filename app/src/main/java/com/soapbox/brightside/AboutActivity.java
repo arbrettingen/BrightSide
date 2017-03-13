@@ -99,8 +99,7 @@ public class AboutActivity extends AppCompatActivity {
      * Handles navigation clicks in nav drawer, switches screens
      */
     private void selectItemDrawer(int position) {
-
-        //mDrawerList.setItemChecked(position, true);
+        
         mDrawerLayout.closeDrawer(findViewById(R.id.about_drawer_cont));
 
         Intent i;
