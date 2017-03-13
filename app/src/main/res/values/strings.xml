@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">BrightSide</string>
+    <string name="drawer_open">Navigate</string>
+    <string name="drawer_close_main">Home</string>
+    <string name="drawer_close_about">About</string>
+    <string name="drawer_close_playlist">Custom Playlists</string>
+    <string name="drawer_close_history">Stats and History</string>
+    <string name="drawer_close_random">Random Affirmations</string>
+    <string name="drawer_close_recommended">Recommended Affirmations</string>
+    <string name="drawer_close_reminders">Reminders</string>
+    <string name="drawer_close_rewards">Rewards</string>
+    <string name="drawer_close_settings">Settings</string>
+</resources>

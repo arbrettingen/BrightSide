@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/history_drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!-- The main content view -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="24" >
+
+
+
+    </LinearLayout>
+
+    <!-- The navigation drawer -->
+
+    <LinearLayout
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:orientation="vertical"
+        android:weightSum="28"
+        android:id="@+id/history_drawer_cont"
+        >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:scaleType="centerCrop"
+            android:src="@drawable/sunrise" />
+
+        <ListView
+            android:id="@+id/history_left_drawer"
+            android:layout_width="240dp"
+            android:layout_height="0dp"
+            android:layout_weight="24"
+            android:background="@color/colorPrimaryDark"
+            android:choiceMode="singleChoice" />
+    </LinearLayout>
+
+
+</android.support.v4.widget.DrawerLayout>
+
