@@ -22,6 +22,16 @@
             android:textColor="#FFFFFF"
             android:textSize="17sp" />
 
+        <ListView
+            android:id="@+id/playlist_master_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="24"
+            android:divider="@color/colorAccent"
+            android:dividerHeight="2dp">
+
+        </ListView>
+
     </LinearLayout>
 
     <!-- The navigation drawer -->
