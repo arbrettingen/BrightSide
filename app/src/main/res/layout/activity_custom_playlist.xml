@@ -32,6 +32,16 @@
 
         </ListView>
 
+        <Button
+            android:text="+ New Playlist"
+            android:layout_margin="4dp"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:background="@color/colorAccent"
+            android:id="@+id/btn_playlist_add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
     <!-- The navigation drawer -->
