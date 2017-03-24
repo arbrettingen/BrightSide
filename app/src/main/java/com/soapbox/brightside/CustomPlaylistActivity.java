@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 /**
@@ -31,6 +32,7 @@ public class CustomPlaylistActivity extends AppCompatActivity {
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+    private Button mNewPlaylistButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,6 +69,17 @@ public class CustomPlaylistActivity extends AppCompatActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //add new playlist item button and listener below
+
+        mNewPlaylistButton = (Button) findViewById(R.id.btn_playlist_add);
+
+        mNewPlaylistButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("NEW PLAYLIST BUTTON TEST");
+            }
+        });
 
     }
 
