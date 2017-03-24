@@ -9,16 +9,25 @@ import java.util.ArrayList;
 public class AffirmationPlaylist {
 
     private ArrayList<Affirmation> mAffirmationList;
+    private String mName;
 
-    public AffirmationPlaylist(){
-
+    public AffirmationPlaylist(String name){
+        mName = name;
     }
 
-    public ArrayList<Affirmation> getmAffirmationList() {
+    public String getPlaylistName() {
+        return mName;
+    }
+
+    public void setPlaylistName(String mName) {
+        this.mName = mName;
+    }
+
+    public ArrayList<Affirmation> getAffirmationList() {
         return mAffirmationList;
     }
 
-    public void setmAffirmationList(ArrayList<Affirmation> mAffirmationList) {
+    public void setAffirmationList(ArrayList<Affirmation> mAffirmationList) {
         this.mAffirmationList = mAffirmationList;
     }
 }

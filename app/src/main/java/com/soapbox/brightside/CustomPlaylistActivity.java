@@ -7,11 +7,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+
+import java.util.ArrayList;
 
 /**
  * Created by Alex on 2/28/2017.
@@ -33,12 +36,17 @@ public class CustomPlaylistActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private Button mNewPlaylistButton;
+    private ArrayList<AffirmationPlaylist> mAffirmationPlaylistList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_playlist);
         setTitle("Custom Playlists");
+
+        //affirmation playlists setup
+
+        mAffirmationPlaylistList = new ArrayList<>();
 
         //drawer code below
         mNavChoices = getResources().getStringArray(R.array.nav_options_array);
@@ -72,12 +80,15 @@ public class CustomPlaylistActivity extends AppCompatActivity {
 
         //add new playlist item button and listener below
 
+
+
         mNewPlaylistButton = (Button) findViewById(R.id.btn_playlist_add);
 
         mNewPlaylistButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("NEW PLAYLIST BUTTON TEST");
+                mAffirmationPlaylistList.add(new AffirmationPlaylist("test"));
+                Log.e("New Playlist Count", String.valueOf(mAffirmationPlaylistList.size()));
             }
         });
 
