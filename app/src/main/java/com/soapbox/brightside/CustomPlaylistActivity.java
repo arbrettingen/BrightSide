@@ -29,7 +29,7 @@ import java.util.ArrayList;
  *
  */
 
-public class CustomPlaylistActivity extends AppCompatActivity {
+public class CustomPlaylistActivity extends AppCompatActivity{
 
     private String[] mNavChoices;
     private ListView mDrawerList;
@@ -140,6 +140,7 @@ public class CustomPlaylistActivity extends AppCompatActivity {
         switch (position){
             case 0:
                 i = new Intent(getApplicationContext(), MainMenuActivity.class);
+                i.putExtra("Custom Playlists", mAffirmationPlaylistList);
                 startActivity(i);
                 break;
             case 1:

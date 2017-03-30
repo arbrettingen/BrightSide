@@ -3,6 +3,7 @@ package com.soapbox.brightside;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.annotation.Nullable;
+import android.support.v4.app.SupportActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -27,6 +30,8 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private ListView mHomeListView;
     private NavItemAdapter mNavItemAdapter;
+
+    private ArrayList<AffirmationPlaylist> mAffirmationPlaylistList;
 
 
     private NavItem[] mNavItems = new NavItem[]{
@@ -45,6 +50,10 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         setTitle("Home");
+
+        //get and handle all relevant extras
+        Intent thisIntent = getIntent();
+        mAffirmationPlaylistList = thisIntent.getParcelableArrayListExtra("Custom Playlists"); //TODO
 
         //main list code below
         mHomeListView = (ListView) findViewById(R.id.home_list_main);
@@ -87,6 +96,7 @@ public class MainMenuActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
+
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
