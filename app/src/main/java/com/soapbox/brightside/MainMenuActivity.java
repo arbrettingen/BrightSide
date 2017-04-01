@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -53,7 +54,10 @@ public class MainMenuActivity extends AppCompatActivity {
 
         //get and handle all relevant extras
         Intent thisIntent = getIntent();
-        mAffirmationPlaylistList = thisIntent.getParcelableArrayListExtra("Custom Playlists"); //TODO
+        if (thisIntent.hasExtra("Custom Playlists")){
+            mAffirmationPlaylistList = thisIntent.getParcelableArrayListExtra("Custom Playlists"); //WORKS!!
+            Log.e("Playlist count main", String.valueOf(mAffirmationPlaylistList.size()));
+        }
 
         //main list code below
         mHomeListView = (ListView) findViewById(R.id.home_list_main);
