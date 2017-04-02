@@ -44,9 +44,16 @@ public class CustomPlaylistActivity extends AppCompatActivity{
         setContentView(R.layout.activity_custom_playlist);
         setTitle("Custom Playlists");
 
-        //affirmation playlists setup
+        //affirmation playlists setup from intent
+        Intent thisIntent = getIntent();
+        if (thisIntent.hasExtra("Custom Playlists")){
+            mAffirmationPlaylistList = thisIntent.getParcelableArrayListExtra("Custom Playlists"); //WORKS!!
+            Log.e("Playlist count PL", String.valueOf(mAffirmationPlaylistList.size()));
+        }else{
+            mAffirmationPlaylistList = new ArrayList<>();
+        }
 
-        mAffirmationPlaylistList = new ArrayList<>();
+
 
         //drawer code below
         mNavChoices = getResources().getStringArray(R.array.nav_options_array);

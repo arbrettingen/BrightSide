@@ -31,7 +31,7 @@ public class RemindersActivity extends AppCompatActivity {
 
         //drawer code below
         mNavChoices = getResources().getStringArray(R.array.nav_options_array);
-        mDrawerList = (ListView) findViewById(R.id.reminders_drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.reminders_left_drawer);
 
         NavListAdapter mDrawerListAdapter = new NavListAdapter(getApplicationContext(), R.layout.row_nav_drawer, mNavChoices);
 

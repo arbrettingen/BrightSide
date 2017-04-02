@@ -150,6 +150,9 @@ public class MainMenuActivity extends AppCompatActivity {
                 break;
             case 2:
                 i = new Intent(getApplicationContext(), CustomPlaylistActivity.class);
+                if (mAffirmationPlaylistList != null){
+                    i.putExtra("Custom Playlists", mAffirmationPlaylistList);
+                }
                 startActivity(i);
                 break;
             case 3:
@@ -207,6 +210,9 @@ public class MainMenuActivity extends AppCompatActivity {
                 break;
             case 3:
                 i = new Intent(getApplicationContext(), CustomPlaylistActivity.class);
+                if (mAffirmationPlaylistList != null){
+                    i.putExtra("Custom Playlists", mAffirmationPlaylistList);
+                }
                 startActivity(i);
                 break;
             case 4:
