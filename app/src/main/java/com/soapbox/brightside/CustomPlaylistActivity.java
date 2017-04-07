@@ -23,18 +23,16 @@ import java.util.ArrayList;
 
 /**
  * Created by Alex on 2/28/2017.
- *
+ * <p>
  * Initial screen is just a list of all of the added playlists with an add button at the top somewhere and also at the bottom item of the list
- *
+ * <p>
  * when user clicks add, prompt for name of playlist and then create/add it to the list instantly
- *
+ * <p>
  * when user clicks playlist that has already been created, switch to new activity/fragment where they can add affirmations from the app database with
  * a similar list structure to the playlist list
- *
- *
  */
 
-public class CustomPlaylistActivity extends AppCompatActivity{
+public class CustomPlaylistActivity extends AppCompatActivity {
 
     private String[] mNavChoices;
     private ListView mDrawerList;
@@ -60,10 +58,10 @@ public class CustomPlaylistActivity extends AppCompatActivity{
 
         //affirmation playlists setup from intent
         Intent thisIntent = getIntent();
-        if (thisIntent.hasExtra("Custom Playlists")){
+        if (thisIntent.hasExtra("Custom Playlists")) {
             mAffirmationPlaylistList = thisIntent.getParcelableArrayListExtra("Custom Playlists"); //WORKS!!
             Log.e("Playlist count PL", String.valueOf(mAffirmationPlaylistList.size()));
-        }else{
+        } else {
             mAffirmationPlaylistList = new ArrayList<AffirmationPlaylist>();
         }
 
@@ -78,7 +76,7 @@ public class CustomPlaylistActivity extends AppCompatActivity{
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.playlist_drawer_layout);
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close_playlist){
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close_playlist) {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
@@ -100,7 +98,6 @@ public class CustomPlaylistActivity extends AppCompatActivity{
         //add new playlist item button and listener below
 
 
-
         mNewPlaylistButton = (Button) findViewById(R.id.btn_playlist_add);
 
         mNewPlaylistButton.setOnClickListener(new View.OnClickListener() {
@@ -115,17 +112,16 @@ public class CustomPlaylistActivity extends AppCompatActivity{
 
                 builder.setView(input);
 
-                    // Set up the buttons
+                // Set up the buttons
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        if (input.getText().toString() != null){
+                        if (input.getText().toString() != null) {
                             input.setTag(input.getText().toString());
                             dialog.dismiss();
 
-                        }
-                        else{
+                        } else {
                             Toast.makeText(getApplicationContext(), "Invalid Playlist Name!", Toast.LENGTH_LONG).show();
                         }
                     }
@@ -174,15 +170,6 @@ public class CustomPlaylistActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItemDrawer(position);
-        }
-    }
-
     /**
      * Handles navigation clicks in nav drawer, switches screens
      */
@@ -192,7 +179,7 @@ public class CustomPlaylistActivity extends AppCompatActivity{
         mDrawerLayout.closeDrawer(findViewById(R.id.playlist_drawer_cont));
 
         Intent i;
-        switch (position){
+        switch (position) {
             case 0:
                 i = new Intent(getApplicationContext(), MainMenuActivity.class);
                 i.putExtra("Custom Playlists", mAffirmationPlaylistList);
@@ -235,6 +222,14 @@ public class CustomPlaylistActivity extends AppCompatActivity{
         }
 
 
+    }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItemDrawer(position);
+        }
     }
 
 
