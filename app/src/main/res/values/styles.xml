@@ -8,6 +8,10 @@
         <item name="colorAccent">#26c6da</item>
     </style>
 
+    <style name="myDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
     <style name="StyleTest">
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">#ABCDEF</item>

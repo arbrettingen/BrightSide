@@ -54,6 +54,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
         //get and handle all relevant extras
         Intent thisIntent = getIntent();
+        //for keeping track of all custom playlists user has created
         if (thisIntent.hasExtra("Custom Playlists")){
             mAffirmationPlaylistList = thisIntent.getParcelableArrayListExtra("Custom Playlists"); //WORKS!!
             Log.e("Playlist count main", String.valueOf(mAffirmationPlaylistList.size()));
@@ -150,6 +151,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 break;
             case 2:
                 i = new Intent(getApplicationContext(), CustomPlaylistActivity.class);
+                //for keeping track of all custom playlists user has created
                 if (mAffirmationPlaylistList != null){
                     i.putExtra("Custom Playlists", mAffirmationPlaylistList);
                 }

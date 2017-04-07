@@ -1,18 +1,23 @@
 package com.soapbox.brightside;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -44,16 +49,23 @@ public class CustomPlaylistActivity extends AppCompatActivity{
         setContentView(R.layout.activity_custom_playlist);
         setTitle("Custom Playlists");
 
+        //FOR TEST
+        if (mAffirmationPlaylistList != null) {
+            if (!mAffirmationPlaylistList.isEmpty()) {
+                Log.e("New Playlist Name", mAffirmationPlaylistList.get(mAffirmationPlaylistList.size() - 1).getPlaylistName());
+            }
+            Log.e("New Playlist Count", String.valueOf(mAffirmationPlaylistList.size()));
+
+        }
+
         //affirmation playlists setup from intent
         Intent thisIntent = getIntent();
         if (thisIntent.hasExtra("Custom Playlists")){
             mAffirmationPlaylistList = thisIntent.getParcelableArrayListExtra("Custom Playlists"); //WORKS!!
             Log.e("Playlist count PL", String.valueOf(mAffirmationPlaylistList.size()));
         }else{
-            mAffirmationPlaylistList = new ArrayList<>();
+            mAffirmationPlaylistList = new ArrayList<AffirmationPlaylist>();
         }
-
-
 
         //drawer code below
         mNavChoices = getResources().getStringArray(R.array.nav_options_array);
@@ -94,8 +106,44 @@ public class CustomPlaylistActivity extends AppCompatActivity{
         mNewPlaylistButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAffirmationPlaylistList.add(new AffirmationPlaylist("test"));
-                Log.e("New Playlist Count", String.valueOf(mAffirmationPlaylistList.size()));
+                //prompt user for the name of the new playlist
+                String newName;
+                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CustomPlaylistActivity.this, R.style.myDialog));
+                builder.setTitle("New Playlist Name: ");
+
+                final EditText input = new EditText(getApplicationContext());
+
+                builder.setView(input);
+
+                    // Set up the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        if (input.getText().toString() != null){
+                            input.setTag(input.getText().toString());
+                            dialog.dismiss();
+
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(), "Invalid Playlist Name!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                //add new playlist to member variable
+                if (input.getTag() != null)
+                    mAffirmationPlaylistList.add(new AffirmationPlaylist((String) input.getTag())); //TODO
+                input.setTag(null);
             }
         });
 
@@ -188,5 +236,6 @@ public class CustomPlaylistActivity extends AppCompatActivity{
 
 
     }
+
 
 }
