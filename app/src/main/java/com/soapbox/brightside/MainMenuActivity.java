@@ -53,12 +53,8 @@ public class MainMenuActivity extends AppCompatActivity {
         setTitle("Home");
 
         //get and handle all relevant extras
-        Intent thisIntent = getIntent();
-        //for keeping track of all custom playlists user has created
-        if (thisIntent.hasExtra("Custom Playlists")){
-            mAffirmationPlaylistList = thisIntent.getParcelableArrayListExtra("Custom Playlists"); //WORKS!!
-            Log.e("Playlist count main", String.valueOf(mAffirmationPlaylistList.size()));
-        }
+        //Intent thisIntent = getIntent();
+
 
         //main list code below
         mHomeListView = (ListView) findViewById(R.id.home_list_main);
@@ -151,10 +147,6 @@ public class MainMenuActivity extends AppCompatActivity {
                 break;
             case 2:
                 i = new Intent(getApplicationContext(), CustomPlaylistActivity.class);
-                //for keeping track of all custom playlists user has created
-                if (mAffirmationPlaylistList != null){
-                    i.putExtra("Custom Playlists", mAffirmationPlaylistList);
-                }
                 startActivity(i);
                 break;
             case 3:
@@ -212,9 +204,6 @@ public class MainMenuActivity extends AppCompatActivity {
                 break;
             case 3:
                 i = new Intent(getApplicationContext(), CustomPlaylistActivity.class);
-                if (mAffirmationPlaylistList != null){
-                    i.putExtra("Custom Playlists", mAffirmationPlaylistList);
-                }
                 startActivity(i);
                 break;
             case 4:

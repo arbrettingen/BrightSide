@@ -34,12 +34,12 @@ import java.util.ArrayList;
 
 public class CustomPlaylistActivity extends AppCompatActivity {
 
+    private static ArrayList<AffirmationPlaylist> mAffirmationPlaylistList;
     private String[] mNavChoices;
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private Button mNewPlaylistButton;
-    private ArrayList<AffirmationPlaylist> mAffirmationPlaylistList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,23 +47,16 @@ public class CustomPlaylistActivity extends AppCompatActivity {
         setContentView(R.layout.activity_custom_playlist);
         setTitle("Custom Playlists");
 
-        //FOR TEST
-        if (mAffirmationPlaylistList != null) {
-            if (!mAffirmationPlaylistList.isEmpty()) {
-                Log.e("New Playlist Name", mAffirmationPlaylistList.get(mAffirmationPlaylistList.size() - 1).getPlaylistName());
-            }
-            Log.e("New Playlist Count", String.valueOf(mAffirmationPlaylistList.size()));
-
+        if (mAffirmationPlaylistList == null) {
+            mAffirmationPlaylistList = new ArrayList<>();
         }
 
-        //affirmation playlists setup from intent
-        Intent thisIntent = getIntent();
-        if (thisIntent.hasExtra("Custom Playlists")) {
-            mAffirmationPlaylistList = thisIntent.getParcelableArrayListExtra("Custom Playlists"); //WORKS!!
-            Log.e("Playlist count PL", String.valueOf(mAffirmationPlaylistList.size()));
-        } else {
-            mAffirmationPlaylistList = new ArrayList<AffirmationPlaylist>();
+
+        Log.e("Playlist count PL", String.valueOf(mAffirmationPlaylistList.size()));
+        if (!mAffirmationPlaylistList.isEmpty()) {
+            Log.e("New Playlist Name", mAffirmationPlaylistList.get(mAffirmationPlaylistList.size() - 1).getPlaylistName());
         }
+
 
         //drawer code below
         mNavChoices = getResources().getStringArray(R.array.nav_options_array);
@@ -114,11 +107,13 @@ public class CustomPlaylistActivity extends AppCompatActivity {
 
                 // Set up the buttons
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public String data;
+
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
                         if (input.getText().toString() != null) {
-                            input.setTag(input.getText().toString());
+                            updatePlaylistList(input.getText().toString());
                             dialog.dismiss();
 
                         } else {
@@ -135,11 +130,6 @@ public class CustomPlaylistActivity extends AppCompatActivity {
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
-
-                //add new playlist to member variable
-                if (input.getTag() != null)
-                    mAffirmationPlaylistList.add(new AffirmationPlaylist((String) input.getTag())); //TODO
-                input.setTag(null);
             }
         });
 
@@ -182,7 +172,6 @@ public class CustomPlaylistActivity extends AppCompatActivity {
         switch (position) {
             case 0:
                 i = new Intent(getApplicationContext(), MainMenuActivity.class);
-                i.putExtra("Custom Playlists", mAffirmationPlaylistList);
                 startActivity(i);
                 break;
             case 1:
@@ -222,6 +211,10 @@ public class CustomPlaylistActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    public void updatePlaylistList(String playlistName) {
+        mAffirmationPlaylistList.add(new AffirmationPlaylist(playlistName));
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
