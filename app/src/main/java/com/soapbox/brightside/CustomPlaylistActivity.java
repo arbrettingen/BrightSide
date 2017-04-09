@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -39,6 +40,7 @@ public class CustomPlaylistActivity extends AppCompatActivity {
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+    private ListView mPlaylistListView;
     private Button mNewPlaylistButton;
 
     @Override
@@ -87,6 +89,12 @@ public class CustomPlaylistActivity extends AppCompatActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //playlist list setup below
+
+        mPlaylistListView = (ListView) findViewById(R.id.playlist_master_list);
+        ArrayAdapter<AffirmationPlaylist> playlistAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.playlist_list_row, mAffirmationPlaylistList);
+        mPlaylistListView.setAdapter(playlistAdapter);
 
         //add new playlist item button and listener below
 
@@ -215,6 +223,9 @@ public class CustomPlaylistActivity extends AppCompatActivity {
 
     public void updatePlaylistList(String playlistName) {
         mAffirmationPlaylistList.add(new AffirmationPlaylist(playlistName));
+        mPlaylistListView = (ListView) findViewById(R.id.playlist_master_list);
+        ArrayAdapter<AffirmationPlaylist> playlistAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.playlist_list_row, mAffirmationPlaylistList);
+        mPlaylistListView.setAdapter(playlistAdapter);
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {

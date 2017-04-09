@@ -59,5 +59,8 @@ public class AffirmationPlaylist implements Parcelable{
 
     }
 
-
+    @Override
+    public String toString() {
+        return mName;
+    }
 }

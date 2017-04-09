@@ -28,7 +28,8 @@
             android:layout_height="0dp"
             android:layout_weight="24"
             android:divider="@color/colorAccent"
-            android:dividerHeight="2dp">
+            android:dividerHeight="2dp"
+            >
 
         </ListView>
 
