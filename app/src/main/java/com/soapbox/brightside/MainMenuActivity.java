@@ -1,6 +1,7 @@
 package com.soapbox.brightside;
 
 import android.content.Intent;
+import java.util.Arrays;
 import android.content.res.Configuration;
 import android.support.annotation.Nullable;
 import android.support.v4.app.SupportActivity;
@@ -19,6 +20,15 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class MainMenuActivity extends AppCompatActivity {
+
+    static ArrayList<Affirmation> mMasterAffirmationList = new ArrayList<Affirmation>(Arrays.asList(new Affirmation[]{
+            new Affirmation("Affirmation One Text Here"),
+            new Affirmation("Affirmation Two Text Here"),
+            new Affirmation("Affirmation Three Text Here"),
+            new Affirmation("Affirmation Four Text Here"),
+            new Affirmation("Affirmation Five Text Here")
+    }));
+
 
     private String[] mNavChoices;
     private ListView mDrawerList;
@@ -52,8 +62,11 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         setTitle("Home");
 
-        //get and handle all relevant extras
-        //Intent thisIntent = getIntent();
+        //FOR TESTING///////////////////////////////////////////////
+        for (Affirmation a : mMasterAffirmationList){
+            Log.e("AFFIRMATION TEST", a.toString());
+        }
+        //FOR TESTING///////////////////////////////////////////////
 
 
         //main list code below

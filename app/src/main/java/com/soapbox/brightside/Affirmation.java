@@ -14,6 +14,11 @@ public class Affirmation {
         mAffirmationBody = affirmationBody;
     }
 
+    public Affirmation(String affirmationBody){
+        mAffirmationBody = affirmationBody;
+        mImgSrc = "";
+    }
+
     public String getmImgSrc() {
         return mImgSrc;
     }
@@ -28,5 +33,10 @@ public class Affirmation {
 
     public void setmAffirmationBody(String mAffirmationBody) {
         this.mAffirmationBody = mAffirmationBody;
+    }
+
+    @Override
+    public String toString() {
+        return mAffirmationBody;
     }
 }
