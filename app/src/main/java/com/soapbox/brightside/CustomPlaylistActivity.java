@@ -110,6 +110,7 @@ public class CustomPlaylistActivity extends AppCompatActivity {
                 builder.setTitle("New Playlist Name: ");
 
                 final EditText input = new EditText(getApplicationContext());
+                input.setSingleLine(true);
 
                 builder.setView(input);
 
@@ -120,12 +121,19 @@ public class CustomPlaylistActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        if (input.getText().toString() != null) {
+                        if (input.getText().toString() != null && !input.getText().toString().isEmpty()) {
+                            //check existing playlists for name match
+                            for (AffirmationPlaylist playlist : mAffirmationPlaylistList){
+                                if (input.getText().toString().equalsIgnoreCase(playlist.getPlaylistName())){
+                                    Toast.makeText(getApplicationContext(), "Playlist name is already in use!", Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+                            }
                             updatePlaylistList(input.getText().toString());
                             dialog.dismiss();
 
                         } else {
-                            Toast.makeText(getApplicationContext(), "Invalid Playlist Name!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Invalid playlist name!", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
