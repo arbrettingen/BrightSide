@@ -21,6 +21,16 @@
 
         </ListView>
 
+        <Button
+            android:id="@+id/btn_add_affirmation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="+ New Affirmation"
+            android:layout_margin="4dp"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:background="@color/colorAccent"/>
+
     </LinearLayout>
 
     <!-- The navigation drawer -->

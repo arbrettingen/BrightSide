@@ -11,7 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 /**
  * Created by Alex on 4/11/2017.
@@ -20,6 +22,7 @@ import android.widget.ListView;
 public class BrowseActivity extends AppCompatActivity {
 
     private ListView mAffirmationList;
+    private Button mAddAffirmation;
 
     private String[] mNavChoices;
     private ListView mDrawerList;
@@ -67,6 +70,16 @@ public class BrowseActivity extends AppCompatActivity {
         mAffirmationList = (ListView) findViewById(R.id.affirmation_master_list);
         ArrayAdapter<Affirmation> mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, MainMenuActivity.mMasterAffirmationList);
         mAffirmationList.setAdapter(mAffirmationAdapter);
+
+        //add new button setup
+        mAddAffirmation = (Button) findViewById(R.id.btn_add_affirmation);
+        mAddAffirmation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "add new affirmation pressed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
     }
 
