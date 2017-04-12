@@ -49,6 +49,7 @@ public class MainMenuActivity extends AppCompatActivity {
             new NavItem("Daily Recommendations", "Tell us how you are feeling today and we'll suggest custom affirmations just for you!", "recommended"),
             new NavItem("Random Affirmations", "Scroll through randomly selected affirmations, or search/filter for something specific.", "random"),
             new NavItem("Custom Playlists", "Create or access your own personal affirmation lists.", "custom"),
+            new NavItem("Browse All Affirmations", "Look through or search specifically for any affirmation, including any custom additions.", "browse"),
             new NavItem("History and Stats", "View your affirmation history, including streaks and graphs.", "history"),
             new NavItem("Set Reminders", "Set up phone notifications to ensure you get your affirmation fix.", "reminder"),
             new NavItem("Rewards", "Unlock and view special features by staying consistent!", "rewards"),
@@ -163,22 +164,26 @@ public class MainMenuActivity extends AppCompatActivity {
                 startActivity(i);
                 break;
             case 3:
-                i = new Intent(getApplicationContext(), HistoryActivity.class);
+                i = new Intent(getApplicationContext(), BrowseActivity.class);
                 startActivity(i);
                 break;
             case 4:
-                i = new Intent(getApplicationContext(), RemindersActivity.class);
+                i = new Intent(getApplicationContext(), HistoryActivity.class);
                 startActivity(i);
                 break;
             case 5:
-                i = new Intent(getApplicationContext(), RewardsActivity.class);
+                i = new Intent(getApplicationContext(), RemindersActivity.class);
                 startActivity(i);
                 break;
             case 6:
-                i = new Intent(getApplicationContext(), AboutActivity.class);
+                i = new Intent(getApplicationContext(), RewardsActivity.class);
                 startActivity(i);
                 break;
             case 7:
+                i = new Intent(getApplicationContext(), AboutActivity.class);
+                startActivity(i);
+                break;
+            case 8:
                 i = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(i);
                 break;
@@ -220,22 +225,26 @@ public class MainMenuActivity extends AppCompatActivity {
                 startActivity(i);
                 break;
             case 4:
-                i = new Intent(getApplicationContext(), HistoryActivity.class);
+                i = new Intent(getApplicationContext(), BrowseActivity.class);
                 startActivity(i);
                 break;
             case 5:
-                i = new Intent(getApplicationContext(), RemindersActivity.class);
+                i = new Intent(getApplicationContext(), HistoryActivity.class);
                 startActivity(i);
                 break;
             case 6:
-                i = new Intent(getApplicationContext(), RewardsActivity.class);
+                i = new Intent(getApplicationContext(), RemindersActivity.class);
                 startActivity(i);
                 break;
             case 7:
-                i = new Intent(getApplicationContext(), AboutActivity.class);
+                i = new Intent(getApplicationContext(), RewardsActivity.class);
                 startActivity(i);
                 break;
             case 8:
+                i = new Intent(getApplicationContext(), AboutActivity.class);
+                startActivity(i);
+                break;
+            case 9:
                 i = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(i);
                 break;

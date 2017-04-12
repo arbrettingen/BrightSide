@@ -185,7 +185,7 @@ public class CustomPlaylistActivity extends AppCompatActivity {
         mDrawerLayout.closeDrawer(findViewById(R.id.playlist_drawer_cont));
 
         Intent i;
-        switch (position) {
+        switch (position){
             case 0:
                 i = new Intent(getApplicationContext(), MainMenuActivity.class);
                 startActivity(i);
@@ -203,22 +203,26 @@ public class CustomPlaylistActivity extends AppCompatActivity {
                 startActivity(i);
                 break;
             case 4:
-                i = new Intent(getApplicationContext(), HistoryActivity.class);
+                i = new Intent(getApplicationContext(), BrowseActivity.class);
                 startActivity(i);
                 break;
             case 5:
-                i = new Intent(getApplicationContext(), RemindersActivity.class);
+                i = new Intent(getApplicationContext(), HistoryActivity.class);
                 startActivity(i);
                 break;
             case 6:
-                i = new Intent(getApplicationContext(), RewardsActivity.class);
+                i = new Intent(getApplicationContext(), RemindersActivity.class);
                 startActivity(i);
                 break;
             case 7:
-                i = new Intent(getApplicationContext(), AboutActivity.class);
+                i = new Intent(getApplicationContext(), RewardsActivity.class);
                 startActivity(i);
                 break;
             case 8:
+                i = new Intent(getApplicationContext(), AboutActivity.class);
+                startActivity(i);
+                break;
+            case 9:
                 i = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(i);
                 break;
