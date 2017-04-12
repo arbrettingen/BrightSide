@@ -53,13 +53,6 @@ public class CustomPlaylistActivity extends AppCompatActivity {
             mAffirmationPlaylistList = new ArrayList<>();
         }
 
-
-        Log.e("Playlist count PL", String.valueOf(mAffirmationPlaylistList.size()));
-        if (!mAffirmationPlaylistList.isEmpty()) {
-            Log.e("New Playlist Name", mAffirmationPlaylistList.get(mAffirmationPlaylistList.size() - 1).getPlaylistName());
-        }
-
-
         //drawer code below
         mNavChoices = getResources().getStringArray(R.array.nav_options_array);
         mDrawerList = (ListView) findViewById(R.id.playlist_left_drawer);

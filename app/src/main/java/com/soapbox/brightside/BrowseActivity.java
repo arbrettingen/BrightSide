@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 /**
@@ -17,6 +18,8 @@ import android.widget.ListView;
  */
 
 public class BrowseActivity extends AppCompatActivity {
+
+    private ListView mAffirmationList;
 
     private String[] mNavChoices;
     private ListView mDrawerList;
@@ -58,6 +61,12 @@ public class BrowseActivity extends AppCompatActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //affirmation listing below
+
+        mAffirmationList = (ListView) findViewById(R.id.affirmation_master_list);
+        ArrayAdapter<Affirmation> mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, MainMenuActivity.mMasterAffirmationList);
+        mAffirmationList.setAdapter(mAffirmationAdapter);
 
     }
 

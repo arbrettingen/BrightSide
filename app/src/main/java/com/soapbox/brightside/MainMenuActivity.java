@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class MainMenuActivity extends AppCompatActivity {
 
-    static ArrayList<Affirmation> mMasterAffirmationList = new ArrayList<Affirmation>(Arrays.asList(new Affirmation[]{
+    public static ArrayList<Affirmation> mMasterAffirmationList = new ArrayList<Affirmation>(Arrays.asList(new Affirmation[]{
             new Affirmation("Affirmation One Text Here"),
             new Affirmation("Affirmation Two Text Here"),
             new Affirmation("Affirmation Three Text Here"),

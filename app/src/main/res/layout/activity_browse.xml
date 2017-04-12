@@ -11,6 +11,16 @@
         android:orientation="vertical"
         android:weightSum="24">
 
+        <ListView
+            android:id="@+id/affirmation_master_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="24"
+            android:divider="@color/colorAccent"
+            android:dividerHeight="2dp">
+
+        </ListView>
+
     </LinearLayout>
 
     <!-- The navigation drawer -->
