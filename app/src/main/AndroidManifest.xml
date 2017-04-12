@@ -39,6 +39,9 @@
         <activity android:name=".RandomActivity">
 
         </activity>
+        <activity android:name=".BrowseActivity">
+
+        </activity>
     </application>
 
 </manifest>
