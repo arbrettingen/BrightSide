@@ -10,19 +10,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 /**
- * Created by Alex on 4/11/2017.
+ * Created by Alex on 4/12/2017.
  */
 
-public class BrowseActivity extends AppCompatActivity {
+public class NewAffirmationActivity extends AppCompatActivity {
 
-    private ListView mAffirmationList;
-    private Button mAddAffirmation;
 
     private String[] mNavChoices;
     private ListView mDrawerList;
@@ -32,25 +27,25 @@ public class BrowseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_browse);
-        setTitle(R.string.drawer_close_browse);
+        setContentView(R.layout.activity_new_affirmation);
+        setTitle(R.string.drawer_close_new_affirmation);
 
         //drawer code below
         mNavChoices = getResources().getStringArray(R.array.nav_options_array);
-        mDrawerList = (ListView) findViewById(R.id.browse_left_drawer);
+        mDrawerList = (ListView) findViewById(R.id.new_affirmation_left_drawer);
 
         NavListAdapter mDrawerListAdapter = new NavListAdapter(getApplicationContext(), R.layout.row_nav_drawer, mNavChoices);
 
         mDrawerList.setAdapter(mDrawerListAdapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.browse_drawer_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.new_affirmation_drawer_layout);
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close_browse){
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close_new_affirmation) {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                setTitle(R.string.drawer_close_browse);
+                setTitle(R.string.drawer_close_new_affirmation);
             }
 
             @Override
@@ -64,23 +59,6 @@ public class BrowseActivity extends AppCompatActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        //affirmation listing below
-
-        mAffirmationList = (ListView) findViewById(R.id.affirmation_master_list);
-        ArrayAdapter<Affirmation> mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, MainMenuActivity.mMasterAffirmationList);
-        mAffirmationList.setAdapter(mAffirmationAdapter);
-
-        //add new button setup
-        mAddAffirmation = (Button) findViewById(R.id.btn_add_affirmation);
-        mAddAffirmation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), NewAffirmationActivity.class);
-                startActivity(i);
-            }
-        });
-
 
     }
 
@@ -109,25 +87,16 @@ public class BrowseActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItemDrawer(position);
-        }
-    }
-
     /**
      * Handles navigation clicks in nav drawer, switches screens
      */
     private void selectItemDrawer(int position) {
 
         //mDrawerList.setItemChecked(position, true);
-        mDrawerLayout.closeDrawer(findViewById(R.id.browse_drawer_cont));
+        mDrawerLayout.closeDrawer(findViewById(R.id.new_affirmation_drawer_cont));
 
         Intent i;
-        switch (position){
+        switch (position) {
             case 0:
                 i = new Intent(getApplicationContext(), MainMenuActivity.class);
                 startActivity(i);
@@ -137,7 +106,7 @@ public class BrowseActivity extends AppCompatActivity {
                 startActivity(i);
                 break;
             case 2:
-                i = new Intent(getApplicationContext(), RandomActivity.class);
+                i = new Intent(getApplicationContext(), com.soapbox.brightside.RandomActivity.class);
                 startActivity(i);
                 break;
             case 3:
@@ -175,5 +144,15 @@ public class BrowseActivity extends AppCompatActivity {
 
     }
 
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItemDrawer(position);
+        }
+    }
 
 }
+
+
+

@@ -11,5 +11,8 @@
     <string name="drawer_close_rewards">Rewards</string>
     <string name="drawer_close_settings">Settings</string>
     <string name="drawer_close_browse">Browse Affirmations</string>
-    <string name="about">Perpetually interested in finding ways to improve mindful efficiency through positive reinforcement, Alex Brettingen developed BrightSide as a passion project in early 2017. Enjoy!</string>
+    <string name="drawer_close_new_affirmation">Add New Affirmation</string>
+    <string name="about">Perpetually interested in finding ways to improve mindful efficiency
+        through positive reinforcement, Alex Brettingen developed BrightSide as a passion project in
+        early 2017. Enjoy!</string>
 </resources>

@@ -42,6 +42,9 @@
         <activity android:name=".BrowseActivity">
 
         </activity>
+        <activity android:name=".NewAffirmationActivity">
+
+        </activity>
     </application>
 
 </manifest>
