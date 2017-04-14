@@ -10,8 +10,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:weightSum="24" >
+        android:weightSum="24"
+        android:background="#FFFFFF">
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="22"
+            android:hint="Enter affirmation text here"
+            android:gravity="center_horizontal"
+            android:paddingTop="16dp"
+            android:id="@+id/new_affirmation_edit"/>
+
+        <Button
+            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_weight="2"
+            android:background="@color/colorAccent"
+            android:text="Add"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:id="@+id/btn_add_affirmation_confirm"/>
 
     </LinearLayout>
 
