@@ -8,6 +8,8 @@ public class Affirmation {
 
     private String mImgSrc;
     private String mAffirmationBody;
+    //todo: rating feature
+    //todo: happiness, confidence, motivation
 
     public Affirmation(String imgSrc, String affirmationBody){
         mImgSrc = imgSrc;

@@ -7,16 +7,25 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 /**
  * Created by Alex on 2/27/2017.
  */
 
 public class RecommendedActivity extends AppCompatActivity {
+
+    //todo: satisfaction, confidence, motivation
+    private SeekBar mSatisfactionBar;
+    private SeekBar mConfidenceBar;
+    private SeekBar mMotivationBar;
+    private TextView mSatisfactionText;
 
     private String[] mNavChoices;
     private ListView mDrawerList;
@@ -58,6 +67,27 @@ public class RecommendedActivity extends AppCompatActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //seekbar setup below
+
+        mSatisfactionBar = (SeekBar) findViewById(R.id.satisfaction_seekbar);
+        mSatisfactionBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mSatisfactionText = (TextView) findViewById(R.id.satisfaction_text);
+                mSatisfactionText.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                //Log.e("SEEKBAR", "start touch");
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                //Log.e("SEEKBAR", "stop touch");
+            }
+        });
 
     }
 

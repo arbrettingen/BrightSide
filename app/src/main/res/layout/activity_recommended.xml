@@ -8,8 +8,65 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#FFFFFF"
         android:orientation="vertical"
-        android:weightSum="24" >
+        android:weightSum="200">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="16"
+            android:gravity="center"
+            android:text="Satisfaction"
+            android:textColor="#000000"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1"
+            android:background="@color/colorAccent" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="How content are you with your current standing in life? Have you found any personal joy today, big or small?"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20"
+            android:orientation="horizontal"
+            android:weightSum="20">
+
+            <SeekBar
+                android:id="@+id/satisfaction_seekbar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_weight="16"
+                android:max="10" />
+
+            <TextView
+                android:id="@+id/satisfaction_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="16sp" />
+
+        </LinearLayout>
 
 
     </LinearLayout>
