@@ -18,7 +18,7 @@
             android:layout_weight="4"
             android:background="@color/colorAccent"
             android:gravity="center"
-            android:text="Add, Edit, or Delete a playlist below:"
+            android:text="Add, Edit (touch), or Delete (hold) a playlist below:"
             android:textColor="#FFFFFF"
             android:textSize="17sp" />
 

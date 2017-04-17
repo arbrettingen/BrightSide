@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -89,6 +90,9 @@ public class CustomPlaylistActivity extends AppCompatActivity {
         ArrayAdapter<AffirmationPlaylist> playlistAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.playlist_list_row, mAffirmationPlaylistList);
         mPlaylistListView.setAdapter(playlistAdapter);
 
+        mPlaylistListView.setOnItemClickListener(new PlaylistListItemListener());
+        mPlaylistListView.setOnItemLongClickListener(new PlaylistListItemLongListener());
+
         //add new playlist item button and listener below
 
 
@@ -104,6 +108,8 @@ public class CustomPlaylistActivity extends AppCompatActivity {
 
                 final EditText input = new EditText(getApplicationContext());
                 input.setSingleLine(true);
+                int maxLength = 140;
+                input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
 
                 builder.setView(input);
 
@@ -122,7 +128,8 @@ public class CustomPlaylistActivity extends AppCompatActivity {
                                     return;
                                 }
                             }
-                            updatePlaylistList(input.getText().toString());
+                            mAffirmationPlaylistList.add(new AffirmationPlaylist(input.getText().toString()));
+                            updatePlaylistList();
                             dialog.dismiss();
 
                         } else {
@@ -226,8 +233,7 @@ public class CustomPlaylistActivity extends AppCompatActivity {
 
     }
 
-    public void updatePlaylistList(String playlistName) {
-        mAffirmationPlaylistList.add(new AffirmationPlaylist(playlistName));
+    public void updatePlaylistList() {
         mPlaylistListView = (ListView) findViewById(R.id.playlist_master_list);
         ArrayAdapter<AffirmationPlaylist> playlistAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.playlist_list_row, mAffirmationPlaylistList);
         mPlaylistListView.setAdapter(playlistAdapter);
@@ -240,6 +246,53 @@ public class CustomPlaylistActivity extends AppCompatActivity {
             selectItemDrawer(position);
         }
     }
+
+    private class PlaylistListItemListener implements  ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItemPlaylistList(position);
+        }
+    }
+
+
+    private void selectItemPlaylistList(int position){
+        //todo: create edit affirmation activity, or re use the "new" affirmation activity somehow, probably need to use extras
+    }
+
+    private class PlaylistListItemLongListener implements ListView.OnItemLongClickListener {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItemLongPlaylistList(position);
+            return true;
+        }
+    }
+
+    private void selectItemLongPlaylistList(final int playlistPosition){
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        String deleted = mAffirmationPlaylistList.get(playlistPosition).getPlaylistName();
+                        mAffirmationPlaylistList.remove(playlistPosition);
+                        updatePlaylistList();
+                        dialog.dismiss();
+                        Toast.makeText(getApplicationContext(), deleted + " successfully deleted.", Toast.LENGTH_LONG).show();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CustomPlaylistActivity.this, R.style.myDialog));
+        builder.setMessage("Are you sure you'd like to delete " + mAffirmationPlaylistList.get(playlistPosition).getPlaylistName() + "?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+
+    }
+
 
 
 }
