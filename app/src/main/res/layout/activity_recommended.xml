@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="4" />
 
         <TextView
             android:layout_width="match_parent"
@@ -29,8 +29,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_weight="1"
             android:background="@color/colorAccent" />
 
@@ -39,7 +39,7 @@
             android:layout_height="0dp"
             android:layout_weight="20"
             android:gravity="center"
-            android:padding="4dp"
+            android:padding="8dp"
             android:text="How content are you with your current standing in life? Have you found any personal joy today, big or small?"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp" />
@@ -47,7 +47,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="20"
+            android:layout_weight="15"
             android:orientation="horizontal"
             android:weightSum="20">
 
@@ -67,6 +67,130 @@
                 android:textSize="16sp" />
 
         </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="16"
+            android:gravity="center"
+            android:text="Confidence"
+            android:textColor="#000000"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:background="@color/colorAccent" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="How much faith do you have in yourself to complete your daily goals, whatever they may be?"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="15"
+            android:orientation="horizontal"
+            android:weightSum="20">
+
+            <SeekBar
+                android:id="@+id/confidence_seekbar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_weight="16"
+                android:max="10" />
+
+            <TextView
+                android:id="@+id/confidence_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="16"
+            android:gravity="center"
+            android:text="Motivation"
+            android:textColor="#000000"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:background="@color/colorAccent" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="How much intrinsic inspiration to you have to complete your goals, regardless of confidence?"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="15"
+            android:orientation="horizontal"
+            android:weightSum="20">
+
+            <SeekBar
+                android:id="@+id/motivation_seekbar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_weight="16"
+                android:max="10" />
+
+            <TextView
+                android:id="@+id/motivation_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="20"
+            android:background="@color/colorPrimary"
+            android:text="Confirm"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
 
 
     </LinearLayout>

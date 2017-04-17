@@ -26,6 +26,8 @@ public class RecommendedActivity extends AppCompatActivity {
     private SeekBar mConfidenceBar;
     private SeekBar mMotivationBar;
     private TextView mSatisfactionText;
+    private TextView mConfidenceText;
+    private TextView mMotivationText;
 
     private String[] mNavChoices;
     private ListView mDrawerList;
@@ -76,6 +78,44 @@ public class RecommendedActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 mSatisfactionText = (TextView) findViewById(R.id.satisfaction_text);
                 mSatisfactionText.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                //Log.e("SEEKBAR", "start touch");
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                //Log.e("SEEKBAR", "stop touch");
+            }
+        });
+
+        mConfidenceBar = (SeekBar) findViewById(R.id.confidence_seekbar);
+        mConfidenceBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mConfidenceText = (TextView) findViewById(R.id.confidence_text);
+                mConfidenceText.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                //Log.e("SEEKBAR", "start touch");
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                //Log.e("SEEKBAR", "stop touch");
+            }
+        });
+
+        mMotivationBar = (SeekBar) findViewById(R.id.motivation_seekbar);
+        mMotivationBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mMotivationText = (TextView) findViewById(R.id.motivation_text);
+                mMotivationText.setText(String.valueOf(progress));
             }
 
             @Override
