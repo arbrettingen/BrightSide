@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -38,6 +39,11 @@ public class NewAffirmationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_affirmation);
         setTitle(R.string.drawer_close_new_affirmation);
+
+        Intent i = getIntent();
+        int pos = i.getIntExtra("PlaylistListPosition", -1);
+
+        Log.e("pos VALUE", String.valueOf(pos));
 
         //drawer code below
         mNavChoices = getResources().getStringArray(R.array.nav_options_array);

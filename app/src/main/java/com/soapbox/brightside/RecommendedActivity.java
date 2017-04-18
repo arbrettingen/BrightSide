@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 public class RecommendedActivity extends AppCompatActivity {
 
-    //todo: satisfaction, confidence, motivation
     private SeekBar mSatisfactionBar;
     private SeekBar mConfidenceBar;
     private SeekBar mMotivationBar;

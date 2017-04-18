@@ -90,7 +90,7 @@ public class CustomPlaylistActivity extends AppCompatActivity {
         ArrayAdapter<AffirmationPlaylist> playlistAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.playlist_list_row, mAffirmationPlaylistList);
         mPlaylistListView.setAdapter(playlistAdapter);
 
-        mPlaylistListView.setOnItemClickListener(new PlaylistListItemListener());
+        //mPlaylistListView.setOnItemClickListener(new PlaylistListItemListener());
         mPlaylistListView.setOnItemLongClickListener(new PlaylistListItemLongListener());
 
         //add new playlist item button and listener below
@@ -247,27 +247,43 @@ public class CustomPlaylistActivity extends AppCompatActivity {
         }
     }
 
-    private class PlaylistListItemListener implements  ListView.OnItemClickListener {
+    /*private class PlaylistListItemListener implements  ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItemPlaylistList(position);
+
         }
-    }
+    }*/
 
-
-    private void selectItemPlaylistList(int position){
-        //todo: create edit affirmation activity, or re use the "new" affirmation activity somehow, probably need to use extras
-    }
 
     private class PlaylistListItemLongListener implements ListView.OnItemLongClickListener {
+        //todo: add dialog choice for edit or delete
         @Override
-        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItemLongPlaylistList(position);
+        public boolean onItemLongClick(AdapterView<?> parent, View view, final int playlistPosition, long id) {
+
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case DialogInterface.BUTTON_POSITIVE:
+                            dialog.dismiss();
+                            editItemPlaylistList(playlistPosition);
+                            break;
+
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            deleteItemPlaylistList(playlistPosition);
+                            dialog.dismiss();
+                            break;
+                    }
+                }
+            };
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CustomPlaylistActivity.this, R.style.myDialog));
+            builder.setMessage(mAffirmationPlaylistList.get(playlistPosition).getPlaylistName()).setPositiveButton("Edit Name", dialogClickListener).setNegativeButton("Delete", dialogClickListener).show();
+
             return true;
         }
     }
 
-    private void selectItemLongPlaylistList(final int playlistPosition){
+    private void deleteItemPlaylistList(final int playlistPosition){
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -291,6 +307,13 @@ public class CustomPlaylistActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CustomPlaylistActivity.this, R.style.myDialog));
         builder.setMessage("Are you sure you'd like to delete " + mAffirmationPlaylistList.get(playlistPosition).getPlaylistName() + "?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
 
+    }
+
+    private void editItemPlaylistList(int position){
+        //todo: create edit affirmation activity, or re use the "new" affirmation activity somehow, probably need to use extras
+        Intent i = new Intent(getApplicationContext(), NewAffirmationActivity.class);
+        i.putExtra("PlaylistListPosition", position);
+        startActivity(i);
     }
 
 
