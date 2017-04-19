@@ -28,7 +28,8 @@
         android:hapticFeedbackEnabled="true"
         android:text="Medium Text Testing"
         android:textColor="#FFFFFF"
-        android:textSize="16sp"
+        android:textSize="17sp"
+        android:background="?android:attr/selectableItemBackground"
         />
 
     <TextView

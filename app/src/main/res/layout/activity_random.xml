@@ -33,6 +33,7 @@
             android:src="@drawable/sunrise" />
 
         <ListView
+            android:drawSelectorOnTop="true"
             android:id="@+id/random_left_drawer"
             android:layout_width="240dp"
             android:layout_height="0dp"
