@@ -309,7 +309,6 @@ public class CustomPlaylistActivity extends AppCompatActivity {
     }
 
     private void editItemPlaylistList(final int position){
-        //todo: create edit dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CustomPlaylistActivity.this, R.style.myDialog));
         builder.setTitle("Edit Playlist Name: ");
 

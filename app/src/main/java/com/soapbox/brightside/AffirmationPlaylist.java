@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Created by Alex on 3/24/2017.
  */
 
-public class AffirmationPlaylist implements Parcelable{
+public class AffirmationPlaylist {
 
     private ArrayList<Affirmation> mAffirmationList;
     private String mName;
@@ -34,30 +34,7 @@ public class AffirmationPlaylist implements Parcelable{
         this.mAffirmationList = mAffirmationList;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-
-    }
-
-    public static final Parcelable.Creator<AffirmationPlaylist> CREATOR
-            = new Parcelable.Creator<AffirmationPlaylist>() {
-        public AffirmationPlaylist createFromParcel(Parcel in) {
-            return new AffirmationPlaylist(in);
-        }
-
-        public AffirmationPlaylist[] newArray(int size) {
-            return new AffirmationPlaylist[size];
-        }
-    };
-
-    private AffirmationPlaylist(Parcel in) {
-
-    }
 
     @Override
     public String toString() {
