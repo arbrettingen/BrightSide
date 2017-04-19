@@ -256,7 +256,6 @@ public class CustomPlaylistActivity extends AppCompatActivity {
 
 
     private class PlaylistListItemLongListener implements ListView.OnItemLongClickListener {
-        //todo: add dialog choice for edit or delete
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, final int playlistPosition, long id) {
 
@@ -309,11 +308,53 @@ public class CustomPlaylistActivity extends AppCompatActivity {
 
     }
 
-    private void editItemPlaylistList(int position){
-        //todo: create edit affirmation activity, or re use the "new" affirmation activity somehow, probably need to use extras
-        Intent i = new Intent(getApplicationContext(), NewAffirmationActivity.class);
-        i.putExtra("PlaylistListPosition", position);
-        startActivity(i);
+    private void editItemPlaylistList(final int position){
+        //todo: create edit dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CustomPlaylistActivity.this, R.style.myDialog));
+        builder.setTitle("Edit Playlist Name: ");
+
+        final EditText input = new EditText(getApplicationContext());
+        input.setSingleLine(true);
+        int maxLength = 140;
+        input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
+        input.setText(mAffirmationPlaylistList.get(position).getPlaylistName());
+
+
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (input.getText().toString() != null && !input.getText().toString().isEmpty()) {
+                    //check existing playlists for name match
+                    for (int i = 0; i < mAffirmationPlaylistList.size(); i++){
+                        if (i != position && input.getText().toString().equalsIgnoreCase(mAffirmationPlaylistList.get(i).getPlaylistName())){
+                            Toast.makeText(getApplicationContext(), "Playlist name is already in use!", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
+                    mAffirmationPlaylistList.get(position).setPlaylistName(input.getText().toString());
+                    updatePlaylistList();
+                    dialog.dismiss();
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "Invalid playlist name!", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 

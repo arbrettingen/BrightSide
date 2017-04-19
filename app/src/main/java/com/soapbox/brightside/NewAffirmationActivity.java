@@ -40,10 +40,7 @@ public class NewAffirmationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_affirmation);
         setTitle(R.string.drawer_close_new_affirmation);
 
-        Intent i = getIntent();
-        int pos = i.getIntExtra("PlaylistListPosition", -1);
 
-        Log.e("pos VALUE", String.valueOf(pos));
 
         //drawer code below
         mNavChoices = getResources().getStringArray(R.array.nav_options_array);
