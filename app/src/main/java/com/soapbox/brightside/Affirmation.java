@@ -97,7 +97,10 @@ public class Affirmation {
     }
 
     public String getShortenedBody(){
-        return mAffirmationBody; //todo:implement
+        if (mAffirmationBody.length() > 100){
+            return mAffirmationBody.substring(0,98) + "...";
+        }
+        return mAffirmationBody;
     }
 
     @Override

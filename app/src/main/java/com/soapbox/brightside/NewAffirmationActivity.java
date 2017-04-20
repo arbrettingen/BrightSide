@@ -45,7 +45,7 @@ public class NewAffirmationActivity extends AppCompatActivity {
         setTitle(R.string.drawer_close_new_affirmation);
 
         Intent i = getIntent();
-        if (i.hasExtra("Affirmation Body")){
+        if (i.hasExtra("Affirmation Body")) {
             mAffirmationExtra = i.getStringExtra("Affirmation Body");
             mAffirmationPosition = i.getIntExtra("Affirmation Position", -1);
             setTitle("Edit Affirmation");
@@ -85,11 +85,11 @@ public class NewAffirmationActivity extends AppCompatActivity {
         //add new button and edit text setup below
         mAffirmationEdit = (EditText) findViewById(R.id.new_affirmation_edit);
         int maxLength = 250;
-        mAffirmationEdit.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
+        mAffirmationEdit.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
 
         mAddNewAffirmation = (Button) findViewById(R.id.btn_add_affirmation_confirm);
 
-        if (mAffirmationExtra != null){
+        if (mAffirmationExtra != null) {
             mAffirmationEdit.setText(mAffirmationExtra);
             mAddNewAffirmation.setText("SAVE");
         }
@@ -100,46 +100,58 @@ public class NewAffirmationActivity extends AppCompatActivity {
 
                 if (mAffirmationEdit.getText().toString().equals("") || mAffirmationEdit.getText().toString().equals("Enter affirmation text here")) {
                     Toast.makeText(getApplicationContext(), "Affirmation text is invalid.", Toast.LENGTH_LONG).show();
-                } else {
-                    //todo:check for duplicates
-                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            switch (which) {
-                                case DialogInterface.BUTTON_POSITIVE:
-                                    if (mAffirmationExtra == null) {
-                                        MainMenuActivity.mMasterAffirmationList.add(new Affirmation(mAffirmationEdit.getText().toString()));
-                                    }
-                                    else{
-                                        MainMenuActivity.mMasterAffirmationList.get(mAffirmationPosition).setAffirmationBody(mAffirmationEdit.getText().toString());
-                                    }
-
-                                    dialog.dismiss();
-                                    Toast.makeText(getApplicationContext(), "Affirmation successfully added", Toast.LENGTH_LONG).show();
-                                    mAffirmationEdit.setText("");
-
-                                    Intent i = new Intent(getApplicationContext(), BrowseActivity.class);
-                                    startActivity(i);
-
-                                    break;
-
-                                case DialogInterface.BUTTON_NEGATIVE:
-                                    dialog.dismiss();
-                                    break;
+                    return;
+                }
+                //todo:check for duplicates
+                for (int i = 0; i < MainMenuActivity.mMasterAffirmationList.size(); i++){
+                    if(MainMenuActivity.mMasterAffirmationList.get(i).getAffirmationBody().equals(mAffirmationEdit.getText().toString())){
+                        if (mAffirmationPosition == -1){
+                            Toast.makeText(getApplicationContext(), "Affirmation text has already been created.", Toast.LENGTH_LONG).show();
+                            return;
+                        } else{
+                            if (i != mAffirmationPosition){
+                                Toast.makeText(getApplicationContext(), "Affirmation text has already been created.", Toast.LENGTH_LONG).show();
+                                return;
                             }
                         }
-                    };
-
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(NewAffirmationActivity.this, R.style.myDialog));
-                    if (mAffirmationExtra == null) {
-                        builder.setMessage("Are you sure you'd like to add this affirmation?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
-                    }
-                    else{
-                        builder.setMessage("Are you sure you'd like to save the changes to this affirmation?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
-
                     }
                 }
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                if (mAffirmationExtra == null) {
+                                    MainMenuActivity.mMasterAffirmationList.add(new Affirmation(mAffirmationEdit.getText().toString()));
+                                } else {
+                                    MainMenuActivity.mMasterAffirmationList.get(mAffirmationPosition).setAffirmationBody(mAffirmationEdit.getText().toString());
+                                }
+
+                                dialog.dismiss();
+                                Toast.makeText(getApplicationContext(), "Affirmation successfully added", Toast.LENGTH_LONG).show();
+                                mAffirmationEdit.setText("");
+
+                                Intent i = new Intent(getApplicationContext(), BrowseActivity.class);
+                                startActivity(i);
+
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                dialog.dismiss();
+                                break;
+                        }
+                    }
+                };
+
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(NewAffirmationActivity.this, R.style.myDialog));
+                if (mAffirmationExtra == null) {
+                    builder.setMessage("Are you sure you'd like to add this affirmation?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+                } else {
+                    builder.setMessage("Are you sure you'd like to save the changes to this affirmation?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+
+                }
+
             }
         });
 
