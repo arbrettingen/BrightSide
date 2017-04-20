@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,12 +35,21 @@ public class NewAffirmationActivity extends AppCompatActivity {
     private Button mAddNewAffirmation;
     private EditText mAffirmationEdit;
 
+    private String mAffirmationExtra;
+    private int mAffirmationPosition;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_affirmation);
         setTitle(R.string.drawer_close_new_affirmation);
 
+        Intent i = getIntent();
+        if (i.hasExtra("Affirmation Body")){
+            mAffirmationExtra = i.getStringExtra("Affirmation Body");
+            mAffirmationPosition = i.getIntExtra("Affirmation Position", -1);
+            setTitle("Edit Affirmation");
+        }
 
 
         //drawer code below
@@ -74,9 +84,16 @@ public class NewAffirmationActivity extends AppCompatActivity {
 
         //add new button and edit text setup below
         mAffirmationEdit = (EditText) findViewById(R.id.new_affirmation_edit);
-        //todo:set character limit
+        int maxLength = 250;
+        mAffirmationEdit.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
 
         mAddNewAffirmation = (Button) findViewById(R.id.btn_add_affirmation_confirm);
+
+        if (mAffirmationExtra != null){
+            mAffirmationEdit.setText(mAffirmationExtra);
+            mAddNewAffirmation.setText("SAVE");
+        }
+
         mAddNewAffirmation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,10 +107,20 @@ public class NewAffirmationActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
                                 case DialogInterface.BUTTON_POSITIVE:
-                                    MainMenuActivity.mMasterAffirmationList.add(new Affirmation(mAffirmationEdit.getText().toString()));
+                                    if (mAffirmationExtra == null) {
+                                        MainMenuActivity.mMasterAffirmationList.add(new Affirmation(mAffirmationEdit.getText().toString()));
+                                    }
+                                    else{
+                                        MainMenuActivity.mMasterAffirmationList.get(mAffirmationPosition).setAffirmationBody(mAffirmationEdit.getText().toString());
+                                    }
+
                                     dialog.dismiss();
                                     Toast.makeText(getApplicationContext(), "Affirmation successfully added", Toast.LENGTH_LONG).show();
                                     mAffirmationEdit.setText("");
+
+                                    Intent i = new Intent(getApplicationContext(), BrowseActivity.class);
+                                    startActivity(i);
+
                                     break;
 
                                 case DialogInterface.BUTTON_NEGATIVE:
@@ -105,7 +132,13 @@ public class NewAffirmationActivity extends AppCompatActivity {
 
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(NewAffirmationActivity.this, R.style.myDialog));
-                    builder.setMessage("Are you sure you'd like to add this affirmation?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+                    if (mAffirmationExtra == null) {
+                        builder.setMessage("Are you sure you'd like to add this affirmation?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+                    }
+                    else{
+                        builder.setMessage("Are you sure you'd like to save the changes to this affirmation?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+
+                    }
                 }
             }
         });

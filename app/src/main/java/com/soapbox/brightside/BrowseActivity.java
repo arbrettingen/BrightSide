@@ -82,7 +82,7 @@ public class BrowseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), NewAffirmationActivity.class);
-                startActivity(i);//todo:come back to this activity after add
+                startActivity(i);
                 updateAffirmationList();
             }
         });
@@ -209,7 +209,11 @@ public class BrowseActivity extends AppCompatActivity {
     }
 
     private void editItemAffirmationList(int position){
-
+        Intent i = new Intent(getApplicationContext(), NewAffirmationActivity.class);
+        i.putExtra("Affirmation Body", MainMenuActivity.mMasterAffirmationList.get(position).getAffirmationBody());
+        i.putExtra("Affirmation Position", position);
+        startActivity(i);
+        updateAffirmationList();
     }
 
     private void deleteItemAffirmationList(final int position){
