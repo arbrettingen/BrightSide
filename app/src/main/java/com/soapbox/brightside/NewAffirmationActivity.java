@@ -74,6 +74,7 @@ public class NewAffirmationActivity extends AppCompatActivity {
 
         //add new button and edit text setup below
         mAffirmationEdit = (EditText) findViewById(R.id.new_affirmation_edit);
+        //todo:set character limit
 
         mAddNewAffirmation = (Button) findViewById(R.id.btn_add_affirmation_confirm);
         mAddNewAffirmation.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +84,7 @@ public class NewAffirmationActivity extends AppCompatActivity {
                 if (mAffirmationEdit.getText().toString().equals("") || mAffirmationEdit.getText().toString().equals("Enter affirmation text here")) {
                     Toast.makeText(getApplicationContext(), "Affirmation text is invalid.", Toast.LENGTH_LONG).show();
                 } else {
-
+                    //todo:check for duplicates
                     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

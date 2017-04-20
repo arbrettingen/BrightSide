@@ -96,6 +96,10 @@ public class Affirmation {
         this.mHidden = mHidden;
     }
 
+    public String getShortenedBody(){
+        return mAffirmationBody; //todo:implement
+    }
+
     @Override
     public String toString() {
         return mAffirmationBody;

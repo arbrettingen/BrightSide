@@ -1,12 +1,15 @@
 package com.soapbox.brightside;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -71,13 +74,16 @@ public class BrowseActivity extends AppCompatActivity {
         ArrayAdapter<Affirmation> mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, MainMenuActivity.mMasterAffirmationList);
         mAffirmationList.setAdapter(mAffirmationAdapter);
 
+        mAffirmationList.setOnItemLongClickListener(new AffirmationListItemLongListener());
+
         //add new button setup
         mAddAffirmation = (Button) findViewById(R.id.btn_add_affirmation);
         mAddAffirmation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), NewAffirmationActivity.class);
-                startActivity(i);
+                startActivity(i);//todo:come back to this activity after add
+                updateAffirmationList();
             }
         });
 
@@ -173,6 +179,66 @@ public class BrowseActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    private class AffirmationListItemLongListener implements ListView.OnItemLongClickListener {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, final int affirmationPosition, long id) {
+
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case DialogInterface.BUTTON_POSITIVE:
+                            dialog.dismiss();
+                            editItemAffirmationList(affirmationPosition);
+                            break;
+
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            deleteItemAffirmationList(affirmationPosition);
+                            dialog.dismiss();
+                            break;
+                    }
+                }
+            };
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(BrowseActivity.this, R.style.myDialog));
+            builder.setMessage(MainMenuActivity.mMasterAffirmationList.get(affirmationPosition).getShortenedBody()).setPositiveButton("Edit Affirmation Text", dialogClickListener).setNegativeButton("Delete Affirmation", dialogClickListener).show();
+
+            return true;
+        }
+    }
+
+    private void editItemAffirmationList(int position){
+
+    }
+
+    private void deleteItemAffirmationList(final int position){
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        MainMenuActivity.mMasterAffirmationList.remove(position);
+                        updateAffirmationList();
+                        dialog.dismiss();
+                        Toast.makeText(getApplicationContext(),"Affirmation successfully deleted.", Toast.LENGTH_LONG).show();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(BrowseActivity.this, R.style.myDialog));
+        builder.setMessage("Are you sure you'd like to delete " + MainMenuActivity.mMasterAffirmationList.get(position).getShortenedBody() + "?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+    }
+
+    private void updateAffirmationList(){
+        mAffirmationList = (ListView) findViewById(R.id.affirmation_master_list);
+        ArrayAdapter<Affirmation> mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, MainMenuActivity.mMasterAffirmationList);
+        mAffirmationList.setAdapter(mAffirmationAdapter);
     }
 
 
