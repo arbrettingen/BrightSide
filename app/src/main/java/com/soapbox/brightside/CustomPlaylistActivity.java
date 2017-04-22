@@ -11,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.text.InputFilter;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -195,7 +194,7 @@ public class CustomPlaylistActivity extends AppCompatActivity {
                 startActivity(i);
                 break;
             case 2:
-                i = new Intent(getApplicationContext(), RandomActivity.class);
+                i = new Intent(getApplicationContext(), DisplayAffirmationActivity.class);
                 startActivity(i);
                 break;
             case 3:

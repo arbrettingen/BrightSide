@@ -11,34 +11,43 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 /**
  * Created by Alex on 2/28/2017.
  */
 
-public class RandomActivity extends AppCompatActivity {
+public class DisplayAffirmationActivity extends AppCompatActivity {
 
     private String[] mNavChoices;
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+    private TextView mAffirmationText;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_random);
+        setContentView(R.layout.activity_display_affirmation);
         setTitle("Random Affirmations");
+
+
+        //affirmation text setup below
+        mAffirmationText = (TextView) findViewById(R.id.display_affirmation_text);
+
+        mAffirmationText.setText(MainMenuActivity.mMasterAffirmationList.get(randomWithRange(0,MainMenuActivity.mMasterAffirmationList.size()-1)).getAffirmationBody());
+
 
         //drawer code below
         mNavChoices = getResources().getStringArray(R.array.nav_options_array);
-        mDrawerList = (ListView) findViewById(R.id.random_left_drawer);
+        mDrawerList = (ListView) findViewById(R.id.display_left_drawer);
 
         NavListAdapter mDrawerListAdapter = new NavListAdapter(getApplicationContext(), R.layout.row_nav_drawer, mNavChoices);
 
         mDrawerList.setAdapter(mDrawerListAdapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.random_drawer_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.display_drawer_layout);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close_random){
             @Override
@@ -101,7 +110,7 @@ public class RandomActivity extends AppCompatActivity {
     private void selectItemDrawer(int position) {
 
         //mDrawerList.setItemChecked(position, true);
-        mDrawerLayout.closeDrawer(findViewById(R.id.random_drawer_cont));
+        mDrawerLayout.closeDrawer(findViewById(R.id.display_drawer_cont));
 
         Intent i;
         switch (position){
@@ -114,7 +123,7 @@ public class RandomActivity extends AppCompatActivity {
                 startActivity(i);
                 break;
             case 2:
-                i = new Intent(getApplicationContext(), RandomActivity.class);
+                i = new Intent(getApplicationContext(), DisplayAffirmationActivity.class);
                 startActivity(i);
                 break;
             case 3:
@@ -150,6 +159,12 @@ public class RandomActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    private int randomWithRange(int min, int max)
+    {
+        int range = (max - min) + 1;
+        return (int)(Math.random() * range) + min;
     }
 
 }

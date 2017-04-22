@@ -114,7 +114,7 @@ public class RewardsActivity extends AppCompatActivity {
                 startActivity(i);
                 break;
             case 2:
-                i = new Intent(getApplicationContext(), RandomActivity.class);
+                i = new Intent(getApplicationContext(), DisplayAffirmationActivity.class);
                 startActivity(i);
                 break;
             case 3:

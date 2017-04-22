@@ -11,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.text.InputFilter;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -102,7 +101,7 @@ public class NewAffirmationActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Affirmation text is invalid.", Toast.LENGTH_LONG).show();
                     return;
                 }
-                //todo:check for duplicates
+
                 for (int i = 0; i < MainMenuActivity.mMasterAffirmationList.size(); i++){
                     if(MainMenuActivity.mMasterAffirmationList.get(i).getAffirmationBody().equals(mAffirmationEdit.getText().toString())){
                         if (mAffirmationPosition == -1){
@@ -201,7 +200,7 @@ public class NewAffirmationActivity extends AppCompatActivity {
                 startActivity(i);
                 break;
             case 2:
-                i = new Intent(getApplicationContext(), com.soapbox.brightside.RandomActivity.class);
+                i = new Intent(getApplicationContext(), DisplayAffirmationActivity.class);
                 startActivity(i);
                 break;
             case 3:

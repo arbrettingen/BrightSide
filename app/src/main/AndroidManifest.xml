@@ -36,7 +36,7 @@
         <activity android:name=".SettingsActivity">
 
         </activity>
-        <activity android:name=".RandomActivity">
+        <activity android:name=".DisplayAffirmationActivity">
 
         </activity>
         <activity android:name=".BrowseActivity">
