@@ -27,6 +27,20 @@
             android:lineSpacingExtra="4dp"
             android:textColor="@color/colorPrimaryDark" />
 
+        <Button
+            android:layout_height="40dp"
+            android:layout_width="80dp"
+            android:id="@+id/btn_roll"
+            android:background="@color/colorPrimary"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="16dp"
+            android:text="ROLL"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+
+            />
+
 
     </RelativeLayout>
 

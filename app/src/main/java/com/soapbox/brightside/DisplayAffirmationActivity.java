@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private TextView mAffirmationText;
+    private Button mRandomButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,6 +39,15 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
 
         mAffirmationText.setText(MainMenuActivity.mMasterAffirmationList.get(randomWithRange(0,MainMenuActivity.mMasterAffirmationList.size()-1)).getAffirmationBody());
 
+        //Roll button code below
+
+        mRandomButton = (Button) findViewById(R.id.btn_roll);
+        mRandomButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAffirmationText.setText(MainMenuActivity.mMasterAffirmationList.get(randomWithRange(0,MainMenuActivity.mMasterAffirmationList.size()-1)).getAffirmationBody());
+            }
+        });
 
         //drawer code below
         mNavChoices = getResources().getStringArray(R.array.nav_options_array);
@@ -67,6 +78,8 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
 
     }
 
