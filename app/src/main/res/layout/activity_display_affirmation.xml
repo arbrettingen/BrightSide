@@ -9,37 +9,57 @@
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#FFFFFF"
         android:orientation="vertical"
-        android:weightSum="24"
-        android:background="#FFFFFF">
+        android:weightSum="24">
 
         <TextView
+            android:id="@+id/display_affirmation_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/display_affirmation_text"
-            android:layout_centerInParent="true"
             android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:lineSpacingExtra="4dp"
             android:paddingBottom="100dp"
-            android:paddingTop="20dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:textSize="16sp"
-            android:lineSpacingExtra="4dp"
-            android:textColor="@color/colorPrimaryDark" />
+            android:paddingTop="20dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16sp" />
 
-        <Button
-            android:layout_height="40dp"
-            android:layout_width="80dp"
+        <LinearLayout
             android:id="@+id/btn_roll"
-            android:background="@color/colorPrimary"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_margin="16dp"
-            android:text="ROLL"
-            android:textSize="16sp"
-            android:textColor="#FFFFFF"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:weightSum="20">
 
-            />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:background="@color/colorPrimary"
+                android:src="@drawable/random"
+
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:background="@color/colorPrimary"
+                android:gravity="center_vertical"
+                android:text="ROLL"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
+
+
+        </LinearLayout>
 
 
     </RelativeLayout>
@@ -47,12 +67,12 @@
     <!-- The navigation drawer -->
 
     <LinearLayout
+        android:id="@+id/display_drawer_cont"
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:orientation="vertical"
-        android:weightSum="28"
-        android:id="@+id/display_drawer_cont">
+        android:weightSum="28">
 
         <ImageView
             android:layout_width="match_parent"
@@ -62,13 +82,13 @@
             android:src="@drawable/sunrise" />
 
         <ListView
-            android:drawSelectorOnTop="true"
             android:id="@+id/display_left_drawer"
             android:layout_width="240dp"
             android:layout_height="0dp"
             android:layout_weight="24"
             android:background="@color/colorPrimaryDark"
-            android:choiceMode="singleChoice" />
+            android:choiceMode="singleChoice"
+            android:drawSelectorOnTop="true" />
     </LinearLayout>
 
 

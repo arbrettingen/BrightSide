@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,7 +26,7 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private TextView mAffirmationText;
-    private Button mRandomButton;
+    private LinearLayout mRandomButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,7 +42,7 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
 
         //Roll button code below
 
-        mRandomButton = (Button) findViewById(R.id.btn_roll);
+        mRandomButton = (LinearLayout) findViewById(R.id.btn_roll);
         mRandomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

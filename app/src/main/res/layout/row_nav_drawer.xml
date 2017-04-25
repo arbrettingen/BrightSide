@@ -30,6 +30,7 @@
         android:textColor="#FFFFFF"
         android:textSize="17sp"
         android:background="?android:attr/selectableItemBackground"
+        android:foreground="?android:attr/selectableItemBackground"
         />
 
     <TextView
