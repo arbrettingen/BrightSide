@@ -29,8 +29,8 @@
 
         <LinearLayout
             android:id="@+id/btn_roll"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
+            android:layout_width="120dp"
+            android:layout_height="52dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_margin="16dp"
@@ -55,6 +55,40 @@
                 android:background="@color/colorPrimary"
                 android:gravity="center_vertical"
                 android:text="ROLL"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_search"
+            android:layout_width="120dp"
+            android:layout_height="52dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="16dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:weightSum="20">
+
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="8"
+                android:background="@color/colorPrimary"
+                android:src="@drawable/search"
+
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="12"
+                android:background="@color/colorPrimary"
+                android:gravity="center_vertical"
+                android:text="SEARCH"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp" />
 
