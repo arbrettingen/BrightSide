@@ -20,6 +20,7 @@ public class Affirmation {
         mSatisfactionFlag = satisfactionFlag;
         mConfidenceFlag = confidenceFlag;
         mMotivationFlag = motivationFlag;
+        mFavorited = false;
     }
 
     public Affirmation(String affirmationBody, boolean satisfactionFlag, boolean confidenceFlag, boolean motivationFlag){
@@ -28,16 +29,19 @@ public class Affirmation {
         mSatisfactionFlag = satisfactionFlag;
         mConfidenceFlag = confidenceFlag;
         mMotivationFlag = motivationFlag;
+        mFavorited = false;
     }
 
     public Affirmation(String imgSrc, String affirmationBody){
         mImgSrc = imgSrc;
         mAffirmationBody = affirmationBody;
+        mFavorited = false;
     }
 
     public Affirmation(String affirmationBody){
         mAffirmationBody = affirmationBody;
         mImgSrc = "";
+        mFavorited = false;
     }
 
     public String getImgSrc() {
