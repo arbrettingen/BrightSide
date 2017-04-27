@@ -16,6 +16,7 @@ public class AffirmationPlaylist {
 
     public AffirmationPlaylist(String name){
         mName = name;
+        mAffirmationList = new ArrayList<>();
     }
 
     public String getPlaylistName() {

@@ -53,6 +53,7 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mAffirmationListPosition = randomWithRange(0,MainMenuActivity.mMasterAffirmationList.size()-1);
                 mAffirmationText.setText(MainMenuActivity.mMasterAffirmationList.get(mAffirmationListPosition).getAffirmationBody());
+                setResources();
             }
         });
 
@@ -207,7 +208,11 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
     }
 
     private void setResources(){
-        //todo
+        if (MainMenuActivity.mMasterAffirmationList.get(mAffirmationListPosition).isFavorited()){
+            mFavImage.setImageResource(R.drawable.favorite);
+        }else{
+            mFavImage.setImageResource(R.drawable.unfavorite);
+        }
     }
 
     private int randomWithRange(int min, int max)

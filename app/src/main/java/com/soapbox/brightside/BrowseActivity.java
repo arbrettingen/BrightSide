@@ -49,7 +49,7 @@ public class BrowseActivity extends AppCompatActivity {
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.browse_drawer_layout);
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close_browse){
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close_browse) {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
@@ -71,7 +71,17 @@ public class BrowseActivity extends AppCompatActivity {
         //affirmation listing below
 
         mAffirmationList = (ListView) findViewById(R.id.affirmation_master_list);
-        ArrayAdapter<Affirmation> mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, MainMenuActivity.mMasterAffirmationList);
+
+        ArrayAdapter<Affirmation> mAffirmationAdapter;
+        Intent i = getIntent();
+        if (i.hasExtra("Browse Playlist")) {
+            int pos = i.getIntExtra("Browse Playlist", -1);
+            mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, CustomPlaylistActivity.mAffirmationPlaylistList.get(pos).getAffirmationList());
+            setTitle(CustomPlaylistActivity.mAffirmationPlaylistList.get(pos).getPlaylistName());
+        } else {
+            mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, MainMenuActivity.mMasterAffirmationList);
+        }
+
         mAffirmationList.setAdapter(mAffirmationAdapter);
 
         mAffirmationList.setOnItemLongClickListener(new AffirmationListItemLongListener());
@@ -81,6 +91,7 @@ public class BrowseActivity extends AppCompatActivity {
         mAddAffirmation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //todo: change below to accommodate browse playlist scenario if/else, add affirmation to specific playlist
                 Intent i = new Intent(getApplicationContext(), NewAffirmationActivity.class);
                 startActivity(i);
                 updateAffirmationList();

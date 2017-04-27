@@ -35,7 +35,7 @@ import java.util.ArrayList;
 
 public class CustomPlaylistActivity extends AppCompatActivity {
 
-    private static ArrayList<AffirmationPlaylist> mAffirmationPlaylistList;
+    public static ArrayList<AffirmationPlaylist> mAffirmationPlaylistList;
     private String[] mNavChoices;
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
@@ -89,7 +89,7 @@ public class CustomPlaylistActivity extends AppCompatActivity {
         ArrayAdapter<AffirmationPlaylist> playlistAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.playlist_list_row, mAffirmationPlaylistList);
         mPlaylistListView.setAdapter(playlistAdapter);
 
-        //mPlaylistListView.setOnItemClickListener(new PlaylistListItemListener());
+        mPlaylistListView.setOnItemClickListener(new PlaylistListItemListener());
         mPlaylistListView.setOnItemLongClickListener(new PlaylistListItemLongListener());
 
         //add new playlist item button and listener below
@@ -246,12 +246,15 @@ public class CustomPlaylistActivity extends AppCompatActivity {
         }
     }
 
-    /*private class PlaylistListItemListener implements  ListView.OnItemClickListener {
+    private class PlaylistListItemListener implements  ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+            //todo: launch edit playlist activity.
+            Intent i = new Intent(getApplicationContext(), BrowseActivity.class);
+            i.putExtra("Browse Playlist",position);
+            startActivity(i);
         }
-    }*/
+    }
 
 
     private class PlaylistListItemLongListener implements ListView.OnItemLongClickListener {
