@@ -88,13 +88,34 @@ public class BrowseActivity extends AppCompatActivity {
 
         //add new button setup
         mAddAffirmation = (Button) findViewById(R.id.btn_add_affirmation);
+
+        if (i.hasExtra("Add to Playlist")){
+            mAddAffirmation.setText("+Add Selected to Playlist");
+        } else if (i.hasExtra("Browse Playlist")){
+            mAddAffirmation.setText("+ Add Affirmation");
+        }
+
         mAddAffirmation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo: change below to accommodate browse playlist scenario if/else, add affirmation to specific playlist
-                Intent i = new Intent(getApplicationContext(), NewAffirmationActivity.class);
-                startActivity(i);
-                updateAffirmationList();
+                Intent i = getIntent();
+                Intent j;
+                if (i.hasExtra("Add to Playlist")){
+                    addSelectedToPlaylist();
+
+                } else{
+                    if (i.hasExtra("Browse Playlist")){
+                        //todo:account for this above
+                        j = new Intent(getApplicationContext(), BrowseActivity.class);
+                        int pos = i.getIntExtra("Browse Playlist", -1);
+                        j.putExtra("Add to Playlist", pos);
+                    } else{
+                        j = new Intent(getApplicationContext(), NewAffirmationActivity.class);
+                    }
+
+                    startActivity(j);
+                    updateAffirmationList();
+                }
             }
         });
 
@@ -256,5 +277,8 @@ public class BrowseActivity extends AppCompatActivity {
         mAffirmationList.setAdapter(mAffirmationAdapter);
     }
 
+    private void addSelectedToPlaylist(){
+
+    }
 
 }

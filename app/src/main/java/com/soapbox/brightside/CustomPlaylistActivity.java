@@ -249,7 +249,6 @@ public class CustomPlaylistActivity extends AppCompatActivity {
     private class PlaylistListItemListener implements  ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            //todo: launch edit playlist activity.
             Intent i = new Intent(getApplicationContext(), BrowseActivity.class);
             i.putExtra("Browse Playlist",position);
             startActivity(i);
