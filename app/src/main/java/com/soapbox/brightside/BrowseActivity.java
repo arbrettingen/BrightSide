@@ -82,6 +82,15 @@ public class BrowseActivity extends AppCompatActivity {
             int pos = i.getIntExtra("Browse Playlist", -1);
             mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, CustomPlaylistActivity.mAffirmationPlaylistList.get(pos).getAffirmationList());
             setTitle(CustomPlaylistActivity.mAffirmationPlaylistList.get(pos).getPlaylistName());
+        } else if (i.hasExtra("Add to Playlist")){
+            int pos = i.getIntExtra("Add to Playlist", -1);
+            ArrayList<Affirmation> mExcludedAffirmations = CustomPlaylistActivity.mAffirmationPlaylistList.get(pos).getAffirmationList();
+            ArrayList<Affirmation> mAddableAffirmations = (ArrayList<Affirmation>) MainMenuActivity.mMasterAffirmationList.clone();
+            for (Affirmation a : mExcludedAffirmations){
+                mAddableAffirmations.remove(a);
+            }
+            mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, mAddableAffirmations);
+            setTitle("Add to Playlist");
         } else {
             mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, MainMenuActivity.mMasterAffirmationList);
         }
@@ -112,14 +121,13 @@ public class BrowseActivity extends AppCompatActivity {
                     if (i.hasExtra("Browse Playlist")){
                         j = new Intent(getApplicationContext(), BrowseActivity.class);
                         int pos = i.getIntExtra("Browse Playlist", -1);
-                        //todo:account for this above
                         j.putExtra("Add to Playlist", pos);
                     } else{
                         j = new Intent(getApplicationContext(), NewAffirmationActivity.class);
                     }
 
                     startActivity(j);
-                    updateAffirmationList();
+                    updateAffirmationList();//todo
                 }
             }
         });
@@ -249,7 +257,7 @@ public class BrowseActivity extends AppCompatActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Intent i = getIntent();
             if (i.hasExtra("Add to Playlist")){
-                //todo:implement
+                //if (mSelectedAffirmations.contains()) todo
                 Log.e("View.toString", view.toString());
             }
         }
