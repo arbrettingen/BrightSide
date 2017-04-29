@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 /**
  * Created by Alex on 4/11/2017.
@@ -31,6 +34,7 @@ public class BrowseActivity extends AppCompatActivity {
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+    private ArrayList<Affirmation> mSelectedAffirmations;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,6 +89,7 @@ public class BrowseActivity extends AppCompatActivity {
         mAffirmationList.setAdapter(mAffirmationAdapter);
 
         mAffirmationList.setOnItemLongClickListener(new AffirmationListItemLongListener());
+        mAffirmationList.setOnItemClickListener(new AffirmationListItemListener());
 
         //add new button setup
         mAddAffirmation = (Button) findViewById(R.id.btn_add_affirmation);
@@ -105,9 +110,9 @@ public class BrowseActivity extends AppCompatActivity {
 
                 } else{
                     if (i.hasExtra("Browse Playlist")){
-                        //todo:account for this above
                         j = new Intent(getApplicationContext(), BrowseActivity.class);
                         int pos = i.getIntExtra("Browse Playlist", -1);
+                        //todo:account for this above
                         j.putExtra("Add to Playlist", pos);
                     } else{
                         j = new Intent(getApplicationContext(), NewAffirmationActivity.class);
@@ -118,7 +123,6 @@ public class BrowseActivity extends AppCompatActivity {
                 }
             }
         });
-
 
     }
 
@@ -237,6 +241,17 @@ public class BrowseActivity extends AppCompatActivity {
             builder.setMessage(MainMenuActivity.mMasterAffirmationList.get(affirmationPosition).getShortenedBody()).setPositiveButton("Edit Affirmation Text", dialogClickListener).setNegativeButton("Delete Affirmation", dialogClickListener).show();
 
             return true;
+        }
+    }
+
+    private class AffirmationListItemListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Intent i = getIntent();
+            if (i.hasExtra("Add to Playlist")){
+                //todo:implement
+                Log.e("View.toString", view.toString());
+            }
         }
     }
 
