@@ -34,7 +34,8 @@ public class BrowseActivity extends AppCompatActivity {
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    private ArrayList<Affirmation> mSelectedAffirmations;
+    private ArrayList<Affirmation> mSelectedAffirmations = new ArrayList<>();
+    private ArrayList<Affirmation> mAddableAffirmations;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,19 +81,19 @@ public class BrowseActivity extends AppCompatActivity {
         Intent i = getIntent();
         if (i.hasExtra("Browse Playlist")) {
             int pos = i.getIntExtra("Browse Playlist", -1);
-            mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, CustomPlaylistActivity.mAffirmationPlaylistList.get(pos).getAffirmationList());
-            setTitle(CustomPlaylistActivity.mAffirmationPlaylistList.get(pos).getPlaylistName());
+            mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getAffirmationList());
+            setTitle(CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getPlaylistName());
         } else if (i.hasExtra("Add to Playlist")){
             int pos = i.getIntExtra("Add to Playlist", -1);
-            ArrayList<Affirmation> mExcludedAffirmations = CustomPlaylistActivity.mAffirmationPlaylistList.get(pos).getAffirmationList();
-            ArrayList<Affirmation> mAddableAffirmations = (ArrayList<Affirmation>) MainMenuActivity.mMasterAffirmationList.clone();
+            ArrayList<Affirmation> mExcludedAffirmations = CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getAffirmationList();
+            mAddableAffirmations = (ArrayList<Affirmation>) MainMenuActivity.masterAffirmationList.clone();
             for (Affirmation a : mExcludedAffirmations){
                 mAddableAffirmations.remove(a);
             }
             mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, mAddableAffirmations);
             setTitle("Add to Playlist");
         } else {
-            mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, MainMenuActivity.mMasterAffirmationList);
+            mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, MainMenuActivity.masterAffirmationList);
         }
 
         mAffirmationList.setAdapter(mAffirmationAdapter);
@@ -127,7 +128,7 @@ public class BrowseActivity extends AppCompatActivity {
                     }
 
                     startActivity(j);
-                    updateAffirmationList();//todo
+                    updateAffirmationList();
                 }
             }
         });
@@ -229,6 +230,8 @@ public class BrowseActivity extends AppCompatActivity {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, final int affirmationPosition, long id) {
 
+            //todo account for playlist browse
+
             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -246,7 +249,7 @@ public class BrowseActivity extends AppCompatActivity {
                 }
             };
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(BrowseActivity.this, R.style.myDialog));
-            builder.setMessage(MainMenuActivity.mMasterAffirmationList.get(affirmationPosition).getShortenedBody()).setPositiveButton("Edit Affirmation Text", dialogClickListener).setNegativeButton("Delete Affirmation", dialogClickListener).show();
+            builder.setMessage(MainMenuActivity.masterAffirmationList.get(affirmationPosition).getShortenedBody()).setPositiveButton("Edit Affirmation Text", dialogClickListener).setNegativeButton("Delete Affirmation", dialogClickListener).show();
 
             return true;
         }
@@ -257,15 +260,20 @@ public class BrowseActivity extends AppCompatActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Intent i = getIntent();
             if (i.hasExtra("Add to Playlist")){
-                //if (mSelectedAffirmations.contains()) todo
-                Log.e("View.toString", view.toString());
+                if (mSelectedAffirmations.contains(mAddableAffirmations.get(position))){
+                    mSelectedAffirmations.remove(mAddableAffirmations.get(position));
+                    view.setBackgroundResource(R.color.colorWhite);
+                }else{
+                    mSelectedAffirmations.add(mAddableAffirmations.get(position));
+                    view.setBackgroundResource(R.color.colorAccent);
+                }
             }
         }
     }
 
     private void editItemAffirmationList(int position){
         Intent i = new Intent(getApplicationContext(), NewAffirmationActivity.class);
-        i.putExtra("Affirmation Body", MainMenuActivity.mMasterAffirmationList.get(position).getAffirmationBody());
+        i.putExtra("Affirmation Body", MainMenuActivity.masterAffirmationList.get(position).getAffirmationBody());
         i.putExtra("Affirmation Position", position);
         startActivity(i);
         updateAffirmationList();
@@ -277,7 +285,7 @@ public class BrowseActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        MainMenuActivity.mMasterAffirmationList.remove(position);
+                        MainMenuActivity.masterAffirmationList.remove(position);
                         updateAffirmationList();
                         dialog.dismiss();
                         Toast.makeText(getApplicationContext(),"Affirmation successfully deleted.", Toast.LENGTH_LONG).show();
@@ -291,16 +299,38 @@ public class BrowseActivity extends AppCompatActivity {
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(BrowseActivity.this, R.style.myDialog));
-        builder.setMessage("Are you sure you'd like to delete " + MainMenuActivity.mMasterAffirmationList.get(position).getShortenedBody() + "?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+        builder.setMessage("Are you sure you'd like to delete " + MainMenuActivity.masterAffirmationList.get(position).getShortenedBody() + "?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
     }
 
     private void updateAffirmationList(){
         mAffirmationList = (ListView) findViewById(R.id.affirmation_master_list);
-        ArrayAdapter<Affirmation> mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, MainMenuActivity.mMasterAffirmationList);
+        ArrayAdapter<Affirmation> mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, MainMenuActivity.masterAffirmationList);
         mAffirmationList.setAdapter(mAffirmationAdapter);
     }
 
     private void addSelectedToPlaylist(){
+        if (mSelectedAffirmations.isEmpty()){
+            Toast.makeText(getApplicationContext(), "Nothing Selected.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else{
+            Intent i = getIntent();
+            int pos = i.getIntExtra("Add to Playlist", -1);
+            for (Affirmation a : mSelectedAffirmations){
+                if (!CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getAffirmationList().contains(a)){ //if affirmation is not yet in playlist
+                    CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getAffirmationList().add(a);
+                }
+                Toast.makeText(getApplicationContext(), "All selected affirmations added to playlist.", Toast.LENGTH_LONG).show();
+
+                i = new Intent(getApplicationContext(), BrowseActivity.class);
+                i.putExtra("Browse Playlist",pos);
+                startActivity(i);
+
+            }
+        }
+
+
+
 
     }
 

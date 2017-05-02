@@ -102,8 +102,8 @@ public class NewAffirmationActivity extends AppCompatActivity {
                     return;
                 }
 
-                for (int i = 0; i < MainMenuActivity.mMasterAffirmationList.size(); i++){
-                    if(MainMenuActivity.mMasterAffirmationList.get(i).getAffirmationBody().equals(mAffirmationEdit.getText().toString())){
+                for (int i = 0; i < MainMenuActivity.masterAffirmationList.size(); i++){
+                    if(MainMenuActivity.masterAffirmationList.get(i).getAffirmationBody().equals(mAffirmationEdit.getText().toString())){
                         if (mAffirmationPosition == -1){
                             Toast.makeText(getApplicationContext(), "Affirmation text has already been created.", Toast.LENGTH_LONG).show();
                             return;
@@ -121,9 +121,9 @@ public class NewAffirmationActivity extends AppCompatActivity {
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 if (mAffirmationExtra == null) {
-                                    MainMenuActivity.mMasterAffirmationList.add(new Affirmation(mAffirmationEdit.getText().toString()));
+                                    MainMenuActivity.masterAffirmationList.add(new Affirmation(mAffirmationEdit.getText().toString()));
                                 } else {
-                                    MainMenuActivity.mMasterAffirmationList.get(mAffirmationPosition).setAffirmationBody(mAffirmationEdit.getText().toString());
+                                    MainMenuActivity.masterAffirmationList.get(mAffirmationPosition).setAffirmationBody(mAffirmationEdit.getText().toString());
                                 }
 
                                 dialog.dismiss();

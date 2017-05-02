@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -42,8 +41,8 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
 
         //affirmation text setup below
         mAffirmationText = (TextView) findViewById(R.id.display_affirmation_text);
-        mAffirmationListPosition = randomWithRange(0,MainMenuActivity.mMasterAffirmationList.size()-1);
-        mAffirmationText.setText(MainMenuActivity.mMasterAffirmationList.get(mAffirmationListPosition).getAffirmationBody());
+        mAffirmationListPosition = randomWithRange(0,MainMenuActivity.masterAffirmationList.size()-1);
+        mAffirmationText.setText(MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition).getAffirmationBody());
 
         //Roll button code below
 
@@ -51,8 +50,8 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
         mRandomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAffirmationListPosition = randomWithRange(0,MainMenuActivity.mMasterAffirmationList.size()-1);
-                mAffirmationText.setText(MainMenuActivity.mMasterAffirmationList.get(mAffirmationListPosition).getAffirmationBody());
+                mAffirmationListPosition = randomWithRange(0,MainMenuActivity.masterAffirmationList.size()-1);
+                mAffirmationText.setText(MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition).getAffirmationBody());
                 setResources();
             }
         });
@@ -60,7 +59,7 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
         //favorite button code below
         mFavImage = (ImageView) findViewById(R.id.img_favorite);
 
-        if (MainMenuActivity.mMasterAffirmationList.get(mAffirmationListPosition).isFavorited()){
+        if (MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition).isFavorited()){
             mFavImage.setImageResource(R.drawable.favorite);
         }else{
             mFavImage.setImageResource(R.drawable.unfavorite);
@@ -70,13 +69,13 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
         mFavoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MainMenuActivity.mMasterAffirmationList.get(mAffirmationListPosition).isFavorited()){
+                if (MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition).isFavorited()){
                     mFavImage.setImageResource(R.drawable.unfavorite);
-                    MainMenuActivity.mMasterAffirmationList.get(mAffirmationListPosition).setFavorited(false);
+                    MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition).setFavorited(false);
                     Toast.makeText(getApplicationContext(), "Affirmation removed from favorites.", Toast.LENGTH_LONG).show();
                 } else {
                     mFavImage.setImageResource(R.drawable.favorite);
-                    MainMenuActivity.mMasterAffirmationList.get(mAffirmationListPosition).setFavorited(true);
+                    MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition).setFavorited(true);
                     Toast.makeText(getApplicationContext(), "Affirmation added to favorites.", Toast.LENGTH_LONG).show();
                 }
             }
@@ -208,7 +207,7 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
     }
 
     private void setResources(){
-        if (MainMenuActivity.mMasterAffirmationList.get(mAffirmationListPosition).isFavorited()){
+        if (MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition).isFavorited()){
             mFavImage.setImageResource(R.drawable.favorite);
         }else{
             mFavImage.setImageResource(R.drawable.unfavorite);

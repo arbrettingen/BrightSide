@@ -35,7 +35,7 @@ import java.util.ArrayList;
 
 public class CustomPlaylistActivity extends AppCompatActivity {
 
-    public static ArrayList<AffirmationPlaylist> mAffirmationPlaylistList;
+    public static ArrayList<AffirmationPlaylist> masterAffirmationPlaylistList;
     private String[] mNavChoices;
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
@@ -49,8 +49,8 @@ public class CustomPlaylistActivity extends AppCompatActivity {
         setContentView(R.layout.activity_custom_playlist);
         setTitle("Custom Playlists");
 
-        if (mAffirmationPlaylistList == null) {
-            mAffirmationPlaylistList = new ArrayList<>();
+        if (masterAffirmationPlaylistList == null) {
+            masterAffirmationPlaylistList = new ArrayList<>();
         }
 
         //drawer code below
@@ -86,7 +86,7 @@ public class CustomPlaylistActivity extends AppCompatActivity {
         //playlist list setup below
 
         mPlaylistListView = (ListView) findViewById(R.id.playlist_master_list);
-        ArrayAdapter<AffirmationPlaylist> playlistAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.playlist_list_row, mAffirmationPlaylistList);
+        ArrayAdapter<AffirmationPlaylist> playlistAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.playlist_list_row, masterAffirmationPlaylistList);
         mPlaylistListView.setAdapter(playlistAdapter);
 
         mPlaylistListView.setOnItemClickListener(new PlaylistListItemListener());
@@ -121,13 +121,13 @@ public class CustomPlaylistActivity extends AppCompatActivity {
 
                         if (input.getText().toString() != null && !input.getText().toString().isEmpty()) {
                             //check existing playlists for name match
-                            for (AffirmationPlaylist playlist : mAffirmationPlaylistList){
+                            for (AffirmationPlaylist playlist : masterAffirmationPlaylistList){
                                 if (input.getText().toString().equalsIgnoreCase(playlist.getPlaylistName())){
                                     Toast.makeText(getApplicationContext(), "Playlist name is already in use!", Toast.LENGTH_LONG).show();
                                     return;
                                 }
                             }
-                            mAffirmationPlaylistList.add(new AffirmationPlaylist(input.getText().toString()));
+                            masterAffirmationPlaylistList.add(new AffirmationPlaylist(input.getText().toString()));
                             updatePlaylistList();
                             dialog.dismiss();
 
@@ -234,7 +234,7 @@ public class CustomPlaylistActivity extends AppCompatActivity {
 
     public void updatePlaylistList() {
         mPlaylistListView = (ListView) findViewById(R.id.playlist_master_list);
-        ArrayAdapter<AffirmationPlaylist> playlistAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.playlist_list_row, mAffirmationPlaylistList);
+        ArrayAdapter<AffirmationPlaylist> playlistAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.playlist_list_row, masterAffirmationPlaylistList);
         mPlaylistListView.setAdapter(playlistAdapter);
     }
 
@@ -277,7 +277,7 @@ public class CustomPlaylistActivity extends AppCompatActivity {
                 }
             };
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CustomPlaylistActivity.this, R.style.myDialog));
-            builder.setMessage(mAffirmationPlaylistList.get(playlistPosition).getPlaylistName()).setPositiveButton("Edit Name", dialogClickListener).setNegativeButton("Delete", dialogClickListener).show();
+            builder.setMessage(masterAffirmationPlaylistList.get(playlistPosition).getPlaylistName()).setPositiveButton("Edit Name", dialogClickListener).setNegativeButton("Delete", dialogClickListener).show();
 
             return true;
         }
@@ -289,8 +289,8 @@ public class CustomPlaylistActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        String deleted = mAffirmationPlaylistList.get(playlistPosition).getPlaylistName();
-                        mAffirmationPlaylistList.remove(playlistPosition);
+                        String deleted = masterAffirmationPlaylistList.get(playlistPosition).getPlaylistName();
+                        masterAffirmationPlaylistList.remove(playlistPosition);
                         updatePlaylistList();
                         dialog.dismiss();
                         Toast.makeText(getApplicationContext(), deleted + " successfully deleted.", Toast.LENGTH_LONG).show();
@@ -305,7 +305,7 @@ public class CustomPlaylistActivity extends AppCompatActivity {
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CustomPlaylistActivity.this, R.style.myDialog));
-        builder.setMessage("Are you sure you'd like to delete " + mAffirmationPlaylistList.get(playlistPosition).getPlaylistName() + "?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+        builder.setMessage("Are you sure you'd like to delete " + masterAffirmationPlaylistList.get(playlistPosition).getPlaylistName() + "?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
 
     }
 
@@ -317,7 +317,7 @@ public class CustomPlaylistActivity extends AppCompatActivity {
         input.setSingleLine(true);
         int maxLength = 140;
         input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
-        input.setText(mAffirmationPlaylistList.get(position).getPlaylistName());
+        input.setText(masterAffirmationPlaylistList.get(position).getPlaylistName());
 
 
         builder.setView(input);
@@ -330,13 +330,13 @@ public class CustomPlaylistActivity extends AppCompatActivity {
 
                 if (input.getText().toString() != null && !input.getText().toString().isEmpty()) {
                     //check existing playlists for name match
-                    for (int i = 0; i < mAffirmationPlaylistList.size(); i++){
-                        if (i != position && input.getText().toString().equalsIgnoreCase(mAffirmationPlaylistList.get(i).getPlaylistName())){
+                    for (int i = 0; i < masterAffirmationPlaylistList.size(); i++){
+                        if (i != position && input.getText().toString().equalsIgnoreCase(masterAffirmationPlaylistList.get(i).getPlaylistName())){
                             Toast.makeText(getApplicationContext(), "Playlist name is already in use!", Toast.LENGTH_LONG).show();
                             return;
                         }
                     }
-                    mAffirmationPlaylistList.get(position).setPlaylistName(input.getText().toString());
+                    masterAffirmationPlaylistList.get(position).setPlaylistName(input.getText().toString());
                     updatePlaylistList();
                     dialog.dismiss();
 

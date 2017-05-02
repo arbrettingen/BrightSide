@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class MainMenuActivity extends AppCompatActivity {
 
-    public static ArrayList<Affirmation> mMasterAffirmationList = new ArrayList<Affirmation>(Arrays.asList(new Affirmation[]{
+    public static ArrayList<Affirmation> masterAffirmationList = new ArrayList<Affirmation>(Arrays.asList(new Affirmation[]{
             new Affirmation("Affirmation One Text Here"),
             new Affirmation("Affirmation Two Text Here"),
             new Affirmation("Affirmation Three Text Here"),
@@ -61,7 +61,7 @@ public class MainMenuActivity extends AppCompatActivity {
         setTitle("Home");
 
         //FOR TESTING///////////////////////////////////////////////
-        for (Affirmation a : mMasterAffirmationList){
+        for (Affirmation a : masterAffirmationList){
             Log.e("AFFIRMATION TEST", a.toString());
         }
         //FOR TESTING///////////////////////////////////////////////

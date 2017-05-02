@@ -8,6 +8,7 @@ public class Affirmation {
 
     private String mImgSrc;
     private String mAffirmationBody;
+    private String mCredit;
     private boolean mSatisfactionFlag;
     private boolean mConfidenceFlag;
     private boolean mMotivationFlag;
@@ -98,6 +99,14 @@ public class Affirmation {
 
     public void setHidden(boolean mHidden) {
         this.mHidden = mHidden;
+    }
+
+    public String getCredit() {
+        return mCredit;
+    }
+
+    public void setCredit(String mCredit) {
+        this.mCredit = mCredit;
     }
 
     public String getShortenedBody(){
