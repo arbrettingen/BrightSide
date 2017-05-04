@@ -230,27 +230,34 @@ public class BrowseActivity extends AppCompatActivity {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, final int affirmationPosition, long id) {
 
-            //todo account for playlist browse
 
-            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    switch (which) {
-                        case DialogInterface.BUTTON_POSITIVE:
-                            dialog.dismiss();
-                            editItemAffirmationList(affirmationPosition);
-                            break;
+            Intent i = getIntent();
 
-                        case DialogInterface.BUTTON_NEGATIVE:
-                            deleteItemAffirmationList(affirmationPosition);
-                            dialog.dismiss();
-                            break;
+            if (!i.hasExtra("Add to Playlist")) {
+
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                dialog.dismiss();
+                                editItemAffirmationList(affirmationPosition);
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                deleteItemAffirmationList(affirmationPosition);
+                                dialog.dismiss();
+                                break;
+                        }
                     }
+                };
+                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(BrowseActivity.this, R.style.myDialog));
+                if (i.hasExtra("Browse Playlist")){
+                    builder.setMessage(MainMenuActivity.masterAffirmationList.get(affirmationPosition).getShortenedBody()).setPositiveButton("Edit Affirmation Text", dialogClickListener).setNegativeButton("Delete Affirmation From Playlist", dialogClickListener).show();
+                }else {
+                    builder.setMessage(MainMenuActivity.masterAffirmationList.get(affirmationPosition).getShortenedBody()).setPositiveButton("Edit Affirmation Text", dialogClickListener).setNegativeButton("Delete Affirmation", dialogClickListener).show();
                 }
-            };
-            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(BrowseActivity.this, R.style.myDialog));
-            builder.setMessage(MainMenuActivity.masterAffirmationList.get(affirmationPosition).getShortenedBody()).setPositiveButton("Edit Affirmation Text", dialogClickListener).setNegativeButton("Delete Affirmation", dialogClickListener).show();
-
+            }
             return true;
         }
     }
@@ -280,12 +287,19 @@ public class BrowseActivity extends AppCompatActivity {
     }
 
     private void deleteItemAffirmationList(final int position){
+        Intent i = getIntent();
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Intent i = getIntent();
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        MainMenuActivity.masterAffirmationList.remove(position);
+                        if (i.hasExtra("Browse Playlist")){
+                            int pos = i.getIntExtra("Browse Playlist", -1);
+                            CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getAffirmationList().remove(position);
+                        }else {
+                            MainMenuActivity.masterAffirmationList.remove(position);
+                        }
                         updateAffirmationList();
                         dialog.dismiss();
                         Toast.makeText(getApplicationContext(),"Affirmation successfully deleted.", Toast.LENGTH_LONG).show();
@@ -299,12 +313,24 @@ public class BrowseActivity extends AppCompatActivity {
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(BrowseActivity.this, R.style.myDialog));
-        builder.setMessage("Are you sure you'd like to delete " + MainMenuActivity.masterAffirmationList.get(position).getShortenedBody() + "?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+        if (i.hasExtra("Browse Playlist")){
+            builder.setMessage("Are you sure you'd like to delete " + MainMenuActivity.masterAffirmationList.get(position).getShortenedBody() + "From Playlist?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+        }else {
+            builder.setMessage("Are you sure you'd like to delete " + MainMenuActivity.masterAffirmationList.get(position).getShortenedBody() + "?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+        }
     }
 
     private void updateAffirmationList(){
+        Intent i = getIntent();
         mAffirmationList = (ListView) findViewById(R.id.affirmation_master_list);
-        ArrayAdapter<Affirmation> mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, MainMenuActivity.masterAffirmationList);
+        ArrayAdapter<Affirmation> mAffirmationAdapter;
+        if (i.hasExtra("Browse Playlist")){
+            int pos = i.getIntExtra("Browse Playlist", -1);
+            mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getAffirmationList());
+        } else{
+            mAffirmationList = (ListView) findViewById(R.id.affirmation_master_list);
+            mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, MainMenuActivity.masterAffirmationList);
+        }
         mAffirmationList.setAdapter(mAffirmationAdapter);
     }
 
