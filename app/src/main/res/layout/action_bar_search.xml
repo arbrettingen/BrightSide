@@ -3,20 +3,22 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-    <TextView
-        android:id="@+id/bar_browse_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-        android:text="Example"
-        android:layout_centerVertical="true"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toLeftOf="@+id/btn_action_search_cancel"
+        android:background="@color/colorWhite"
+        android:id="@+id/action_search_txt"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:maxLines="1"/>
 
     <ImageView
-        android:id="@+id/btn_action_search"
+        android:id="@+id/btn_action_search_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/search"
-        android:padding="8dp"
+        android:src="@drawable/cancel"
+        android:padding="4dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
@@ -24,5 +26,3 @@
         />
 
 </RelativeLayout>
-
-

@@ -1,5 +1,6 @@
 package com.soapbox.brightside;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -13,9 +14,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +35,7 @@ public class BrowseActivity extends AppCompatActivity {
     private ListView mAffirmationList;
     private Button mAddAffirmation;
     private TextView mBarText;
+    private ImageView mSearchBtn;
 
     private String[] mNavChoices;
     private ListView mDrawerList;
@@ -46,10 +51,10 @@ public class BrowseActivity extends AppCompatActivity {
 
         //actionBar code below
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setCustomView(R.layout.action_bar_browse);
+        final ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setCustomView(R.layout.action_bar_browse);
 
-        actionBar.setDisplayOptions(android.app.ActionBar.DISPLAY_SHOW_CUSTOM | android.app.ActionBar.DISPLAY_SHOW_HOME);
+        mActionBar.setDisplayOptions(android.app.ActionBar.DISPLAY_SHOW_CUSTOM | android.app.ActionBar.DISPLAY_SHOW_HOME);
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -84,9 +89,6 @@ public class BrowseActivity extends AppCompatActivity {
         };
 
         mDrawerLayout.addDrawerListener(mDrawerToggle);
-
-
-
 
 
         //affirmation listing below
@@ -146,6 +148,30 @@ public class BrowseActivity extends AppCompatActivity {
                     startActivity(j);
                     updateAffirmationList();
                 }
+            }
+        });
+
+        //search button code below
+
+        mSearchBtn = (ImageView) findViewById(R.id.btn_action_search);
+
+        mSearchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mActionBar.setCustomView(R.layout.action_bar_search);
+
+                mActionBar.setDisplayOptions(android.app.ActionBar.DISPLAY_SHOW_CUSTOM | android.app.ActionBar.DISPLAY_SHOW_HOME);
+
+                getSupportActionBar().setHomeButtonEnabled(true);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+                EditText mSearchEditText = (EditText) findViewById(R.id.action_search_txt);
+
+                mSearchEditText.requestFocus();
+
+                InputMethodManager imm = (InputMethodManager)   getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(mSearchEditText, InputMethodManager.SHOW_IMPLICIT);
+
             }
         });
 
