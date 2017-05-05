@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class BrowseActivity extends AppCompatActivity {
 
     private ListView mAffirmationList;
     private Button mAddAffirmation;
+    private TextView mBarText;
 
     private String[] mNavChoices;
     private ListView mDrawerList;
@@ -41,7 +43,20 @@ public class BrowseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse);
-        setTitle(R.string.drawer_close_browse);
+
+        //actionBar code below
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setCustomView(R.layout.action_bar_browse);
+
+        actionBar.setDisplayOptions(android.app.ActionBar.DISPLAY_SHOW_CUSTOM | android.app.ActionBar.DISPLAY_SHOW_HOME);
+
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        mBarText = (TextView) findViewById(R.id.bar_browse_txt);
+        mBarText.setText("Browse Affirmations");
 
         //drawer code below
         mNavChoices = getResources().getStringArray(R.array.nav_options_array);
@@ -58,31 +73,19 @@ public class BrowseActivity extends AppCompatActivity {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                setTitle(R.string.drawer_close_browse);
+                mBarText.setText("Browse Affirmations");
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                setTitle(R.string.drawer_open);
+                mBarText.setText("Navigate");
             }
         };
 
         mDrawerLayout.addDrawerListener(mDrawerToggle);
 
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //actionBar code below
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setCustomView(R.layout.action_bar_browse);
-
-
-        actionBar.setDisplayOptions(android.app.ActionBar.DISPLAY_SHOW_CUSTOM | android.app.ActionBar.DISPLAY_SHOW_HOME);
-
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
 
@@ -95,7 +98,7 @@ public class BrowseActivity extends AppCompatActivity {
         if (i.hasExtra("Browse Playlist")) {
             int pos = i.getIntExtra("Browse Playlist", -1);
             mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getAffirmationList());
-            setTitle(CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getPlaylistName());
+            mBarText.setText(CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getPlaylistName());
         } else if (i.hasExtra("Add to Playlist")){
             int pos = i.getIntExtra("Add to Playlist", -1);
             ArrayList<Affirmation> mExcludedAffirmations = CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getAffirmationList();
@@ -104,7 +107,7 @@ public class BrowseActivity extends AppCompatActivity {
                 mAddableAffirmations.remove(a);
             }
             mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, mAddableAffirmations);
-            setTitle("Add to Playlist");
+            mBarText.setText("Add to Playlist");
         } else {
             mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, MainMenuActivity.masterAffirmationList);
         }
