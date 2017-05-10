@@ -12,6 +12,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -36,6 +39,8 @@ public class BrowseActivity extends AppCompatActivity {
     private Button mAddAffirmation;
     private TextView mBarText;
     private ImageView mSearchBtn;
+    private ArrayAdapter<Affirmation> mAffirmationAdapter;
+    private ArrayAdapter<Affirmation> mSearchAffirmationAdapter;
 
     private String[] mNavChoices;
     private ListView mDrawerList;
@@ -95,7 +100,7 @@ public class BrowseActivity extends AppCompatActivity {
 
         mAffirmationList = (ListView) findViewById(R.id.affirmation_master_list);
 
-        ArrayAdapter<Affirmation> mAffirmationAdapter;
+
         Intent i = getIntent();
         if (i.hasExtra("Browse Playlist")) {
             int pos = i.getIntExtra("Browse Playlist", -1);
@@ -171,6 +176,37 @@ public class BrowseActivity extends AppCompatActivity {
 
                 InputMethodManager imm = (InputMethodManager)   getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(mSearchEditText, InputMethodManager.SHOW_IMPLICIT);
+
+                mSearchEditText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        //// TODO: 5/6/2017
+                        //mSearchAffirmationAdapter
+                        ArrayList<Affirmation> mSearchedAffirmations = new ArrayList<Affirmation>();
+                        for (int i = 0; i < mAffirmationAdapter.getCount(); i++){
+                            if (mAffirmationAdapter.getItem(i).getAffirmationBody().toLowerCase().contains(s.toString().toLowerCase())){
+                                mSearchedAffirmations.add(mAffirmationAdapter.getItem(i));
+                            }
+                        }
+                        mSearchAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, mSearchedAffirmations);
+                        mAffirmationList = (ListView) findViewById(R.id.affirmation_master_list);
+                        mAffirmationList.setAdapter(mSearchAffirmationAdapter);
+
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+
+
 
             }
         });
