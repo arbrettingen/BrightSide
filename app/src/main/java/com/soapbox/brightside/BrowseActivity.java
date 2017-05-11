@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -41,6 +40,7 @@ public class BrowseActivity extends AppCompatActivity {
     private ImageView mSearchBtn;
     private ArrayAdapter<Affirmation> mAffirmationAdapter;
     private ArrayAdapter<Affirmation> mSearchAffirmationAdapter;
+    private static ActionBar mActionBar;
 
     private String[] mNavChoices;
     private ListView mDrawerList;
@@ -55,8 +55,7 @@ public class BrowseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_browse);
 
         //actionBar code below
-
-        final ActionBar mActionBar = getSupportActionBar();
+        mActionBar = getSupportActionBar();
         mActionBar.setCustomView(R.layout.action_bar_browse);
 
         mActionBar.setDisplayOptions(android.app.ActionBar.DISPLAY_SHOW_CUSTOM | android.app.ActionBar.DISPLAY_SHOW_HOME);
@@ -160,56 +159,7 @@ public class BrowseActivity extends AppCompatActivity {
 
         mSearchBtn = (ImageView) findViewById(R.id.btn_action_search);
 
-        mSearchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mActionBar.setCustomView(R.layout.action_bar_search);
-
-                mActionBar.setDisplayOptions(android.app.ActionBar.DISPLAY_SHOW_CUSTOM | android.app.ActionBar.DISPLAY_SHOW_HOME);
-
-                getSupportActionBar().setHomeButtonEnabled(true);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-                EditText mSearchEditText = (EditText) findViewById(R.id.action_search_txt);
-
-                mSearchEditText.requestFocus();
-
-                InputMethodManager imm = (InputMethodManager)   getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(mSearchEditText, InputMethodManager.SHOW_IMPLICIT);
-
-                mSearchEditText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        //// TODO: 5/6/2017
-                        //mSearchAffirmationAdapter
-                        ArrayList<Affirmation> mSearchedAffirmations = new ArrayList<Affirmation>();
-                        for (int i = 0; i < mAffirmationAdapter.getCount(); i++){
-                            if (mAffirmationAdapter.getItem(i).getAffirmationBody().toLowerCase().contains(s.toString().toLowerCase())){
-                                mSearchedAffirmations.add(mAffirmationAdapter.getItem(i));
-                            }
-                        }
-                        mSearchAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, mSearchedAffirmations);
-                        mAffirmationList = (ListView) findViewById(R.id.affirmation_master_list);
-                        mAffirmationList.setAdapter(mSearchAffirmationAdapter);
-
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                });
-
-
-
-            }
-        });
+        mSearchBtn.setOnClickListener(new searchButtonClickListener());
 
     }
 
@@ -302,6 +252,65 @@ public class BrowseActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    private class searchButtonClickListener implements ImageView.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            mActionBar.setCustomView(R.layout.action_bar_search);
+
+            mActionBar.setDisplayOptions(android.app.ActionBar.DISPLAY_SHOW_CUSTOM | android.app.ActionBar.DISPLAY_SHOW_HOME);
+
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            final EditText mSearchEditText = (EditText) findViewById(R.id.action_search_txt);
+
+            mSearchEditText.requestFocus();
+
+            InputMethodManager imm = (InputMethodManager)   getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(mSearchEditText, InputMethodManager.SHOW_IMPLICIT);
+
+            mSearchEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    ArrayList<Affirmation> mSearchedAffirmations = new ArrayList<Affirmation>();
+                    for (int i = 0; i < mAffirmationAdapter.getCount(); i++){
+                        if (mAffirmationAdapter.getItem(i).getAffirmationBody().toLowerCase().contains(s.toString().toLowerCase())){
+                            mSearchedAffirmations.add(mAffirmationAdapter.getItem(i));
+                        }
+                    }
+                    mSearchAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, mSearchedAffirmations);
+                    mAffirmationList = (ListView) findViewById(R.id.affirmation_master_list);
+                    mAffirmationList.setAdapter(mSearchAffirmationAdapter);
+
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
+
+            ImageView mCancelBtn = (ImageView) findViewById(R.id.btn_action_search_cancel);
+            mCancelBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    InputMethodManager imm = (InputMethodManager)   getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mSearchEditText.getWindowToken(), 0);
+                    mActionBar.setCustomView(R.layout.action_bar_browse);
+                    updateAffirmationList();
+
+                }
+            });
+        }
     }
 
     private class AffirmationListItemLongListener implements ListView.OnItemLongClickListener {
@@ -402,14 +411,33 @@ public class BrowseActivity extends AppCompatActivity {
         Intent i = getIntent();
         mAffirmationList = (ListView) findViewById(R.id.affirmation_master_list);
         ArrayAdapter<Affirmation> mAffirmationAdapter;
-        if (i.hasExtra("Browse Playlist")){
+        mBarText = (TextView) findViewById(R.id.bar_browse_txt);
+
+        mSearchBtn = (ImageView) findViewById(R.id.btn_action_search);
+        mSearchBtn.setOnClickListener(new searchButtonClickListener());
+
+        if (i.hasExtra("Browse Playlist")) {
             int pos = i.getIntExtra("Browse Playlist", -1);
             mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getAffirmationList());
-        } else{
-            mAffirmationList = (ListView) findViewById(R.id.affirmation_master_list);
+            mBarText.setText(CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getPlaylistName());
+        } else if (i.hasExtra("Add to Playlist")){
+            int pos = i.getIntExtra("Add to Playlist", -1);
+            ArrayList<Affirmation> mExcludedAffirmations = CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getAffirmationList();
+            mAddableAffirmations = (ArrayList<Affirmation>) MainMenuActivity.masterAffirmationList.clone();
+            for (Affirmation a : mExcludedAffirmations){
+                mAddableAffirmations.remove(a);
+            }
+            mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, mAddableAffirmations);
+            mBarText.setText("Add to Playlist");
+        } else {
             mAffirmationAdapter = new ArrayAdapter<Affirmation>(getApplicationContext(), R.layout.playlist_list_row, MainMenuActivity.masterAffirmationList);
+            mBarText.setText("Browse Affirmations");
         }
+
         mAffirmationList.setAdapter(mAffirmationAdapter);
+
+
+
     }
 
     private void addSelectedToPlaylist(){
