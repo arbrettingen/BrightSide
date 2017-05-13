@@ -28,10 +28,12 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private TextView mAffirmationText;
-    private LinearLayout mRandomButton;
+    private TextView mBottomRightText;
+    private LinearLayout mBottomRightButton;
     private LinearLayout mFavoriteButton;
     private int mAffirmationListPosition;
     private ImageView mFavImage;
+    private ImageView mBottomRightImage;
     public static ArrayAdapter<Affirmation> mCurrListAdapter;
 
     @Override
@@ -42,6 +44,9 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
 
         //initializing
         mAffirmationText = (TextView) findViewById(R.id.display_affirmation_text);
+        mBottomRightButton = (LinearLayout) findViewById(R.id.btn_display_bottom_right);
+        mBottomRightImage = (ImageView) findViewById(R.id.btn_display_bottom_right_image);
+        mBottomRightText = (TextView) findViewById(R.id.display_bottom_right_text);
 
         //intent extra checking
 
@@ -49,31 +54,46 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
         if (i.hasExtra("Selected From List")){
             //todo
             //Toast.makeText(getApplicationContext(), "Selected from list", Toast.LENGTH_SHORT).show(); works
-            int mPos = i.getIntExtra("Selected From List", -1);
+            int pos = i.getIntExtra("Selected From List", -1);
 
             //affirmation text setup below
-            mAffirmationListPosition = mPos;
+            mAffirmationListPosition = pos;
             mAffirmationText.setText(mCurrListAdapter.getItem(mAffirmationListPosition).getAffirmationBody());
+
+            //Next button code below
+            mBottomRightImage.setImageResource(R.drawable.next);
+            mBottomRightImage.setBackgroundResource(R.color.colorAccent);
+            mBottomRightText.setText("NEXT");
+            mBottomRightText.setBackgroundResource(R.color.colorAccent);
+            mBottomRightButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mAffirmationListPosition != mCurrListAdapter.getCount()-1){
+                        mAffirmationListPosition++;
+                        mAffirmationText.setText(mCurrListAdapter.getItem(mAffirmationListPosition).getAffirmationBody());
+                    }
+                }
+            });
 
         }
         else{
             //affirmation text setup below
             mAffirmationListPosition = randomWithRange(0,MainMenuActivity.masterAffirmationList.size()-1);
             mAffirmationText.setText(MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition).getAffirmationBody());
+
+            //Random button code below
+            mBottomRightButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAffirmationListPosition = randomWithRange(0,MainMenuActivity.masterAffirmationList.size()-1);
+                    mAffirmationText.setText(MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition).getAffirmationBody());
+                    setResources();
+                }
+            });
         }
 
 
-        //Roll button code below
 
-        mRandomButton = (LinearLayout) findViewById(R.id.btn_roll);
-        mRandomButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAffirmationListPosition = randomWithRange(0,MainMenuActivity.masterAffirmationList.size()-1);
-                mAffirmationText.setText(MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition).getAffirmationBody());
-                setResources();
-            }
-        });
 
         //favorite button code below
         mFavImage = (ImageView) findViewById(R.id.img_favorite);
