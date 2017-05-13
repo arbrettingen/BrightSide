@@ -362,6 +362,13 @@ public class BrowseActivity extends AppCompatActivity {
                     view.setBackgroundResource(R.color.colorAccent);
                 }
             }
+            else{
+                //// TODO: 5/11/2017
+                Intent j = new Intent(getApplicationContext(), DisplayAffirmationActivity.class);
+                j.putExtra("Selected From List", position);
+                DisplayAffirmationActivity.mCurrListAdapter = (ArrayAdapter) mAffirmationList.getAdapter();
+                startActivity(j);
+            }
         }
     }
 

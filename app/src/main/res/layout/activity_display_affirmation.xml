@@ -45,6 +45,7 @@
                 android:layout_weight="10"
                 android:background="@color/colorPrimary"
                 android:src="@drawable/random"
+                android:id="@+id/btn_display_bottom_right"
 
                 />
 
@@ -76,19 +77,20 @@
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="8"
+                android:layout_weight="10"
                 android:background="@color/colorPrimary"
                 android:src="@drawable/search"
+                android:id="@+id/btn_display_bottom_left"
 
                 />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="12"
+                android:layout_weight="10"
                 android:background="@color/colorPrimary"
                 android:gravity="center_vertical"
-                android:text="SEARCH"
+                android:text="PREV"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp" />
 

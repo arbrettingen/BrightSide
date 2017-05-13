@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -31,6 +32,7 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
     private LinearLayout mFavoriteButton;
     private int mAffirmationListPosition;
     private ImageView mFavImage;
+    public static ArrayAdapter<Affirmation> mCurrListAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,11 +40,28 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_display_affirmation);
         setTitle("Random Affirmations");
 
-
-        //affirmation text setup below
+        //initializing
         mAffirmationText = (TextView) findViewById(R.id.display_affirmation_text);
-        mAffirmationListPosition = randomWithRange(0,MainMenuActivity.masterAffirmationList.size()-1);
-        mAffirmationText.setText(MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition).getAffirmationBody());
+
+        //intent extra checking
+
+        Intent i = getIntent();
+        if (i.hasExtra("Selected From List")){
+            //todo
+            //Toast.makeText(getApplicationContext(), "Selected from list", Toast.LENGTH_SHORT).show(); works
+            int mPos = i.getIntExtra("Selected From List", -1);
+
+            //affirmation text setup below
+            mAffirmationListPosition = mPos;
+            mAffirmationText.setText(mCurrListAdapter.getItem(mAffirmationListPosition).getAffirmationBody());
+
+        }
+        else{
+            //affirmation text setup below
+            mAffirmationListPosition = randomWithRange(0,MainMenuActivity.masterAffirmationList.size()-1);
+            mAffirmationText.setText(MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition).getAffirmationBody());
+        }
+
 
         //Roll button code below
 
