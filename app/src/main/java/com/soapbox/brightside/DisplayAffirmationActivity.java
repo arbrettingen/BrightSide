@@ -31,6 +31,9 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
     private TextView mBottomRightText;
     private LinearLayout mBottomRightButton;
     private LinearLayout mFavoriteButton;
+    private LinearLayout mBottomLeftButton;
+    private ImageView mBottomLeftImage;
+    private TextView mBottomLeftText;
     private int mAffirmationListPosition;
     private ImageView mFavImage;
     private ImageView mBottomRightImage;
@@ -47,6 +50,11 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
         mBottomRightButton = (LinearLayout) findViewById(R.id.btn_display_bottom_right);
         mBottomRightImage = (ImageView) findViewById(R.id.btn_display_bottom_right_image);
         mBottomRightText = (TextView) findViewById(R.id.display_bottom_right_text);
+
+        mBottomLeftButton = (LinearLayout) findViewById(R.id.display_btn_bottom_left);
+        mBottomLeftImage = (ImageView) findViewById(R.id.display_image_bottom_left);
+        mBottomLeftText = (TextView) findViewById(R.id.display_text_bottom_left);
+
 
         //intent extra checking
 
@@ -75,6 +83,21 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
                 }
             });
 
+            //Prev Button code below
+            mBottomLeftImage.setImageResource(R.drawable.prev);
+            mBottomLeftImage.setBackgroundResource(R.color.colorAccent);
+            mBottomLeftText.setText("PREV");
+            mBottomLeftText.setBackgroundResource(R.color.colorAccent);
+            mBottomLeftButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mAffirmationListPosition != 0){
+                        mAffirmationListPosition--;
+                        mAffirmationText.setText(mCurrListAdapter.getItem(mAffirmationListPosition).getAffirmationBody());
+                    }
+                }
+            });
+
         }
         else{
             //affirmation text setup below
@@ -90,6 +113,9 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
                     setResources();
                 }
             });
+
+            //other button
+            mBottomLeftButton.setVisibility(View.GONE);
         }
 
 
