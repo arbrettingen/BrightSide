@@ -79,6 +79,9 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
                     if (mAffirmationListPosition != mCurrListAdapter.getCount()-1){
                         mAffirmationListPosition++;
                         mAffirmationText.setText(mCurrListAdapter.getItem(mAffirmationListPosition).getAffirmationBody());
+                    } else if (mAffirmationListPosition == mCurrListAdapter.getCount()-1){
+                        mAffirmationListPosition = 0;
+                        mAffirmationText.setText(mCurrListAdapter.getItem(mAffirmationListPosition).getAffirmationBody());
                     }
                 }
             });
@@ -94,6 +97,10 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
                     if (mAffirmationListPosition != 0){
                         mAffirmationListPosition--;
                         mAffirmationText.setText(mCurrListAdapter.getItem(mAffirmationListPosition).getAffirmationBody());
+                    } else if (mAffirmationListPosition == 0){
+                        mAffirmationListPosition = mCurrListAdapter.getCount()-1;
+                        mAffirmationText.setText(mCurrListAdapter.getItem(mAffirmationListPosition).getAffirmationBody());
+
                     }
                 }
             });
