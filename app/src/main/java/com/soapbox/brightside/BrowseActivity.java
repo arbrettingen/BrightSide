@@ -363,7 +363,6 @@ public class BrowseActivity extends AppCompatActivity {
                 }
             }
             else{
-                //// TODO: 5/11/2017
                 Intent j = new Intent(getApplicationContext(), DisplayAffirmationActivity.class);
                 j.putExtra("Selected From List", position);
                 DisplayAffirmationActivity.mCurrListAdapter = (ArrayAdapter) mAffirmationList.getAdapter();

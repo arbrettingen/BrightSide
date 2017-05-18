@@ -51,6 +51,12 @@ public class CustomPlaylistActivity extends AppCompatActivity {
 
         if (masterAffirmationPlaylistList == null) {
             masterAffirmationPlaylistList = new ArrayList<>();
+            masterAffirmationPlaylistList.add(new AffirmationPlaylist("Favorites"));
+            for (Affirmation a : MainMenuActivity.masterAffirmationList){
+                if (a.isFavorited()){
+                    masterAffirmationPlaylistList.get(0).getAffirmationList().add(a);
+                }
+            }
         }
 
         //drawer code below

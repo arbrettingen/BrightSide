@@ -60,8 +60,7 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         if (i.hasExtra("Selected From List")){
-            //todo
-            //Toast.makeText(getApplicationContext(), "Selected from list", Toast.LENGTH_SHORT).show(); works
+
             int pos = i.getIntExtra("Selected From List", -1);
 
             //affirmation text setup below
@@ -83,6 +82,7 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
                         mAffirmationListPosition = 0;
                         mAffirmationText.setText(mCurrListAdapter.getItem(mAffirmationListPosition).getAffirmationBody());
                     }
+                    setResources();
                 }
             });
 
@@ -102,8 +102,11 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
                         mAffirmationText.setText(mCurrListAdapter.getItem(mAffirmationListPosition).getAffirmationBody());
 
                     }
+                    setResources();
                 }
             });
+
+
 
         }
         else{
@@ -123,6 +126,7 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
 
             //other button
             mBottomLeftButton.setVisibility(View.GONE);
+
         }
 
 
@@ -141,14 +145,61 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
         mFavoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition).isFavorited()){
-                    mFavImage.setImageResource(R.drawable.unfavorite);
-                    MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition).setFavorited(false);
-                    Toast.makeText(getApplicationContext(), "Affirmation removed from favorites.", Toast.LENGTH_LONG).show();
-                } else {
-                    mFavImage.setImageResource(R.drawable.favorite);
-                    MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition).setFavorited(true);
-                    Toast.makeText(getApplicationContext(), "Affirmation added to favorites.", Toast.LENGTH_LONG).show();
+                Intent i = getIntent();
+                if (i.hasExtra("Selected From List")){
+
+                    if (mCurrListAdapter.getItem(mAffirmationListPosition).isFavorited()) {
+                        mFavImage.setImageResource(R.drawable.unfavorite);
+                        mCurrListAdapter.getItem(mAffirmationListPosition).setFavorited(false);
+
+                        if (CustomPlaylistActivity.masterAffirmationPlaylistList != null) {
+                            if (!CustomPlaylistActivity.masterAffirmationPlaylistList.isEmpty()) {
+                                CustomPlaylistActivity.masterAffirmationPlaylistList.get(0).getAffirmationList()
+                                        .remove(mCurrListAdapter.getItem(mAffirmationListPosition));
+                            }
+                        }
+
+                        Toast.makeText(getApplicationContext(), "Affirmation removed from favorites.", Toast.LENGTH_LONG).show();
+                    } else {
+                        mFavImage.setImageResource(R.drawable.favorite);
+                        mCurrListAdapter.getItem(mAffirmationListPosition).setFavorited(true);
+
+                        if (CustomPlaylistActivity.masterAffirmationPlaylistList != null) {
+                            if (!CustomPlaylistActivity.masterAffirmationPlaylistList.isEmpty()) {
+                                CustomPlaylistActivity.masterAffirmationPlaylistList.get(0).getAffirmationList()
+                                        .add(mCurrListAdapter.getItem(mAffirmationListPosition));
+                            }
+                        }
+
+                        Toast.makeText(getApplicationContext(), "Affirmation added to favorites.", Toast.LENGTH_LONG).show();
+                    }
+
+                }else {
+                    if (MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition).isFavorited()) {
+                        mFavImage.setImageResource(R.drawable.unfavorite);
+                        MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition).setFavorited(false);
+
+                        if (CustomPlaylistActivity.masterAffirmationPlaylistList != null) {
+                            if (!CustomPlaylistActivity.masterAffirmationPlaylistList.isEmpty()) {
+                                CustomPlaylistActivity.masterAffirmationPlaylistList.get(0).getAffirmationList()
+                                        .remove(MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition));
+                            }
+                        }
+
+                        Toast.makeText(getApplicationContext(), "Affirmation removed from favorites.", Toast.LENGTH_LONG).show();
+                    } else {
+                        mFavImage.setImageResource(R.drawable.favorite);
+                        MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition).setFavorited(true);
+
+                        if (CustomPlaylistActivity.masterAffirmationPlaylistList != null) {
+                            if (!CustomPlaylistActivity.masterAffirmationPlaylistList.isEmpty()) {
+                                CustomPlaylistActivity.masterAffirmationPlaylistList.get(0).getAffirmationList()
+                                        .add(MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition));
+                            }
+                        }
+
+                        Toast.makeText(getApplicationContext(), "Affirmation added to favorites.", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
@@ -183,7 +234,7 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
+        setResources();
 
     }
 
@@ -279,10 +330,20 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
     }
 
     private void setResources(){
-        if (MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition).isFavorited()){
-            mFavImage.setImageResource(R.drawable.favorite);
-        }else{
-            mFavImage.setImageResource(R.drawable.unfavorite);
+        Intent i = getIntent();
+        if (i.hasExtra("Selected From List")){
+
+            if (mCurrListAdapter.getItem(mAffirmationListPosition).isFavorited()) {
+                mFavImage.setImageResource(R.drawable.favorite);
+            } else {
+                mFavImage.setImageResource(R.drawable.unfavorite);
+            }
+        }else {
+            if (MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition).isFavorited()) {
+                mFavImage.setImageResource(R.drawable.favorite);
+            } else {
+                mFavImage.setImageResource(R.drawable.unfavorite);
+            }
         }
     }
 
@@ -291,5 +352,6 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
         int range = (max - min) + 1;
         return (int)(Math.random() * range) + min;
     }
+
 
 }
