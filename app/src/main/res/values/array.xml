@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="nav_options_array">
+    <string-array name="array_nav_options">
         <item>Home</item>
         <item>Daily Recommendations</item>
         <item>Random Affirmations</item>
@@ -11,5 +11,11 @@
         <item>Rewards</item>
         <item>About</item>
         <item>Settings</item>
+    </string-array>
+    <string-array name="array_reminder_options">
+        <item>Random Affirmation</item>
+        <item>Specific Affirmation</item>
+        <item>From Playlist</item>
+        <item>Custom Message</item>
     </string-array>
 </resources>

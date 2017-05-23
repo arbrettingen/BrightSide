@@ -2,15 +2,26 @@ package com.soapbox.brightside;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 
 /**
  * Created by Alex on 2/28/2017.
@@ -23,14 +34,25 @@ public class RemindersActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
 
+    private String[] mReminderChoices;
+    private Spinner mReminderList;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminders);
         setTitle("Reminders");
 
+        //reminder choices list below
+        mReminderChoices = getResources().getStringArray(R.array.array_reminder_options);
+        mReminderList = (Spinner) findViewById(R.id.reminders_spinner_reminder_type);
+
+        SpinnerAdapter mReminderAdapter = new MySpinnerAdapter();
+
+        mReminderList.setAdapter(mReminderAdapter);
+
         //drawer code below
-        mNavChoices = getResources().getStringArray(R.array.nav_options_array);
+        mNavChoices = getResources().getStringArray(R.array.array_nav_options);
         mDrawerList = (ListView) findViewById(R.id.reminders_left_drawer);
 
         NavListAdapter mDrawerListAdapter = new NavListAdapter(getApplicationContext(), R.layout.row_nav_drawer, mNavChoices);
@@ -150,6 +172,33 @@ public class RemindersActivity extends AppCompatActivity {
         }
 
 
+    }
+
+
+    private class MySpinnerAdapter extends BaseAdapter implements SpinnerAdapter{
+        @Override
+        public int getCount() {
+            return 4;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mReminderChoices[position];
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            TextView mSimpleText = new TextView(getApplicationContext());
+            mSimpleText.setText(mReminderChoices[position]);
+            mSimpleText.setTextColor(getColor(R.color.colorPrimary));
+            mSimpleText.setTextSize(18);
+            return mSimpleText;
+        }
     }
 
 }

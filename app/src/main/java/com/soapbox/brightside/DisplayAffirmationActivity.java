@@ -205,7 +205,7 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
         });
 
         //drawer code below
-        mNavChoices = getResources().getStringArray(R.array.nav_options_array);
+        mNavChoices = getResources().getStringArray(R.array.array_nav_options);
         mDrawerList = (ListView) findViewById(R.id.display_left_drawer);
 
         NavListAdapter mDrawerListAdapter = new NavListAdapter(getApplicationContext(), R.layout.row_nav_drawer, mNavChoices);

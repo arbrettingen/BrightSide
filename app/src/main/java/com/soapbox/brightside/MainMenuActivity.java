@@ -60,13 +60,6 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         setTitle("Home");
 
-        //FOR TESTING///////////////////////////////////////////////
-        for (Affirmation a : masterAffirmationList){
-            Log.e("AFFIRMATION TEST", a.toString());
-        }
-        //FOR TESTING///////////////////////////////////////////////
-
-
         //main list code below
         mHomeListView = (ListView) findViewById(R.id.home_list_main);
         mNavItemAdapter = new NavItemAdapter(getApplicationContext(), R.layout.home_row, mNavItems);
@@ -75,7 +68,7 @@ public class MainMenuActivity extends AppCompatActivity {
         mHomeListView.setOnItemClickListener(new HomeListItemListener());
 
         //drawer code below
-        mNavChoices = getResources().getStringArray(R.array.nav_options_array);
+        mNavChoices = getResources().getStringArray(R.array.array_nav_options);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         NavListAdapter mNavListAdapter = new NavListAdapter(getApplicationContext(),
