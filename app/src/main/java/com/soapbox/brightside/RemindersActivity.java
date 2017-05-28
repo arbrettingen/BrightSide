@@ -16,12 +16,15 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by Alex on 2/28/2017.
@@ -34,6 +37,7 @@ public class RemindersActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
 
+    private Switch mNotificationsSwitch;
     private String[] mReminderChoices;
     private Spinner mReminderList;
 
@@ -42,6 +46,19 @@ public class RemindersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminders);
         setTitle("Reminders");
+
+        //initialize views
+
+        //reminder switch below
+        mNotificationsSwitch = (Switch) findViewById(R.id.reminders_switch_notifications);
+        mNotificationsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //todo
+                if (isChecked);
+
+            }
+        });
 
         //reminder choices list below
         mReminderChoices = getResources().getStringArray(R.array.array_reminder_options);
