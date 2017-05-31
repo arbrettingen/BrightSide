@@ -101,7 +101,7 @@ public class RemindersActivity extends AppCompatActivity {
         mNotificationsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                
+
                 if (isChecked){
                     mReminderList.setVisibility(View.VISIBLE);
                     mReminderMessgageText.setVisibility(View.VISIBLE);
@@ -132,6 +132,23 @@ public class RemindersActivity extends AppCompatActivity {
         mReminderChoices = getResources().getStringArray(R.array.array_reminder_options);
         SpinnerAdapter mReminderAdapter = new MySpinnerAdapter();
         mReminderList.setAdapter(mReminderAdapter);
+
+        //if there is a shared preference, get it and set it to the selected value
+        int initValue = sharedPref.getInt("Reminder Type", 0);
+        mReminderList.setSelection(initValue);
+
+        mReminderList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                editor.putInt("Reminder Type", position);
+                editor.apply();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         //drawer code below
         mNavChoices = getResources().getStringArray(R.array.array_nav_options);
