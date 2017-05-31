@@ -49,7 +49,6 @@ public class RemindersActivity extends AppCompatActivity {
     private Button mReminderMessageButton;
     private TextView mReminderTimeText;
     private ImageView mReminderTimeButton;
-    private Button mReminderSaveChanges;
     private TextView mReminderTypeText;
 
     @Override
@@ -65,7 +64,6 @@ public class RemindersActivity extends AppCompatActivity {
         mReminderMessageButton = (Button) findViewById(R.id.reminders_message_btn);
         mReminderTimeText = (TextView) findViewById(R.id.reminders_time_text);
         mReminderTimeButton = (ImageView) findViewById(R.id.reminders_timechange_btn);
-        mReminderSaveChanges = (Button) findViewById(R.id.reminders_btn_save_changes);
         mReminderTypeText = (TextView) findViewById(R.id.reminders_type_text);
 
         //preferences init
@@ -81,7 +79,6 @@ public class RemindersActivity extends AppCompatActivity {
             mReminderMessageButton.setVisibility(View.VISIBLE);
             mReminderTimeText.setVisibility(View.VISIBLE);
             mReminderTimeButton.setVisibility(View.VISIBLE);
-            mReminderSaveChanges.setVisibility(View.VISIBLE);
             mReminderTypeText.setVisibility(View.VISIBLE);
 
             mNotificationsSwitch.setChecked(true);
@@ -92,7 +89,6 @@ public class RemindersActivity extends AppCompatActivity {
             mReminderMessageButton.setVisibility(View.GONE);
             mReminderTimeText.setVisibility(View.GONE);
             mReminderTimeButton.setVisibility(View.GONE);
-            mReminderSaveChanges.setVisibility(View.GONE);
             mReminderTypeText.setVisibility(View.GONE);
 
             mNotificationsSwitch.setChecked(false);
@@ -108,7 +104,6 @@ public class RemindersActivity extends AppCompatActivity {
                     mReminderMessageButton.setVisibility(View.VISIBLE);
                     mReminderTimeText.setVisibility(View.VISIBLE);
                     mReminderTimeButton.setVisibility(View.VISIBLE);
-                    mReminderSaveChanges.setVisibility(View.VISIBLE);
                     mReminderTypeText.setVisibility(View.VISIBLE);
 
                     editor.putBoolean("Notifications", true);
@@ -118,7 +113,6 @@ public class RemindersActivity extends AppCompatActivity {
                     mReminderMessageButton.setVisibility(View.GONE);
                     mReminderTimeText.setVisibility(View.GONE);
                     mReminderTimeButton.setVisibility(View.GONE);
-                    mReminderSaveChanges.setVisibility(View.GONE);
                     mReminderTypeText.setVisibility(View.GONE);
 
                     editor.putBoolean("Notifications", false);
