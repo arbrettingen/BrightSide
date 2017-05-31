@@ -1,6 +1,8 @@
 package com.soapbox.brightside;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.DataSetObserver;
 import android.os.Bundle;
@@ -16,9 +18,12 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -40,6 +45,12 @@ public class RemindersActivity extends AppCompatActivity {
     private Switch mNotificationsSwitch;
     private String[] mReminderChoices;
     private Spinner mReminderList;
+    private EditText mReminderMessgageText;
+    private Button mReminderMessageButton;
+    private TextView mReminderTimeText;
+    private ImageView mReminderTimeButton;
+    private Button mReminderSaveChanges;
+    private TextView mReminderTypeText;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,24 +59,78 @@ public class RemindersActivity extends AppCompatActivity {
         setTitle("Reminders");
 
         //initialize views
-
-        //reminder switch below
         mNotificationsSwitch = (Switch) findViewById(R.id.reminders_switch_notifications);
+        mReminderList = (Spinner) findViewById(R.id.reminders_spinner_reminder_type);
+        mReminderMessgageText = (EditText) findViewById(R.id.reminders_message_edittext);
+        mReminderMessageButton = (Button) findViewById(R.id.reminders_message_btn);
+        mReminderTimeText = (TextView) findViewById(R.id.reminders_time_text);
+        mReminderTimeButton = (ImageView) findViewById(R.id.reminders_timechange_btn);
+        mReminderSaveChanges = (Button) findViewById(R.id.reminders_btn_save_changes);
+        mReminderTypeText = (TextView) findViewById(R.id.reminders_type_text);
+
+        //preferences init
+
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPref.edit();
+
+        //notification reminder switch below
+
+        if (sharedPref.getBoolean("Notifications", false)){
+            mReminderList.setVisibility(View.VISIBLE);
+            mReminderMessgageText.setVisibility(View.VISIBLE);
+            mReminderMessageButton.setVisibility(View.VISIBLE);
+            mReminderTimeText.setVisibility(View.VISIBLE);
+            mReminderTimeButton.setVisibility(View.VISIBLE);
+            mReminderSaveChanges.setVisibility(View.VISIBLE);
+            mReminderTypeText.setVisibility(View.VISIBLE);
+
+            mNotificationsSwitch.setChecked(true);
+        }
+        else{
+            mReminderList.setVisibility(View.GONE);
+            mReminderMessgageText.setVisibility(View.GONE);
+            mReminderMessageButton.setVisibility(View.GONE);
+            mReminderTimeText.setVisibility(View.GONE);
+            mReminderTimeButton.setVisibility(View.GONE);
+            mReminderSaveChanges.setVisibility(View.GONE);
+            mReminderTypeText.setVisibility(View.GONE);
+
+            mNotificationsSwitch.setChecked(false);
+        }
+
         mNotificationsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //todo
-                if (isChecked);
+                
+                if (isChecked){
+                    mReminderList.setVisibility(View.VISIBLE);
+                    mReminderMessgageText.setVisibility(View.VISIBLE);
+                    mReminderMessageButton.setVisibility(View.VISIBLE);
+                    mReminderTimeText.setVisibility(View.VISIBLE);
+                    mReminderTimeButton.setVisibility(View.VISIBLE);
+                    mReminderSaveChanges.setVisibility(View.VISIBLE);
+                    mReminderTypeText.setVisibility(View.VISIBLE);
 
+                    editor.putBoolean("Notifications", true);
+                } else{
+                    mReminderList.setVisibility(View.GONE);
+                    mReminderMessgageText.setVisibility(View.GONE);
+                    mReminderMessageButton.setVisibility(View.GONE);
+                    mReminderTimeText.setVisibility(View.GONE);
+                    mReminderTimeButton.setVisibility(View.GONE);
+                    mReminderSaveChanges.setVisibility(View.GONE);
+                    mReminderTypeText.setVisibility(View.GONE);
+
+                    editor.putBoolean("Notifications", false);
+                }
+
+                editor.apply(); //editor.commit();?
             }
         });
 
         //reminder choices list below
         mReminderChoices = getResources().getStringArray(R.array.array_reminder_options);
-        mReminderList = (Spinner) findViewById(R.id.reminders_spinner_reminder_type);
-
         SpinnerAdapter mReminderAdapter = new MySpinnerAdapter();
-
         mReminderList.setAdapter(mReminderAdapter);
 
         //drawer code below
