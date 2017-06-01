@@ -1,10 +1,13 @@
 package com.soapbox.brightside;
 
+import android.animation.TimeInterpolator;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.DataSetObserver;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
@@ -29,7 +32,11 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Alex on 2/28/2017.
@@ -141,6 +148,27 @@ public class RemindersActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+
+        //message text handling below
+
+        String messageText = sharedPref.getString("Message Text", "");
+        if (messageText.equals("")){
+            messageText = setMessageText(mReminderList.getSelectedItem().toString());
+            editor.putString("Message Text", messageText);
+            editor.apply();
+        }
+        mReminderMessgageText.setText(messageText);
+
+        //time pick setup below
+
+        mReminderTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                java.util.Calendar cal = java.util.Calendar.getInstance();
+                TimePickerDialog tp1 = new TimePickerDialog(RemindersActivity.this, new MyTimePickerListener(), cal.get(java.util.Calendar.HOUR_OF_DAY), cal.get(java.util.Calendar.MINUTE), false);
+                tp1.show();
             }
         });
 
@@ -267,6 +295,24 @@ public class RemindersActivity extends AppCompatActivity {
 
     }
 
+    private String setMessageText(String reminderType){
+        //todo
+        switch (reminderType) {
+            case "Random Affirmation":
+                break;
+            case "Specific Affirmation":
+                break;
+            case "From Playlist":
+                break;
+            case "Custom Message":
+                break;
+            default:
+                break;
+        }
+
+        return "";
+    }
+
 
     private class MySpinnerAdapter extends BaseAdapter implements SpinnerAdapter{
         @Override
@@ -291,6 +337,23 @@ public class RemindersActivity extends AppCompatActivity {
             mSimpleText.setTextColor(getColor(R.color.colorPrimary));
             mSimpleText.setTextSize(18);
             return mSimpleText;
+        }
+    }
+
+    private class MyTimePickerListener implements TimePickerDialog.OnTimeSetListener{
+        //// TODO: 5/31/2017 save to preferences
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            try {
+                String _24HourTime = String.valueOf(hourOfDay) + ":" + String.valueOf(minute);
+                SimpleDateFormat _24HourSDF = new SimpleDateFormat("HH:mm");
+                SimpleDateFormat _12HourSDF = new SimpleDateFormat("hh:mm a");
+                Date _24HourDt = _24HourSDF.parse(_24HourTime);
+                String clockTime = _12HourSDF.format(_24HourDt);
+                mReminderTimeText.setText(clockTime);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
