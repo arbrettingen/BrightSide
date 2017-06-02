@@ -97,7 +97,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/rounded_corner"
                 android:padding="16dp"
-                android:text="00:00 AM"
+                android:text="12:00 PM"
                 android:textColor="@color/colorWhite"
                 android:textSize="44sp" />
 

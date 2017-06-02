@@ -114,6 +114,8 @@ public class RemindersActivity extends AppCompatActivity {
                     mReminderTypeText.setVisibility(View.VISIBLE);
 
                     editor.putBoolean("Notifications", true);
+
+                    Toast.makeText(getApplicationContext(), "Notifications set for " + mReminderTimeText.getText() + ".", Toast.LENGTH_LONG).show();
                 } else{
                     mReminderList.setVisibility(View.GONE);
                     mReminderMessgageText.setVisibility(View.GONE);
@@ -123,6 +125,8 @@ public class RemindersActivity extends AppCompatActivity {
                     mReminderTypeText.setVisibility(View.GONE);
 
                     editor.putBoolean("Notifications", false);
+
+                    Toast.makeText(getApplicationContext(), "Notifications turned off.", Toast.LENGTH_LONG).show();
                 }
 
                 editor.apply(); //editor.commit();?
@@ -171,6 +175,12 @@ public class RemindersActivity extends AppCompatActivity {
                 tp1.show();
             }
         });
+
+        //time text setup below
+
+        if (!sharedPref.getString("Reminder Time", "").equals("")){
+            mReminderTimeText.setText(sharedPref.getString("Reminder Time", ""));
+        }
 
         //drawer code below
         mNavChoices = getResources().getStringArray(R.array.array_nav_options);
@@ -341,7 +351,7 @@ public class RemindersActivity extends AppCompatActivity {
     }
 
     private class MyTimePickerListener implements TimePickerDialog.OnTimeSetListener{
-        //// TODO: 5/31/2017 save to preferences
+
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             try {
@@ -351,6 +361,14 @@ public class RemindersActivity extends AppCompatActivity {
                 Date _24HourDt = _24HourSDF.parse(_24HourTime);
                 String clockTime = _12HourSDF.format(_24HourDt);
                 mReminderTimeText.setText(clockTime);
+
+                SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+                final SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("Reminder Time", clockTime);
+                editor.apply();
+
+                Toast.makeText(getApplicationContext(), "Notifications set for " + mReminderTimeText.getText() + ".", Toast.LENGTH_LONG).show();
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
