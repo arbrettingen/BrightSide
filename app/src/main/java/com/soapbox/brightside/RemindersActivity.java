@@ -3,15 +3,18 @@ package com.soapbox.brightside;
 import android.animation.TimeInterpolator;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -149,7 +152,9 @@ public class RemindersActivity extends AppCompatActivity {
         //if there is a shared preference, get it and set it to the selected value
         int initValue = sharedPref.getInt("Reminder Type", 0);
         mReminderList.setSelection(initValue);
+        changeMessageButton(mReminderList.getItemAtPosition(initValue).toString());
 
+        //reminder choice listener
         mReminderList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -157,6 +162,7 @@ public class RemindersActivity extends AppCompatActivity {
                 editor.apply();
 
                 mReminderMessgageText.setText(setMessageText(mReminderList.getItemAtPosition(position).toString()));
+                changeMessageButton(mReminderList.getItemAtPosition(position).toString());
             }
 
             @Override
@@ -312,7 +318,6 @@ public class RemindersActivity extends AppCompatActivity {
     }
 
     private String setMessageText(String reminderType){
-        //todo
 
         String ret = "";
         int randomPosition;
@@ -322,10 +327,12 @@ public class RemindersActivity extends AppCompatActivity {
         switch (reminderType) {
             case "Random Affirmation":
 
-                Toast.makeText(getApplicationContext(), reminderType, Toast.LENGTH_SHORT).show();
-
-                randomPosition = randomWithRange(0,MainMenuActivity.masterAffirmationList.size()-1);
-                ret = MainMenuActivity.masterAffirmationList.get(randomPosition).getAffirmationBody();
+                if (sharedPref.getString("Random Affirmation", "").equals("")){
+                    randomPosition = randomWithRange(0,MainMenuActivity.masterAffirmationList.size()-1);
+                    ret = MainMenuActivity.masterAffirmationList.get(randomPosition).getAffirmationBody();
+                }else{
+                    ret = sharedPref.getString("Random Affirmation", "");
+                }
 
                 break;
             case "Specific Affirmation":
@@ -433,6 +440,131 @@ public class RemindersActivity extends AppCompatActivity {
     {
         int range = (max - min) + 1;
         return (int)(Math.random() * range) + min;
+    }
+
+    private void changeMessageButton(final String reminderType){
+        //// TODO: 6/5/2017
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPref.edit();
+
+        switch (reminderType){
+            case "Random Affirmation":
+                mReminderMessageButton.setText("RANDOMIZE");
+                mReminderMessgageText.setEnabled(false);
+                mReminderMessgageText.setTextColor(Color.BLACK);
+
+                mReminderMessageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int randomPosition = randomWithRange(0, MainMenuActivity.masterAffirmationList.size()-1);
+                        String message = MainMenuActivity.masterAffirmationList.get(randomPosition).getAffirmationBody();
+
+                        editor.putString(reminderType, message);
+                        editor.apply();
+
+                        mReminderMessgageText.setText(setMessageText(reminderType));
+                    }
+                });
+
+                break;
+            case "Specific Affirmation":
+                mReminderMessageButton.setText("CHANGE");
+                mReminderMessgageText.setEnabled(false);
+                mReminderMessgageText.setTextColor(Color.BLACK);
+
+                mReminderMessageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+                        AlertDialog.Builder b = new AlertDialog.Builder(RemindersActivity.this);
+                        b.setTitle("Select Affirmation");
+                        String[] affirmations = new String[MainMenuActivity.masterAffirmationList.size()];
+                        int i = 0;
+                        for (Affirmation a : MainMenuActivity.masterAffirmationList){
+                            affirmations[i] = a.getAffirmationBody();
+                            i++;
+                        }
+
+                        b.setItems(affirmations, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                String message = MainMenuActivity.masterAffirmationList.get(which).getAffirmationBody();
+
+                                editor.putString(reminderType, message);
+                                editor.apply();
+
+                                mReminderMessgageText.setText(setMessageText(reminderType));
+
+                                Toast.makeText(getApplicationContext(), "New Affirmation Selected", Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+                        b.show();
+
+
+
+                    }
+                });
+                break;
+            case "From Playlist":
+                mReminderMessageButton.setText("CHANGE");
+                mReminderMessgageText.setEnabled(false);
+                mReminderMessgageText.setTextColor(Color.BLACK);
+
+                mReminderMessageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialog.Builder b = new AlertDialog.Builder(RemindersActivity.this);
+                        b.setTitle("Select Playlist");
+                        String[] playlists = new String[CustomPlaylistActivity.masterAffirmationPlaylistList.size()];
+                        int i = 0;
+                        for (AffirmationPlaylist pl : CustomPlaylistActivity.masterAffirmationPlaylistList){
+                            playlists[i] = pl.getPlaylistName();
+                            i++;
+                        }
+
+                        b.setItems(playlists, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String message = CustomPlaylistActivity.masterAffirmationPlaylistList.get(which).getPlaylistName();
+
+                                editor.putString(reminderType, message);
+                                editor.apply();
+
+                                mReminderMessgageText.setText(setMessageText(reminderType));
+                                Toast.makeText(getApplicationContext(), "New playlist selected. Affirmations will be sequentially selected from this playlist.", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        b.show();
+
+                    }
+                });
+                break;
+            case "Custom Message":
+                mReminderMessageButton.setText("SAVE");
+                mReminderMessgageText.setEnabled(true);
+                mReminderMessgageText.setTextColor(Color.BLACK);
+
+                mReminderMessageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String message = mReminderMessgageText.getText().toString();
+
+                        editor.putString(reminderType, message);
+                        editor.apply();
+
+                        mReminderMessgageText.setText(setMessageText(reminderType));
+                        Toast.makeText(getApplicationContext(), "Custom Message Saved.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+                break;
+            default:
+                break;
+        }
     }
 
 }

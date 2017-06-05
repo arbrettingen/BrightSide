@@ -60,14 +60,6 @@ public class CustomPlaylistActivity extends AppCompatActivity {
             }
         }
 
-        Intent i = getIntent(); //todo
-        if (i.hasExtra("Reminder Select")){
-            Intent returnIntent = new Intent();
-            //returnIntent.putExtra
-            setResult(Activity.RESULT_OK,returnIntent);
-            finish();
-        }
-
         //drawer code below
         mNavChoices = getResources().getStringArray(R.array.array_nav_options);
         mDrawerList = (ListView) findViewById(R.id.playlist_left_drawer);

@@ -60,6 +60,16 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         setTitle("Home");
 
+        if (CustomPlaylistActivity.masterAffirmationPlaylistList == null) {
+            CustomPlaylistActivity.masterAffirmationPlaylistList = new ArrayList<>();
+            CustomPlaylistActivity.masterAffirmationPlaylistList.add(new AffirmationPlaylist("Favorites"));
+            for (Affirmation a : MainMenuActivity.masterAffirmationList){
+                if (a.isFavorited()){
+                    CustomPlaylistActivity.masterAffirmationPlaylistList.get(0).getAffirmationList().add(a);
+                }
+            }
+        }
+
         //main list code below
         mHomeListView = (ListView) findViewById(R.id.home_list_main);
         mNavItemAdapter = new NavItemAdapter(getApplicationContext(), R.layout.home_row, mNavItems);
