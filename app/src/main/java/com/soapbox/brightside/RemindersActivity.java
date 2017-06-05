@@ -36,6 +36,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -58,11 +59,19 @@ public class RemindersActivity extends AppCompatActivity {
     private ImageView mReminderTimeButton;
     private TextView mReminderTypeText;
 
+    static final int PLAYLIST_LIST_REQUEST = 1;  // The request code
+
+
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminders);
         setTitle("Reminders");
+
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPref.edit();
 
         //initialize views
         mNotificationsSwitch = (Switch) findViewById(R.id.reminders_switch_notifications);
@@ -75,8 +84,7 @@ public class RemindersActivity extends AppCompatActivity {
 
         //preferences init
 
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        final SharedPreferences.Editor editor = sharedPref.edit();
+
 
         //notification reminder switch below
 
@@ -147,6 +155,8 @@ public class RemindersActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 editor.putInt("Reminder Type", position);
                 editor.apply();
+
+                mReminderMessgageText.setText(setMessageText(mReminderList.getItemAtPosition(position).toString()));
             }
 
             @Override
@@ -157,12 +167,8 @@ public class RemindersActivity extends AppCompatActivity {
 
         //message text handling below
 
-        String messageText = sharedPref.getString("Message Text", "");
-        if (messageText.equals("")){
-            messageText = setMessageText(mReminderList.getSelectedItem().toString());
-            editor.putString("Message Text", messageText);
-            editor.apply();
-        }
+        String messageText = setMessageText(mReminderList.getSelectedItem().toString());
+
         mReminderMessgageText.setText(messageText);
 
         //time pick setup below
@@ -307,20 +313,65 @@ public class RemindersActivity extends AppCompatActivity {
 
     private String setMessageText(String reminderType){
         //todo
+
+        String ret = "";
+        int randomPosition;
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPref.edit();
+
         switch (reminderType) {
             case "Random Affirmation":
+
+                Toast.makeText(getApplicationContext(), reminderType, Toast.LENGTH_SHORT).show();
+
+                randomPosition = randomWithRange(0,MainMenuActivity.masterAffirmationList.size()-1);
+                ret = MainMenuActivity.masterAffirmationList.get(randomPosition).getAffirmationBody();
+
                 break;
             case "Specific Affirmation":
+
+                if (sharedPref.getString("Specific Affirmation", "").equals("")){
+                    randomPosition = randomWithRange(0,MainMenuActivity.masterAffirmationList.size()-1);
+                    ret = MainMenuActivity.masterAffirmationList.get(randomPosition).getAffirmationBody();
+                    editor.putString("Specific Affirmation", ret);
+                    editor.apply();
+                }else{
+                    ret = sharedPref.getString("Specific Affirmation", "");
+                }
+
                 break;
             case "From Playlist":
+
+                if (sharedPref.getString("From Playlist", "").equals("")){
+                    if (CustomPlaylistActivity.masterAffirmationPlaylistList == null) {
+                        CustomPlaylistActivity.masterAffirmationPlaylistList = new ArrayList<>();
+                        CustomPlaylistActivity.masterAffirmationPlaylistList.add(new AffirmationPlaylist("Favorites"));
+                        for (Affirmation a : MainMenuActivity.masterAffirmationList){
+                            if (a.isFavorited()){
+                                CustomPlaylistActivity.masterAffirmationPlaylistList.get(0).getAffirmationList().add(a);
+                            }
+                        }
+                    }
+                    randomPosition = randomWithRange(0, CustomPlaylistActivity.masterAffirmationPlaylistList.size()-1);
+                    ret = CustomPlaylistActivity.masterAffirmationPlaylistList.get(randomPosition).getPlaylistName();
+
+                    editor.putString("From Playlist", ret);
+                    editor.apply();
+                }else{
+                    ret = sharedPref.getString("From Playlist", "");
+                }
+
                 break;
             case "Custom Message":
+
+                ret = sharedPref.getString("Custom Message", "");
+
                 break;
             default:
                 break;
         }
 
-        return "";
+        return ret;
     }
 
 
@@ -354,6 +405,10 @@ public class RemindersActivity extends AppCompatActivity {
 
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+            SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+            final SharedPreferences.Editor editor = sharedPref.edit();
+
             try {
                 String _24HourTime = String.valueOf(hourOfDay) + ":" + String.valueOf(minute);
                 SimpleDateFormat _24HourSDF = new SimpleDateFormat("HH:mm");
@@ -362,8 +417,7 @@ public class RemindersActivity extends AppCompatActivity {
                 String clockTime = _12HourSDF.format(_24HourDt);
                 mReminderTimeText.setText(clockTime);
 
-                SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-                final SharedPreferences.Editor editor = sharedPref.edit();
+
                 editor.putString("Reminder Time", clockTime);
                 editor.apply();
 
@@ -373,6 +427,12 @@ public class RemindersActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    private int randomWithRange(int min, int max)
+    {
+        int range = (max - min) + 1;
+        return (int)(Math.random() * range) + min;
     }
 
 }

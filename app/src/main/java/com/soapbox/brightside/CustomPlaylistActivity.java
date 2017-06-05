@@ -1,5 +1,6 @@
 package com.soapbox.brightside;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -57,6 +58,14 @@ public class CustomPlaylistActivity extends AppCompatActivity {
                     masterAffirmationPlaylistList.get(0).getAffirmationList().add(a);
                 }
             }
+        }
+
+        Intent i = getIntent(); //todo
+        if (i.hasExtra("Reminder Select")){
+            Intent returnIntent = new Intent();
+            //returnIntent.putExtra
+            setResult(Activity.RESULT_OK,returnIntent);
+            finish();
         }
 
         //drawer code below
