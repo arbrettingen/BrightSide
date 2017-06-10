@@ -1,25 +1,42 @@
 package com.soapbox.brightside;
 
 import android.animation.TimeInterpolator;
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.app.TimePickerDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import java.util.*;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.DataSetObserver;
 import android.graphics.Color;
-import android.icu.util.Calendar;
+import android.icu.util.*;
+
+import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.Parcel;
+import android.os.SystemClock;
+import android.service.notification.NotificationListenerService;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -40,7 +57,9 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by Alex on 2/28/2017.
@@ -61,6 +80,7 @@ public class RemindersActivity extends AppCompatActivity {
     private TextView mReminderTimeText;
     private ImageView mReminderTimeButton;
     private TextView mReminderTypeText;
+    private PendingIntent pendingIntent;
 
     static final int PLAYLIST_LIST_REQUEST = 1;  // The request code
 
@@ -99,6 +119,7 @@ public class RemindersActivity extends AppCompatActivity {
             mReminderTimeButton.setVisibility(View.VISIBLE);
             mReminderTypeText.setVisibility(View.VISIBLE);
 
+
             mNotificationsSwitch.setChecked(true);
         }
         else{
@@ -126,6 +147,8 @@ public class RemindersActivity extends AppCompatActivity {
 
                     editor.putBoolean("Notifications", true);
 
+                    setNotification();
+
                     Toast.makeText(getApplicationContext(), "Notifications set for " + mReminderTimeText.getText() + ".", Toast.LENGTH_LONG).show();
                 } else{
                     mReminderList.setVisibility(View.GONE);
@@ -136,6 +159,9 @@ public class RemindersActivity extends AppCompatActivity {
                     mReminderTypeText.setVisibility(View.GONE);
 
                     editor.putBoolean("Notifications", false);
+
+                    AlarmManager mAM = (AlarmManager) getApplicationContext().getSystemService(ALARM_SERVICE);
+                    mAM.cancel(pendingIntent);
 
                     Toast.makeText(getApplicationContext(), "Notifications turned off.", Toast.LENGTH_LONG).show();
                 }
@@ -163,6 +189,7 @@ public class RemindersActivity extends AppCompatActivity {
 
                 mReminderMessgageText.setText(setMessageText(mReminderList.getItemAtPosition(position).toString()));
                 changeMessageButton(mReminderList.getItemAtPosition(position).toString());
+
             }
 
             @Override
@@ -224,6 +251,9 @@ public class RemindersActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //finally
+
+
     }
 
 
@@ -238,6 +268,7 @@ public class RemindersActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
+
     }
 
 
@@ -429,6 +460,7 @@ public class RemindersActivity extends AppCompatActivity {
                 editor.apply();
 
                 Toast.makeText(getApplicationContext(), "Notifications set for " + mReminderTimeText.getText() + ".", Toast.LENGTH_LONG).show();
+                setNotification();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -443,7 +475,7 @@ public class RemindersActivity extends AppCompatActivity {
     }
 
     private void changeMessageButton(final String reminderType){
-        //// TODO: 6/5/2017
+
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPref.edit();
 
@@ -565,6 +597,62 @@ public class RemindersActivity extends AppCompatActivity {
             default:
                 break;
         }
+
+
     }
+
+    private void setNotification(){
+
+        Intent mIntent = new Intent(getApplicationContext(), ReminderBroadcastReceiver.class);
+        if (mReminderList.getSelectedItem().toString().equals("From Playlist")){
+            //todo account for playlist
+        }
+        mIntent.putExtra("Message Text", mReminderMessgageText.getText().toString());
+        pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Activity.ALARM_SERVICE);
+
+        //cal start
+
+        android.icu.util.Calendar nCalendar;
+        java.util.Calendar mCalendar;
+
+        int minutes = Integer.parseInt(mReminderTimeText.getText().toString().substring(3,5));
+        int hour = Integer.parseInt(mReminderTimeText.getText().toString().substring(0,2));
+
+        if (Build.VERSION.SDK_INT > 23) {
+            nCalendar = android.icu.util.Calendar.getInstance();
+            nCalendar.set(android.icu.util.Calendar.SECOND, 0);
+            nCalendar.set(android.icu.util.Calendar.MINUTE, minutes);
+            nCalendar.set(android.icu.util.Calendar.HOUR, hour);
+            if (mReminderTimeText.getText().charAt(6) == 'A'){
+                nCalendar.set(android.icu.util.Calendar.AM_PM, android.icu.util.Calendar.AM);
+            }else{
+                nCalendar.set(android.icu.util.Calendar.AM_PM, android.icu.util.Calendar.PM);
+            }
+
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, nCalendar.getTimeInMillis(), 1000*60*60*24, pendingIntent);
+
+        }
+        else{
+            mCalendar = java.util.Calendar.getInstance();
+            mCalendar.set(java.util.Calendar.SECOND, 0);
+            mCalendar.set(java.util.Calendar.MINUTE, minutes);
+            mCalendar.set(java.util.Calendar.HOUR, hour);
+            if (mReminderTimeText.getText().charAt(6) == 'A'){
+                mCalendar.set(java.util.Calendar.AM_PM, java.util.Calendar.AM);
+            }else{
+                mCalendar.set(java.util.Calendar.AM_PM, java.util.Calendar.PM);
+            }
+
+
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, mCalendar.getTimeInMillis(), 1000*60*60*24, pendingIntent);
+
+        }
+
+        //cal end
+
+    }
+
+
 
 }

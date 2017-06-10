@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.soapbox.brightside">
 
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -27,7 +30,9 @@
         <activity android:name=".HistoryActivity">
 
         </activity>
-        <activity android:name=".RemindersActivity">
+        <activity android:name=".RemindersActivity"
+            android:windowSoftInputMode="stateHidden" >
+
 
         </activity>
         <activity android:name=".RewardsActivity">
@@ -45,6 +50,12 @@
         <activity android:name=".NewAffirmationActivity">
 
         </activity>
+        <receiver android:name=".ReminderBroadcastReceiver">
+
+        </receiver>
+
     </application>
+
+
 
 </manifest>
