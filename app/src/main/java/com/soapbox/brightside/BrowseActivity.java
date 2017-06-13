@@ -129,7 +129,13 @@ public class BrowseActivity extends AppCompatActivity {
         if (i.hasExtra("Add to Playlist")){
             mAddAffirmation.setText("+Add Selected to Playlist");
         } else if (i.hasExtra("Browse Playlist")){
-            mAddAffirmation.setText("+ Add Affirmation");
+            mAddAffirmation.setText("+Add Affirmation");
+            if (CustomPlaylistActivity.masterAffirmationPlaylistList.get(i.getIntExtra("Browse Playlist", 0)).getPlaylistName().equals("Favorites")){
+                mAddAffirmation.setVisibility(View.GONE);
+            }
+            else{
+                mAddAffirmation.setVisibility(View.VISIBLE);
+            }
         }
 
         mAddAffirmation.setOnClickListener(new View.OnClickListener() {

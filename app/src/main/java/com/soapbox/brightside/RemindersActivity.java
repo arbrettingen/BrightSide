@@ -566,7 +566,7 @@ public class RemindersActivity extends AppCompatActivity {
                                 editor.apply();
 
                                 mReminderMessgageText.setText(setMessageText(reminderType));
-                                Toast.makeText(getApplicationContext(), "New playlist selected. Affirmations will be sequentially selected from this playlist.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "New playlist selected. Affirmations will be randomly selected from this playlist, or from the entire library if the playlist is empty.", Toast.LENGTH_LONG).show();
                             }
                         });
                         b.show();
@@ -603,12 +603,43 @@ public class RemindersActivity extends AppCompatActivity {
 
     private void setNotification(){
 
+        //todo figure out why notifications STOPPED working
+
         Intent mIntent = new Intent(getApplicationContext(), ReminderBroadcastReceiver.class);
+
         if (mReminderList.getSelectedItem().toString().equals("From Playlist")){
-            //todo account for playlist
+            AffirmationPlaylist selectedPlaylist = new AffirmationPlaylist("");
+            String selectedMessageText;
+
+            for (AffirmationPlaylist mAP : CustomPlaylistActivity.masterAffirmationPlaylistList){
+                if (mAP.getPlaylistName().equals(mReminderMessgageText.getText().toString())){
+                    selectedPlaylist = mAP;
+                    break;
+                }
+            }
+
+            if (selectedPlaylist.getAffirmationList() != null){
+                if (!selectedPlaylist.getAffirmationList().isEmpty()){
+                    //randomly select from playlist
+                    int randomPos = randomWithRange(0, selectedPlaylist.getAffirmationList().size()-1);
+                    selectedMessageText = selectedPlaylist.getAffirmationList().get(randomPos).getAffirmationBody();
+                } else {
+                    //randomly select from library
+                    int randomPos = randomWithRange(0, MainMenuActivity.masterAffirmationList.size()-1);
+                    selectedMessageText = MainMenuActivity.masterAffirmationList.get(randomPos).getAffirmationBody();
+                }
+            } else{
+                //randomly select from library
+                int randomPos = randomWithRange(0, MainMenuActivity.masterAffirmationList.size()-1);
+                selectedMessageText = MainMenuActivity.masterAffirmationList.get(randomPos).getAffirmationBody();
+            }
+            mIntent.putExtra("Message Text", selectedMessageText);
         }
-        mIntent.putExtra("Message Text", mReminderMessgageText.getText().toString());
+        else{
+            mIntent.putExtra("Message Text", mReminderMessgageText.getText().toString());
+        }
         pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Activity.ALARM_SERVICE);
 
         //cal start
@@ -632,8 +663,7 @@ public class RemindersActivity extends AppCompatActivity {
 
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, nCalendar.getTimeInMillis(), 1000*60*60*24, pendingIntent);
 
-        }
-        else{
+        } else{
             mCalendar = java.util.Calendar.getInstance();
             mCalendar.set(java.util.Calendar.SECOND, 0);
             mCalendar.set(java.util.Calendar.MINUTE, minutes);
@@ -644,15 +674,12 @@ public class RemindersActivity extends AppCompatActivity {
                 mCalendar.set(java.util.Calendar.AM_PM, java.util.Calendar.PM);
             }
 
-
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, mCalendar.getTimeInMillis(), 1000*60*60*24, pendingIntent);
 
         }
 
         //cal end
-
     }
-
 
 
 }

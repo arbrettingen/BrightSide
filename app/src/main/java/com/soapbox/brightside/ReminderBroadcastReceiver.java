@@ -8,10 +8,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
+import static android.content.Context.SYSTEM_HEALTH_SERVICE;
 
 /**
  * Created by Alex on 6/10/2017.
@@ -36,7 +38,7 @@ public class ReminderBroadcastReceiver extends BroadcastReceiver {
 
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
 
-        mNotificationManager.notify(1, mNotify);
+        mNotificationManager.notify((int) System.currentTimeMillis(), mNotify);
 
 
     }
