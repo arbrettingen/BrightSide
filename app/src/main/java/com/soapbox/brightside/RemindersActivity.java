@@ -603,8 +603,6 @@ public class RemindersActivity extends AppCompatActivity {
 
     private void setNotification(){
 
-        //todo figure out why notifications STOPPED working
-
         Intent mIntent = new Intent(getApplicationContext(), ReminderBroadcastReceiver.class);
 
         if (mReminderList.getSelectedItem().toString().equals("From Playlist")){
