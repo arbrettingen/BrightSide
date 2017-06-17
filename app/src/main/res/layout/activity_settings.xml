@@ -9,9 +9,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:weightSum="24"
         android:background="#FFFFFF">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:weightSum="20">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="13"
+                android:layout_height="match_parent"
+                android:text="Reset the affirmation library to its default state, removing all custom affirmation additions:"
+                android:layout_marginTop="24dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:textAlignment="center"
+                android:textSize="14sp"
+                android:textColor="@color/colorPrimaryDark"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="wrap_content"
+                android:id="@+id/settings_btn_clear_affirmations"
+                android:text="clear"
+                android:background="@drawable/rounded_corner"
+                android:textColor="@color/colorWhite"
+                android:layout_marginTop="28dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="16dp"/>
+        </LinearLayout>
 
     </LinearLayout>
 

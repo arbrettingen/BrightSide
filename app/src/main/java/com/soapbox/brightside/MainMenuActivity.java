@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 public class MainMenuActivity extends AppCompatActivity {
 
+    //// TODO: 6/13/2017 sqlite database for master affirmation list, then playlists
     public static ArrayList<Affirmation> masterAffirmationList = new ArrayList<Affirmation>(Arrays.asList(new Affirmation[]{
             new Affirmation("Affirmation One Text Here"),
             new Affirmation("Affirmation Two Text Here"),

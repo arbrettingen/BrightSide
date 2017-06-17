@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 /**
  * Created by Alex on 2/28/2017.
@@ -23,11 +24,28 @@ public class HistoryActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
 
+    private TextView mAffirmationsViewedText;
+    private TextView mAffirmationsAddedText;
+    private TextView mAffirmationsDeletedText;
+    private TextView mBestSreakText;
+    private TextView mCurrentStreakText;
+    private TextView mTotalDaysText;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
         setTitle("Stats and History");
+
+        //initialize views
+
+        mAffirmationsViewedText = (TextView) findViewById(R.id.history_txt_affirmations_viewed);
+        mAffirmationsAddedText = (TextView) findViewById(R.id.history_txt_affirmations_added);
+        mAffirmationsDeletedText = (TextView) findViewById(R.id.history_txt_affirmations_deleted);
+        mBestSreakText = (TextView) findViewById(R.id.history_txt_best_streak);
+        mCurrentStreakText = (TextView) findViewById(R.id.history_txt_current_streak);
+        mTotalDaysText = (TextView) findViewById(R.id.history_txt_total_days);
+
 
         //drawer code below
         mNavChoices = getResources().getStringArray(R.array.array_nav_options);
