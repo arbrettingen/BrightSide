@@ -1,9 +1,15 @@
 package com.soapbox.brightside;
 
+import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
@@ -26,13 +32,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.soapbox.brightside.data.AffirmationContract.AffirmationEntry;
+
 import java.util.ArrayList;
 
 /**
  * Created by Alex on 4/11/2017.
  */
 
-public class BrowseActivity extends AppCompatActivity {
+public class BrowseActivity extends AppCompatActivity{
+
+
 
     private ListView mAffirmationList;
     private Button mAddAffirmation;
@@ -94,11 +104,9 @@ public class BrowseActivity extends AppCompatActivity {
 
         mDrawerLayout.addDrawerListener(mDrawerToggle);
 
-
         //affirmation listing below
 
         mAffirmationList = (ListView) findViewById(R.id.affirmation_master_list);
-
 
         Intent i = getIntent();
         if (i.hasExtra("Browse Playlist")) {
@@ -473,9 +481,7 @@ public class BrowseActivity extends AppCompatActivity {
             }
         }
 
-
-
-
     }
+
 
 }

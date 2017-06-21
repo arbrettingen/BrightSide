@@ -53,6 +53,10 @@
         <receiver android:name=".ReminderBroadcastReceiver">
 
         </receiver>
+        <provider
+            android:name=".data.AffirmationProvider"
+            android:authorities="com.soapbox.brightside"
+            android:exported="false" />
 
     </application>
 

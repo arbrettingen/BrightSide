@@ -1,8 +1,10 @@
 package com.soapbox.brightside;
 
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
@@ -18,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.soapbox.brightside.data.AffirmationContract.AffirmationEntry;
 
 /**
  * Created by Alex on 4/12/2017.
@@ -121,7 +124,9 @@ public class NewAffirmationActivity extends AppCompatActivity {
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 if (mAffirmationExtra == null) {
-                                    MainMenuActivity.masterAffirmationList.add(new Affirmation(mAffirmationEdit.getText().toString()));
+                                    Affirmation newEntry = new Affirmation(mAffirmationEdit.getText().toString());
+                                    MainMenuActivity.masterAffirmationList.add(newEntry);
+                                    insertAffirmationToDb(newEntry);
                                 } else {
                                     MainMenuActivity.masterAffirmationList.get(mAffirmationPosition).setAffirmationBody(mAffirmationEdit.getText().toString());
                                 }
@@ -244,6 +249,20 @@ public class NewAffirmationActivity extends AppCompatActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             selectItemDrawer(position);
         }
+    }
+
+    private void insertAffirmationToDb(Affirmation a) { //todo implement 1
+        // Create a ContentValues object where column names are the keys,
+        // and Toto's affirmation attributes are the values.
+        ContentValues values = new ContentValues();
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_BODY, "body here");
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_FAVORITED, 0);
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_CREDIT, "and so on, finish these");
+
+        // Use the {@link AffirmationEntry#CONTENT_URI} to indicate that we want to insert
+        // into the affirmations database table.
+        // Receive the new content URI that will allow us to access row's data in the future.
+        Uri newUri = getContentResolver().insert(AffirmationEntry.CONTENT_URI, values);
     }
 
 }

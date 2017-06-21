@@ -1,8 +1,13 @@
 package com.soapbox.brightside;
 
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
 import java.util.Arrays;
+
+import android.content.Loader;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,11 +19,18 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.soapbox.brightside.data.AffirmationContract.AffirmationEntry;
+
 import java.util.ArrayList;
 
-public class MainMenuActivity extends AppCompatActivity {
+public class MainMenuActivity extends AppCompatActivity  implements
+        LoaderManager.LoaderCallbacks<Cursor>{
 
     //// TODO: 6/13/2017 sqlite database for master affirmation list, then playlists
+    /** Identifier for the affirmation data loader */
+    private static final int AFFIRMATION_LOADER = 0;
+
+
     public static ArrayList<Affirmation> masterAffirmationList = new ArrayList<Affirmation>(Arrays.asList(new Affirmation[]{
             new Affirmation("Affirmation One Text Here"),
             new Affirmation("Affirmation Two Text Here"),
@@ -111,6 +123,9 @@ public class MainMenuActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //loader setup below
+
+        getLoaderManager().initLoader(AFFIRMATION_LOADER, null, this);
     }
 
 
@@ -256,7 +271,33 @@ public class MainMenuActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        // Define a projection that specifies the columns from the table we care about.
+        String[] projection = {
+                AffirmationEntry._ID,
+                AffirmationEntry.COLUMN_AFFIRMATION_BODY};
 
+        // This loader will execute the ContentProvider's query method on a background thread
+        return new CursorLoader(this,   // Parent activity context
+                AffirmationEntry.CONTENT_URI,   // Provider content URI to query
+                projection,             // Columns to include in the resulting Cursor
+                null,                   // No selection clause
+                null,                   // No selection arguments
+                null);                  // Default sort order
+
+        //todo add cursor contents to the base listing of affirmations that are already hard coded 2
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
 }
 
 
