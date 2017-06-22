@@ -17,14 +17,14 @@ public class Affirmation {
     private boolean mFavorited;
     private boolean mHidden;
 
-    public Affirmation(String affirmationBody, String imgSrc, boolean satisfactionFlag, boolean confidenceFlag, boolean motivationFlag){
+    public Affirmation(String affirmationBody, String imgSrc, String credit, boolean favorited, boolean satisfactionFlag, boolean confidenceFlag, boolean motivationFlag){
         mImgSrc = imgSrc;
         mAffirmationBody = affirmationBody;
         mSatisfactionFlag = satisfactionFlag;
         mConfidenceFlag = confidenceFlag;
         mMotivationFlag = motivationFlag;
-        mFavorited = false;
-        mCredit = "";
+        mFavorited = favorited;
+        mCredit = credit;
     }
 
     public Affirmation(String affirmationBody, boolean satisfactionFlag, boolean confidenceFlag, boolean motivationFlag){

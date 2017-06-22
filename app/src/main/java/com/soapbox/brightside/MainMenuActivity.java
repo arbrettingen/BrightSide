@@ -276,7 +276,13 @@ public class MainMenuActivity extends AppCompatActivity  implements
         // Define a projection that specifies the columns from the table we care about.
         String[] projection = {
                 AffirmationEntry._ID,
-                AffirmationEntry.COLUMN_AFFIRMATION_BODY};
+                AffirmationEntry.COLUMN_AFFIRMATION_BODY,
+                AffirmationEntry.COLUMN_AFFIRMATION_FAVORITED,
+                AffirmationEntry.COLUMN_AFFIRMATION_IMAGE,
+                AffirmationEntry.COLUMN_AFFIRMATION_CREDIT,
+                AffirmationEntry.COLUMN_AFFIRMATION_SATISFACTION_FLAG,
+                AffirmationEntry.COLUMN_AFFIRMATION_MOTIVATION_FLAG,
+                AffirmationEntry.COLUMN_AFFIRMATION_CONFIDENCE_FLAG};
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
@@ -286,11 +292,39 @@ public class MainMenuActivity extends AppCompatActivity  implements
                 null,                   // No selection arguments
                 null);                  // Default sort order
 
-        //todo add cursor contents to the base listing of affirmations that are already hard coded 2
+
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        //todo add cursor contents to the base listing of affirmations that are already hard coded 2
+        if (data == null){
+            return;
+        }
+        if (data.getCount() == 0){
+            return;
+        }
+
+        data.moveToFirst();
+        while (!data.isAfterLast()){
+
+            int  affirmationBodyIndex = data.getColumnIndex(AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+            int  affirmationCreditIndex = data.getColumnIndex(AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+            int  affirmationFavoriteIndex = data.getColumnIndex(AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+            int  affirmationImageIndex = data.getColumnIndex(AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+            int  affirmationSatisfactionIndex = data.getColumnIndex(AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+            int  affirmationMotivationIndex = data.getColumnIndex(AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+            int  affirmationConfidenceIndex = data.getColumnIndex(AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+
+            boolean dFavorited = data.getInt(affirmationFavoriteIndex) == 1;
+            boolean dSatisfaction = data.getInt(affirmationSatisfactionIndex) == 1;
+            boolean dMotivation = data.getInt(affirmationMotivationIndex) == 1;
+            boolean dConfidence = data.getInt(affirmationConfidenceIndex) == 1;
+
+            MainMenuActivity.masterAffirmationList.add(new Affirmation(data.getString(affirmationBodyIndex), data.getString(affirmationImageIndex), data.getString(affirmationCreditIndex), dFavorited, dSatisfaction, dConfidence, dMotivation));
+
+            data.moveToNext();
+        }
 
     }
 

@@ -252,7 +252,7 @@ public class NewAffirmationActivity extends AppCompatActivity {
         }
     }
 
-    private void insertAffirmationToDb(Affirmation a) { //todo implement 1
+    private void insertAffirmationToDb(Affirmation a) {
         // Create a ContentValues object where column names are the keys,
         // and Toto's affirmation attributes are the values.
         ContentValues values = new ContentValues();
