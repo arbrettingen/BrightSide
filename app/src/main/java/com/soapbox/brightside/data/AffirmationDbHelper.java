@@ -39,14 +39,14 @@ public class AffirmationDbHelper extends SQLiteOpenHelper {
         // Create a String that contains the SQL statement to create the pets table
 
         String SQL_CREATE_AFFIRMATIONS_TABLE = "CREATE TABLE " + AffirmationEntry.TABLE_NAME + " ("
-                + AffirmationEntry._ID + "INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + AffirmationEntry.COLUMN_AFFIRMATION_BODY + "TEXT NOT NULL, "
-                + AffirmationEntry.COLUMN_AFFIRMATION_CREDIT + "TEXT, "
-                + AffirmationEntry.COLUMN_AFFIRMATION_IMAGE + "TEXT, "
-                + AffirmationEntry.COLUMN_AFFIRMATION_FAVORITED + "INTEGER NOT NULL DEFAULT 0, "
-                + AffirmationEntry.COLUMN_AFFIRMATION_CONFIDENCE_FLAG + "INTEGER NOT NULL DEFAULT 0, "
-                + AffirmationEntry.COLUMN_AFFIRMATION_MOTIVATION_FLAG + "INTEGER NOT NULL DEFAULT 0, "
-                + AffirmationEntry.COLUMN_AFFIRMATION_SATISFACTION_FLAG + "INTEGER NOT NULL DEFAULT 0);";
+                + AffirmationEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + AffirmationEntry.COLUMN_AFFIRMATION_BODY + " TEXT NOT NULL, "
+                + AffirmationEntry.COLUMN_AFFIRMATION_CREDIT + " TEXT, "
+                + AffirmationEntry.COLUMN_AFFIRMATION_IMAGE + " TEXT, "
+                + AffirmationEntry.COLUMN_AFFIRMATION_FAVORITED + " INTEGER NOT NULL DEFAULT 0, "
+                + AffirmationEntry.COLUMN_AFFIRMATION_CONFIDENCE_FLAG + " INTEGER NOT NULL DEFAULT 0, "
+                + AffirmationEntry.COLUMN_AFFIRMATION_MOTIVATION_FLAG + " INTEGER NOT NULL DEFAULT 0, "
+                + AffirmationEntry.COLUMN_AFFIRMATION_SATISFACTION_FLAG + " INTEGER NOT NULL DEFAULT 0);";
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_AFFIRMATIONS_TABLE);

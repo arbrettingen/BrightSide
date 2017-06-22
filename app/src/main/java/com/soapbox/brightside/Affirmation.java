@@ -9,6 +9,8 @@ public class Affirmation {
     private String mImgSrc;
     private String mAffirmationBody;
     private String mCredit;
+
+    private String m_ID;
     private boolean mSatisfactionFlag;
     private boolean mConfidenceFlag;
     private boolean mMotivationFlag;
@@ -22,6 +24,7 @@ public class Affirmation {
         mConfidenceFlag = confidenceFlag;
         mMotivationFlag = motivationFlag;
         mFavorited = false;
+        mCredit = "";
     }
 
     public Affirmation(String affirmationBody, boolean satisfactionFlag, boolean confidenceFlag, boolean motivationFlag){
@@ -31,18 +34,27 @@ public class Affirmation {
         mConfidenceFlag = confidenceFlag;
         mMotivationFlag = motivationFlag;
         mFavorited = false;
+        mCredit = "";
     }
 
     public Affirmation(String imgSrc, String affirmationBody){
         mImgSrc = imgSrc;
         mAffirmationBody = affirmationBody;
         mFavorited = false;
+        mSatisfactionFlag = false;
+        mConfidenceFlag = false;
+        mMotivationFlag = false;
+        mCredit = "";
     }
 
     public Affirmation(String affirmationBody){
         mAffirmationBody = affirmationBody;
         mImgSrc = "";
         mFavorited = false;
+        mSatisfactionFlag = false;
+        mConfidenceFlag = false;
+        mMotivationFlag = false;
+        mCredit = "";
     }
 
     public String getImgSrc() {
@@ -114,6 +126,14 @@ public class Affirmation {
             return mAffirmationBody.substring(0,98) + "...";
         }
         return mAffirmationBody;
+    }
+
+    public String getM_ID() {
+        return m_ID;
+    }
+
+    public void setM_ID(String m_ID) {
+        this.m_ID = m_ID;
     }
 
     @Override

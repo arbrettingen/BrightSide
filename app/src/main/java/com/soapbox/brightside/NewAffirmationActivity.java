@@ -13,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -255,14 +256,21 @@ public class NewAffirmationActivity extends AppCompatActivity {
         // Create a ContentValues object where column names are the keys,
         // and Toto's affirmation attributes are the values.
         ContentValues values = new ContentValues();
-        values.put(AffirmationEntry.COLUMN_AFFIRMATION_BODY, "body here");
-        values.put(AffirmationEntry.COLUMN_AFFIRMATION_FAVORITED, 0);
-        values.put(AffirmationEntry.COLUMN_AFFIRMATION_CREDIT, "and so on, finish these");
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_BODY, a.getAffirmationBody());
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_CREDIT, a.getCredit());
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_FAVORITED, a.isFavorited());
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_IMAGE, a.getImgSrc());
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_SATISFACTION_FLAG, a.isSatisfactionFlag());
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_MOTIVATION_FLAG, a.isMotivationFlag());
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_CONFIDENCE_FLAG, a.isConfidenceFlag());
 
         // Use the {@link AffirmationEntry#CONTENT_URI} to indicate that we want to insert
         // into the affirmations database table.
         // Receive the new content URI that will allow us to access row's data in the future.
         Uri newUri = getContentResolver().insert(AffirmationEntry.CONTENT_URI, values);
+        if (newUri != null) {
+            a.setM_ID(newUri.toString().substring(newUri.toString().length() - 1));
+        }
     }
 
 }
