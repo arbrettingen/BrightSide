@@ -57,7 +57,7 @@ public final class AffirmationContract {
         public final static String TABLE_NAME = "affirmations";
 
         /**
-         * Unique ID number for the pet (only for use in the database table).
+         * Unique ID number for the affirmation (only for use in the database table).
          *
          * Type: INTEGER
          */

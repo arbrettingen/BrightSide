@@ -13,7 +13,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.text.InputFilter;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -268,9 +267,7 @@ public class NewAffirmationActivity extends AppCompatActivity {
         // into the affirmations database table.
         // Receive the new content URI that will allow us to access row's data in the future.
         Uri newUri = getContentResolver().insert(AffirmationEntry.CONTENT_URI, values);
-        if (newUri != null) {
-            a.setM_ID(newUri.toString().substring(newUri.toString().length() - 1));
-        }
+
     }
 
 }

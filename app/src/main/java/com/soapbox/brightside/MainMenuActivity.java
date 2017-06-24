@@ -1,23 +1,27 @@
 package com.soapbox.brightside;
 
 import android.app.LoaderManager;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import java.util.Arrays;
 
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.soapbox.brightside.data.AffirmationContract.AffirmationEntry;
 
@@ -27,17 +31,18 @@ public class MainMenuActivity extends AppCompatActivity  implements
         LoaderManager.LoaderCallbacks<Cursor>{
 
     //// TODO: 6/13/2017 sqlite database for master affirmation list, then playlists
+    //todo 1 redesign app launch. when app is opened, check a shared preference to see if the dB has been built for the first time. if not, hard code the 5 starter affirmations into a new dB and read them into the ArrayList below. if the dB HAS been built, merely load the data into the arraylist.
     /** Identifier for the affirmation data loader */
     private static final int AFFIRMATION_LOADER = 0;
 
 
-    public static ArrayList<Affirmation> masterAffirmationList = new ArrayList<Affirmation>(Arrays.asList(new Affirmation[]{
+    public static ArrayList<Affirmation> masterAffirmationList = new ArrayList<Affirmation>();  /*(Arrays.asList(new Affirmation[]{
             new Affirmation("Affirmation One Text Here"),
             new Affirmation("Affirmation Two Text Here"),
             new Affirmation("Affirmation Three Text Here"),
             new Affirmation("Affirmation Four Text Here"),
             new Affirmation("Affirmation Five Text Here")
-    }));
+    }));*/
 
 
     private String[] mNavChoices;
@@ -72,6 +77,13 @@ public class MainMenuActivity extends AppCompatActivity  implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         setTitle("Home");
+
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPref.edit();
+
+        if (sharedPref.getBoolean("First Launch", true)){
+            initialAffirmationDbInsert();
+        }
 
         if (CustomPlaylistActivity.masterAffirmationPlaylistList == null) {
             CustomPlaylistActivity.masterAffirmationPlaylistList = new ArrayList<>();
@@ -297,7 +309,8 @@ public class MainMenuActivity extends AppCompatActivity  implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        //todo add cursor contents to the base listing of affirmations that are already hard coded 2
+        MainMenuActivity.masterAffirmationList.clear();
+
         if (data == null){
             return;
         }
@@ -315,13 +328,14 @@ public class MainMenuActivity extends AppCompatActivity  implements
             int  affirmationSatisfactionIndex = data.getColumnIndex(AffirmationEntry.COLUMN_AFFIRMATION_BODY);
             int  affirmationMotivationIndex = data.getColumnIndex(AffirmationEntry.COLUMN_AFFIRMATION_BODY);
             int  affirmationConfidenceIndex = data.getColumnIndex(AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+            int  affirmationID = data.getColumnIndex(AffirmationEntry._ID);
 
             boolean dFavorited = data.getInt(affirmationFavoriteIndex) == 1;
             boolean dSatisfaction = data.getInt(affirmationSatisfactionIndex) == 1;
             boolean dMotivation = data.getInt(affirmationMotivationIndex) == 1;
             boolean dConfidence = data.getInt(affirmationConfidenceIndex) == 1;
 
-            MainMenuActivity.masterAffirmationList.add(new Affirmation(data.getString(affirmationBodyIndex), data.getString(affirmationImageIndex), data.getString(affirmationCreditIndex), dFavorited, dSatisfaction, dConfidence, dMotivation));
+            MainMenuActivity.masterAffirmationList.add(new Affirmation(data.getString(affirmationBodyIndex), data.getString(affirmationImageIndex), data.getString(affirmationCreditIndex), dFavorited, dSatisfaction, dConfidence, dMotivation, data.getInt(affirmationID)));
 
             data.moveToNext();
         }
@@ -331,6 +345,74 @@ public class MainMenuActivity extends AppCompatActivity  implements
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    private void initialAffirmationDbInsert(){
+        //todo implement
+
+        // Create a ContentValues object where column names are the keys,
+        // and Toto's affirmation attributes are the values.
+        ContentValues values = new ContentValues();
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_BODY, "Affirmation One Text Here");
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_CREDIT, "");
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_FAVORITED, 0);
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_IMAGE, "");
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_SATISFACTION_FLAG, 0);
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_MOTIVATION_FLAG, 0);
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_CONFIDENCE_FLAG, 0);
+
+        // Use the {@link AffirmationEntry#CONTENT_URI} to indicate that we want to insert
+        // into the affirmations database table.
+        // Receive the new content URI that will allow us to access row's data in the future.
+        Uri newUri = getContentResolver().insert(AffirmationEntry.CONTENT_URI, values);
+
+        values.clear();
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_BODY, "Affirmation Two Text Here");
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_CREDIT, "");
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_FAVORITED, 0);
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_IMAGE, "");
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_SATISFACTION_FLAG, 0);
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_MOTIVATION_FLAG, 0);
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_CONFIDENCE_FLAG, 0);
+        newUri = getContentResolver().insert(AffirmationEntry.CONTENT_URI, values);
+
+        values.clear();
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_BODY, "Affirmation Three Text Here");
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_CREDIT, "");
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_FAVORITED, 0);
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_IMAGE, "");
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_SATISFACTION_FLAG, 0);
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_MOTIVATION_FLAG, 0);
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_CONFIDENCE_FLAG, 0);
+        newUri = getContentResolver().insert(AffirmationEntry.CONTENT_URI, values);
+
+        values.clear();
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_BODY, "Affirmation Four Text Here");
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_CREDIT, "");
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_FAVORITED, 0);
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_IMAGE, "");
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_SATISFACTION_FLAG, 0);
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_MOTIVATION_FLAG, 0);
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_CONFIDENCE_FLAG, 0);
+        newUri = getContentResolver().insert(AffirmationEntry.CONTENT_URI, values);
+
+        values.clear();
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_BODY, "Affirmation Five Text Here");
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_CREDIT, "");
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_FAVORITED, 0);
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_IMAGE, "");
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_SATISFACTION_FLAG, 0);
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_MOTIVATION_FLAG, 0);
+        values.put(AffirmationEntry.COLUMN_AFFIRMATION_CONFIDENCE_FLAG, 0);
+        newUri = getContentResolver().insert(AffirmationEntry.CONTENT_URI, values);
+
+
+
+        //end by setting the shared preference to true
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean("First Launch", false);
+        editor.apply();
     }
 }
 

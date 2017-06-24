@@ -1,7 +1,6 @@
 package com.soapbox.brightside.data;
 
 import android.content.ContentProvider;
-import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -10,12 +9,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 
-import com.soapbox.brightside.Affirmation;
 import com.soapbox.brightside.data.AffirmationContract.AffirmationEntry;
 
 /**
  * Brightside SQL
  */
+
+//todo account for playlist table as well?
 
 public class AffirmationProvider extends ContentProvider {
 

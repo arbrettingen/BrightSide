@@ -1,7 +1,6 @@
 package com.soapbox.brightside;
 
 import android.app.LoaderManager;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -9,7 +8,6 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
@@ -32,7 +30,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.soapbox.brightside.data.AffirmationContract.AffirmationEntry;
+import com.soapbox.brightside.data.AffirmationContract;
 
 import java.util.ArrayList;
 
@@ -40,7 +38,8 @@ import java.util.ArrayList;
  * Created by Alex on 4/11/2017.
  */
 
-public class BrowseActivity extends AppCompatActivity{
+public class BrowseActivity extends AppCompatActivity implements
+        LoaderManager.LoaderCallbacks<Cursor>{
 
 
 
@@ -483,5 +482,63 @@ public class BrowseActivity extends AppCompatActivity{
 
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        // Define a projection that specifies the columns from the table we care about.
+        String[] projection = {
+                AffirmationContract.AffirmationEntry._ID,
+                AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY,
+                AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_FAVORITED,
+                AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_IMAGE,
+                AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_CREDIT,
+                AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_SATISFACTION_FLAG,
+                AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_MOTIVATION_FLAG,
+                AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_CONFIDENCE_FLAG};
 
+        // This loader will execute the ContentProvider's query method on a background thread
+        return new CursorLoader(this,   // Parent activity context
+                AffirmationContract.AffirmationEntry.CONTENT_URI,   // Provider content URI to query
+                projection,             // Columns to include in the resulting Cursor
+                null,                   // No selection clause
+                null,                   // No selection arguments
+                null);                  // Default sort order
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        MainMenuActivity.masterAffirmationList.clear();
+        if (data == null){
+            return;
+        }
+        if (data.getCount() == 0){
+            return;
+        }
+
+        data.moveToFirst();
+        while (!data.isAfterLast()){
+
+            int  affirmationBodyIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+            int  affirmationCreditIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+            int  affirmationFavoriteIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+            int  affirmationImageIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+            int  affirmationSatisfactionIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+            int  affirmationMotivationIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+            int  affirmationConfidenceIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+            int  affirmationID = data.getColumnIndex(AffirmationContract.AffirmationEntry._ID);
+
+            boolean dFavorited = data.getInt(affirmationFavoriteIndex) == 1;
+            boolean dSatisfaction = data.getInt(affirmationSatisfactionIndex) == 1;
+            boolean dMotivation = data.getInt(affirmationMotivationIndex) == 1;
+            boolean dConfidence = data.getInt(affirmationConfidenceIndex) == 1;
+
+            MainMenuActivity.masterAffirmationList.add(new Affirmation(data.getString(affirmationBodyIndex), data.getString(affirmationImageIndex), data.getString(affirmationCreditIndex), dFavorited, dSatisfaction, dConfidence, dMotivation, data.getInt(affirmationID)));
+
+            data.moveToNext();
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
 }

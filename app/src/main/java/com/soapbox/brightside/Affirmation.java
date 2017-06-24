@@ -9,8 +9,7 @@ public class Affirmation {
     private String mImgSrc;
     private String mAffirmationBody;
     private String mCredit;
-
-    private String m_ID;
+    private int m_ID;
     private boolean mSatisfactionFlag;
     private boolean mConfidenceFlag;
     private boolean mMotivationFlag;
@@ -25,6 +24,18 @@ public class Affirmation {
         mMotivationFlag = motivationFlag;
         mFavorited = favorited;
         mCredit = credit;
+    }
+
+    public Affirmation(String affirmationBody, String imgSrc, String credit, boolean favorited, boolean satisfactionFlag, boolean confidenceFlag, boolean motivationFlag, int _ID){
+        mImgSrc = imgSrc;
+        mAffirmationBody = affirmationBody;
+        mSatisfactionFlag = satisfactionFlag;
+        mConfidenceFlag = confidenceFlag;
+        mMotivationFlag = motivationFlag;
+        mFavorited = favorited;
+        mCredit = credit;
+        m_ID = _ID;
+
     }
 
     public Affirmation(String affirmationBody, boolean satisfactionFlag, boolean confidenceFlag, boolean motivationFlag){
@@ -128,11 +139,11 @@ public class Affirmation {
         return mAffirmationBody;
     }
 
-    public String getM_ID() {
+    public int getM_ID() {
         return m_ID;
     }
 
-    public void setM_ID(String m_ID) {
+    public void setM_ID(int m_ID) {
         this.m_ID = m_ID;
     }
 
