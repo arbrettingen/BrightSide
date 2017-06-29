@@ -30,19 +30,12 @@ import java.util.ArrayList;
 public class MainMenuActivity extends AppCompatActivity  implements
         LoaderManager.LoaderCallbacks<Cursor>{
 
-    //// TODO: 6/13/2017 sqlite database for master affirmation list, then playlists
-    //todo 1 redesign app launch. when app is opened, check a shared preference to see if the dB has been built for the first time. if not, hard code the 5 starter affirmations into a new dB and read them into the ArrayList below. if the dB HAS been built, merely load the data into the arraylist.
+    //// TODO: 6/13/2017 sqlite database for  playlists
     /** Identifier for the affirmation data loader */
     private static final int AFFIRMATION_LOADER = 0;
 
 
-    public static ArrayList<Affirmation> masterAffirmationList = new ArrayList<Affirmation>();  /*(Arrays.asList(new Affirmation[]{
-            new Affirmation("Affirmation One Text Here"),
-            new Affirmation("Affirmation Two Text Here"),
-            new Affirmation("Affirmation Three Text Here"),
-            new Affirmation("Affirmation Four Text Here"),
-            new Affirmation("Affirmation Five Text Here")
-    }));*/
+    public static ArrayList<Affirmation> masterAffirmationList = new ArrayList<Affirmation>();  
 
 
     private String[] mNavChoices;
@@ -348,7 +341,6 @@ public class MainMenuActivity extends AppCompatActivity  implements
     }
 
     private void initialAffirmationDbInsert(){
-        //todo implement
 
         // Create a ContentValues object where column names are the keys,
         // and Toto's affirmation attributes are the values.

@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.soapbox.brightside.data.AffirmationContract.AffirmationEntry;
+import com.soapbox.brightside.data.PlaylistContract.PlaylistEntry;
 
 /**
  * Brightside SQL
@@ -27,6 +28,14 @@ public class AffirmationProvider extends ContentProvider {
 
     /** URI matcher code for the content URI for a single affirmation in the affirmations table */
     private static final int AFFIRMATION_ID = 101;
+
+    /** URI matcher code for the content URI for the playlists table */
+    private static final int PLAYLISTS = 200;
+
+    /** URI matcher code for the content URI for a single playlist in the affirmations table */
+    private static final int PLAYLIST_ID = 201;
+
+    /** URI matcher code for the content URI for a single playlist name in the affirmations table */
 
     /**
      * UriMatcher object to match a content URI to a corresponding code.
@@ -54,6 +63,9 @@ public class AffirmationProvider extends ContentProvider {
         // For example, "content://com.example.android.xxx/xxx/3" matches, but
         // "content://com.example.android.xxx/xxx" (without a number at the end) doesn't match.
         sUriMatcher.addURI(AffirmationContract.CONTENT_AUTHORITY, AffirmationContract.PATH_AFFIRMATIONS + "/#", AFFIRMATION_ID);
+
+        sUriMatcher.addURI(PlaylistContract.CONTENT_AUTHORITY, PlaylistContract.PATH_PLAYLISTS, PLAYLISTS);
+        sUriMatcher.addURI(PlaylistContract.CONTENT_AUTHORITY, PlaylistContract.PATH_PLAYLISTS + "/#", PLAYLIST_ID);
     }
 
     /** Database helper object */
@@ -101,6 +113,17 @@ public class AffirmationProvider extends ContentProvider {
                 cursor = database.query(AffirmationEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
+            case PLAYLISTS:
+                cursor = database.query(PlaylistContract.PlaylistEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            case PLAYLIST_ID:
+                selection = PlaylistContract.PlaylistEntry._ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+
+                // This will perform a query on the affirmations table where the _id equals 3 to return a
+                // Cursor containing that row of the table.
+                cursor = database.query(PlaylistContract.PlaylistEntry.TABLE_NAME, projection, selection, selectionArgs,
+                        null, null, sortOrder);
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
@@ -120,6 +143,8 @@ public class AffirmationProvider extends ContentProvider {
         switch (match) {
             case AFFIRMATIONS:
                 return insertAffirmation(uri, contentValues);
+            case PLAYLISTS:
+                return insertPlaylist(uri, contentValues);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
         }
@@ -129,8 +154,24 @@ public class AffirmationProvider extends ContentProvider {
      * Insert an affirmation into the database with the given content values. Return the new content URI
      * for that specific row in the database.
      */
-    private Uri insertAffirmation(Uri uri, ContentValues values) {
+
+    private Uri insertPlaylist(Uri uri, ContentValues values){
+        //todo implement
         // Check that the name is not null
+        String name = values.getAsString(AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+        if (name == null) {
+            throw new IllegalArgumentException("Affirmation requires body text.");
+        }
+
+        return null;
+    }
+
+    /**
+     * Insert an affirmation into the database with the given content values. Return the new content URI
+     * for that specific row in the database.
+     */
+    private Uri insertAffirmation(Uri uri, ContentValues values) {
+        // Check that the body is not null
         String name = values.getAsString(AffirmationEntry.COLUMN_AFFIRMATION_BODY);
         if (name == null) {
             throw new IllegalArgumentException("Affirmation requires body text.");

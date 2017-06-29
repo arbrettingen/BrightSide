@@ -70,6 +70,13 @@ public final class PlaylistContract {
          */
         public final static String COLUMN_PLAYLIST_NAME ="name";
 
+        /**
+         * playlists name text
+         *
+         * Type: TEXT
+         */
+        public final static String COLUMN_PLAYLIST_AFFIRMATION_ID ="a_ID";
+
 
     }
 
