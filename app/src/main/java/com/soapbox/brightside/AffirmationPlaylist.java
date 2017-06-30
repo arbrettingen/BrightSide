@@ -13,6 +13,7 @@ public class AffirmationPlaylist {
 
     private ArrayList<Affirmation> mAffirmationList;
     private String mName;
+    private Integer mPlaylist_ID;
 
     public AffirmationPlaylist(String name){
         mName = name;
@@ -35,7 +36,13 @@ public class AffirmationPlaylist {
         this.mAffirmationList = mAffirmationList;
     }
 
+    public Integer getmPlaylist_ID() {
+        return mPlaylist_ID;
+    }
 
+    public void setmPlaylist_ID(Integer mPlaylist_ID) {
+        this.mPlaylist_ID = mPlaylist_ID;
+    }
 
     @Override
     public String toString() {

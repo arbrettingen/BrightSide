@@ -16,7 +16,7 @@ import com.soapbox.brightside.data.PlaylistContract.PlaylistEntry;
  * Brightside SQL
  */
 
-//todo account for playlist table as well?
+//todo account for playlist table as well
 
 public class AffirmationProvider extends ContentProvider {
 
@@ -151,19 +151,38 @@ public class AffirmationProvider extends ContentProvider {
     }
 
     /**
-     * Insert an affirmation into the database with the given content values. Return the new content URI
+     * Insert a playlist entry into the database with the given content values. Return the new content URI
      * for that specific row in the database.
      */
 
     private Uri insertPlaylist(Uri uri, ContentValues values){
-        //todo implement
         // Check that the name is not null
-        String name = values.getAsString(AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+        String name = values.getAsString(PlaylistEntry.COLUMN_PLAYLIST_NAME);
         if (name == null) {
-            throw new IllegalArgumentException("Affirmation requires body text.");
+            throw new IllegalArgumentException("Playlist requires name text.");
+        }
+        //check that affirmation ID is not null or less than 1
+        Integer affirmation_ID = values.getAsInteger(PlaylistEntry.COLUMN_PLAYLIST_AFFIRMATION_ID);
+        if (affirmation_ID == null || affirmation_ID < 0){
+            throw new IllegalArgumentException("Associated affirmation ID must be a positive integer.");
         }
 
-        return null;
+        // Get writeable database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        // Insert the new playlist entry with the given values
+        long id = database.insert(PlaylistEntry.TABLE_NAME, null, values);
+        // If the ID is -1, then the insertion failed. Log an error and return null.
+        if (id == -1) {
+            Log.e(LOG_TAG, "Failed to insert row for " + uri);
+            return null;
+        }
+
+        // Notify all listeners that the data has changed for the affirmation content URI
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        // Return the new URI with the ID (of the newly inserted row) appended at the end
+        return ContentUris.withAppendedId(uri, id);
     }
 
     /**
@@ -172,8 +191,8 @@ public class AffirmationProvider extends ContentProvider {
      */
     private Uri insertAffirmation(Uri uri, ContentValues values) {
         // Check that the body is not null
-        String name = values.getAsString(AffirmationEntry.COLUMN_AFFIRMATION_BODY);
-        if (name == null) {
+        String body = values.getAsString(AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+        if (body == null) {
             throw new IllegalArgumentException("Affirmation requires body text.");
         }
 
@@ -209,6 +228,12 @@ public class AffirmationProvider extends ContentProvider {
                 selection = AffirmationEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 return updateAffirmation(uri, contentValues, selection, selectionArgs);
+            case PLAYLISTS:
+                return updatePlaylist(uri, contentValues, selection, selectionArgs);
+            case PLAYLIST_ID:
+                selection = PlaylistEntry._ID + "=?";
+                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                return updatePlaylist(uri, contentValues, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
         }
@@ -216,7 +241,7 @@ public class AffirmationProvider extends ContentProvider {
 
     /**
      * Update pets in the database with the given content values. Apply the changes to the rows
-     * specified in the selection and selection arguments (which could be 0 or 1 or more pets).
+     * specified in the selection and selection arguments (which could be 0 or 1 or more affirmations).
      * Return the number of rows that were successfully updated.
      */
     private int updateAffirmation(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
@@ -290,6 +315,52 @@ public class AffirmationProvider extends ContentProvider {
         return rowsUpdated;
     }
 
+    /**
+     * Update pets in the database with the given content values. Apply the changes to the rows
+     * specified in the selection and selection arguments (which could be 0 or 1 or more playlist entries).
+     * Return the number of rows that were successfully updated.
+     */
+    private int updatePlaylist(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+
+        if (values.containsKey(PlaylistEntry.COLUMN_PLAYLIST_AFFIRMATION_ID)){
+            Integer val = values.getAsInteger(PlaylistEntry.COLUMN_PLAYLIST_AFFIRMATION_ID);
+            if (val == null){
+                throw new IllegalArgumentException("Affirmation ID cannot be null.");
+            }
+            if (val < 0){
+                throw new IllegalArgumentException("Affirmation ID cannot be negative.");
+            }
+        }
+
+        if (values.containsKey(PlaylistEntry.COLUMN_PLAYLIST_NAME)) {
+            String body = values.getAsString(PlaylistEntry.COLUMN_PLAYLIST_NAME);
+            if (body == null) {
+                throw new IllegalArgumentException("Playlist entry requires playlist name text");
+            }
+        }
+
+        // If there are no values to update, then don't try to update the database
+        if (values.size() == 0) {
+            return 0;
+        }
+
+        // Otherwise, get writeable database to update the data
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        // Perform the update on the database and get the number of rows affected
+        int rowsUpdated = database.update(PlaylistEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        // If 1 or more rows were updated, then notify all listeners that the data at the
+        // given URI has changed
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        // Return the number of rows updated
+        return rowsUpdated;
+    }
+
+
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         // Get writeable database
@@ -309,6 +380,14 @@ public class AffirmationProvider extends ContentProvider {
                 selection = AffirmationEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 rowsDeleted = database.delete(AffirmationEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case PLAYLISTS:
+                rowsDeleted = database.delete(PlaylistEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case PLAYLIST_ID:
+                selection = PlaylistEntry._ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                rowsDeleted = database.delete(PlaylistEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
@@ -332,6 +411,10 @@ public class AffirmationProvider extends ContentProvider {
                 return AffirmationEntry.CONTENT_LIST_TYPE;
             case AFFIRMATION_ID:
                 return AffirmationEntry.CONTENT_ITEM_TYPE;
+            case PLAYLISTS:
+                return PlaylistEntry.CONTENT_LIST_TYPE;
+            case PLAYLIST_ID:
+                return PlaylistEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
         }
