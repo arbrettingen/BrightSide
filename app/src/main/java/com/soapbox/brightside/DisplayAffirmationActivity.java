@@ -159,6 +159,8 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
                             }
                         }
 
+                        //todo remove from playlist table
+
                         Toast.makeText(getApplicationContext(), "Affirmation removed from favorites.", Toast.LENGTH_LONG).show();
                     } else {
                         mFavImage.setImageResource(R.drawable.favorite);
@@ -170,6 +172,8 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
                                         .add(mCurrListAdapter.getItem(mAffirmationListPosition));
                             }
                         }
+
+                        //todo add to playlist table
 
                         Toast.makeText(getApplicationContext(), "Affirmation added to favorites.", Toast.LENGTH_LONG).show();
                     }
@@ -186,6 +190,8 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
                             }
                         }
 
+                        //todo remove from playlist table
+
                         Toast.makeText(getApplicationContext(), "Affirmation removed from favorites.", Toast.LENGTH_LONG).show();
                     } else {
                         mFavImage.setImageResource(R.drawable.favorite);
@@ -197,6 +203,8 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
                                         .add(MainMenuActivity.masterAffirmationList.get(mAffirmationListPosition));
                             }
                         }
+
+                        //todo add to playlist table
 
                         Toast.makeText(getApplicationContext(), "Affirmation added to favorites.", Toast.LENGTH_LONG).show();
                     }

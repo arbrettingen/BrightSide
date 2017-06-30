@@ -471,6 +471,9 @@ public class BrowseActivity extends AppCompatActivity implements
                 if (!CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getAffirmationList().contains(a)){ //if affirmation is not yet in playlist
                     CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getAffirmationList().add(a);
                 }
+
+                //todo make playlist entries for table here
+
                 Toast.makeText(getApplicationContext(), "All selected affirmations added to playlist.", Toast.LENGTH_LONG).show();
 
                 i = new Intent(getApplicationContext(), BrowseActivity.class);

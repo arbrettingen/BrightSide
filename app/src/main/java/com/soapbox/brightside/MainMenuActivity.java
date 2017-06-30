@@ -24,6 +24,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.soapbox.brightside.data.AffirmationContract.AffirmationEntry;
+import com.soapbox.brightside.data.PlaylistContract.PlaylistEntry;
 
 import java.util.ArrayList;
 
@@ -333,6 +334,17 @@ public class MainMenuActivity extends AppCompatActivity  implements
             data.moveToNext();
         }
 
+        //add favorites to favorites
+
+        CustomPlaylistActivity.masterAffirmationPlaylistList.get(0).getAffirmationList().clear();
+
+        for (Affirmation a : MainMenuActivity.masterAffirmationList) {
+            if (a.isFavorited()) {
+                CustomPlaylistActivity.masterAffirmationPlaylistList.get(0).getAffirmationList().add(a);
+            }
+        }
+
+
     }
 
     @Override
@@ -397,6 +409,15 @@ public class MainMenuActivity extends AppCompatActivity  implements
         values.put(AffirmationEntry.COLUMN_AFFIRMATION_MOTIVATION_FLAG, 0);
         values.put(AffirmationEntry.COLUMN_AFFIRMATION_CONFIDENCE_FLAG, 0);
         newUri = getContentResolver().insert(AffirmationEntry.CONTENT_URI, values);
+
+        //playlist table initial favorites playlist entry
+        values.clear();
+        values.put(PlaylistEntry.COLUMN_PLAYLIST_NAME, "Favorites");
+        values.put(PlaylistEntry.COLUMN_PLAYLIST_AFFIRMATION_ID, 0);
+        newUri = getContentResolver().insert(PlaylistEntry.CONTENT_URI, values);
+
+        CustomPlaylistActivity.masterAffirmationPlaylistList = new ArrayList<>();
+        CustomPlaylistActivity.masterAffirmationPlaylistList.add(new AffirmationPlaylist("Favorites"));
 
 
 
