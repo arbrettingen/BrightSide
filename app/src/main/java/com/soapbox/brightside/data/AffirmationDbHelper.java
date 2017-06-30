@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.soapbox.brightside.data.AffirmationContract.AffirmationEntry;
+import com.soapbox.brightside.data.PlaylistContract.PlaylistEntry;
 
 
 
@@ -11,8 +12,6 @@ import com.soapbox.brightside.data.AffirmationContract.AffirmationEntry;
  * Database helper for brightside app. Manages database creation and version management.
  */
 public class AffirmationDbHelper extends SQLiteOpenHelper {
-
-    public static final String LOG_TAG = AffirmationDbHelper.class.getSimpleName();
 
     /** Name of the database file */
     private static final String DATABASE_NAME = "brightside.db";
@@ -50,6 +49,13 @@ public class AffirmationDbHelper extends SQLiteOpenHelper {
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_AFFIRMATIONS_TABLE);
+
+        String SQL_CREATE_PLAYLISTS_TABLE = "CREATE TABLE " + PlaylistEntry.TABLE_NAME + " ("
+                + PlaylistEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + PlaylistEntry.COLUMN_PLAYLIST_NAME + " TEXT NOT NULL, "
+                + PlaylistEntry.COLUMN_PLAYLIST_AFFIRMATION_ID + " INTEGER NOT NULL);";
+
+        db.execSQL(SQL_CREATE_PLAYLISTS_TABLE);
     }
 
     /**
