@@ -253,7 +253,7 @@ public class NewAffirmationActivity extends AppCompatActivity {
 
     private void insertAffirmationToDb(Affirmation a) {
         // Create a ContentValues object where column names are the keys,
-        // and Toto's affirmation attributes are the values.
+        // and affirmation attributes are the values.
         ContentValues values = new ContentValues();
         values.put(AffirmationEntry.COLUMN_AFFIRMATION_BODY, a.getAffirmationBody());
         values.put(AffirmationEntry.COLUMN_AFFIRMATION_CREDIT, a.getCredit());
@@ -267,6 +267,8 @@ public class NewAffirmationActivity extends AppCompatActivity {
         // into the affirmations database table.
         // Receive the new content URI that will allow us to access row's data in the future.
         Uri newUri = getContentResolver().insert(AffirmationEntry.CONTENT_URI, values);
+
+        
 
     }
 

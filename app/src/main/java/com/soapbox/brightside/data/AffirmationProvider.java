@@ -16,8 +16,6 @@ import com.soapbox.brightside.data.PlaylistContract.PlaylistEntry;
  * Brightside SQL
  */
 
-//todo account for playlist table as well
-
 public class AffirmationProvider extends ContentProvider {
 
     /** Tag for the log messages */

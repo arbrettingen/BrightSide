@@ -1,6 +1,7 @@
 package com.soapbox.brightside;
 
 import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
@@ -31,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.soapbox.brightside.data.AffirmationContract;
+import com.soapbox.brightside.data.PlaylistContract.PlaylistEntry;
 
 import java.util.ArrayList;
 
@@ -470,9 +473,13 @@ public class BrowseActivity extends AppCompatActivity implements
             for (Affirmation a : mSelectedAffirmations){
                 if (!CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getAffirmationList().contains(a)){ //if affirmation is not yet in playlist
                     CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getAffirmationList().add(a);
+
+                    //todo make playlist entries for playlist table here
+
+                    insertPlaylistEntryToDb(CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos), a);
                 }
 
-                //todo make playlist entries for table here
+
 
                 Toast.makeText(getApplicationContext(), "All selected affirmations added to playlist.", Toast.LENGTH_LONG).show();
 
@@ -482,6 +489,21 @@ public class BrowseActivity extends AppCompatActivity implements
 
             }
         }
+
+    }
+
+    private void insertPlaylistEntryToDb(AffirmationPlaylist playlist, Affirmation affirmation){
+        // Create a ContentValues object where column names are the keys,
+        // and playlist attributes are the values.
+
+        ContentValues values = new ContentValues();
+        values.put(PlaylistEntry.COLUMN_PLAYLIST_NAME, playlist.getPlaylistName());
+        values.put(PlaylistEntry.COLUMN_PLAYLIST_AFFIRMATION_ID, affirmation.getM_ID());
+
+        // Use the {@link PlaylistEntry#CONTENT_URI} to indicate that we want to insert
+        // into the playlists database table.
+        // Receive the new content URI that will allow us to access row's data in the future.
+        Uri newUri = getContentResolver().insert(PlaylistEntry.CONTENT_URI, values);
 
     }
 
