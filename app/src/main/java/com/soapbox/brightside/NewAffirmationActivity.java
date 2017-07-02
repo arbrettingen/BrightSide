@@ -129,6 +129,7 @@ public class NewAffirmationActivity extends AppCompatActivity {
                                     insertAffirmationToDb(newEntry);
                                 } else {
                                     MainMenuActivity.masterAffirmationList.get(mAffirmationPosition).setAffirmationBody(mAffirmationEdit.getText().toString());
+                                    //todo update affirmation sql entry
                                 }
 
                                 dialog.dismiss();
@@ -268,7 +269,7 @@ public class NewAffirmationActivity extends AppCompatActivity {
         // Receive the new content URI that will allow us to access row's data in the future.
         Uri newUri = getContentResolver().insert(AffirmationEntry.CONTENT_URI, values);
 
-        
+
 
     }
 

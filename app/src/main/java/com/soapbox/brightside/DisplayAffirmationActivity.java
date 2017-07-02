@@ -1,7 +1,9 @@
 package com.soapbox.brightside;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
@@ -16,6 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.soapbox.brightside.data.PlaylistContract.PlaylistEntry;
 
 /**
  * Created by Alex on 2/28/2017.
@@ -159,7 +163,7 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
                             }
                         }
 
-                        //todo remove from playlist table
+                        removeFromFavoritesPlaylist(mCurrListAdapter.getItem(mAffirmationListPosition));
 
                         Toast.makeText(getApplicationContext(), "Affirmation removed from favorites.", Toast.LENGTH_LONG).show();
                     } else {
@@ -173,7 +177,7 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
                             }
                         }
 
-                        //todo add to playlist table
+                        addToFavoritesPlaylistDb(mCurrListAdapter.getItem(mAffirmationListPosition));
 
                         Toast.makeText(getApplicationContext(), "Affirmation added to favorites.", Toast.LENGTH_LONG).show();
                     }
@@ -190,7 +194,7 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
                             }
                         }
 
-                        //todo remove from playlist table
+                        removeFromFavoritesPlaylist(mCurrListAdapter.getItem(mAffirmationListPosition));
 
                         Toast.makeText(getApplicationContext(), "Affirmation removed from favorites.", Toast.LENGTH_LONG).show();
                     } else {
@@ -204,7 +208,7 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
                             }
                         }
 
-                        //todo add to playlist table
+                        addToFavoritesPlaylistDb(mCurrListAdapter.getItem(mAffirmationListPosition));
 
                         Toast.makeText(getApplicationContext(), "Affirmation added to favorites.", Toast.LENGTH_LONG).show();
                     }
@@ -361,5 +365,22 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
         return (int)(Math.random() * range) + min;
     }
 
+    private void addToFavoritesPlaylistDb(Affirmation a){
+        // Create a ContentValues object where column names are the keys,
+        // and playlist attributes are the values.
+
+        ContentValues values = new ContentValues();
+        values.put(PlaylistEntry.COLUMN_PLAYLIST_NAME, "Favorites");
+        values.put(PlaylistEntry.COLUMN_PLAYLIST_AFFIRMATION_ID, a.getM_ID());
+
+        // Use the {@link PlaylistEntry#CONTENT_URI} to indicate that we want to insert
+        // into the playlists database table.
+        // Receive the new content URI that will allow us to access row's data in the future.
+        Uri newUri = getContentResolver().insert(PlaylistEntry.CONTENT_URI, values);
+    }
+
+    private void removeFromFavoritesPlaylist(Affirmation a){
+        //todo implement
+    }
 
 }

@@ -406,8 +406,10 @@ public class BrowseActivity extends AppCompatActivity implements
                         if (i.hasExtra("Browse Playlist")){
                             int pos = i.getIntExtra("Browse Playlist", -1);
                             CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getAffirmationList().remove(position);
+                            //todo delete playlist entry
                         }else {
                             MainMenuActivity.masterAffirmationList.remove(position);
+                            //todo delete affirmation
                         }
                         updateAffirmationList();
                         dialog.dismiss();
@@ -473,13 +475,8 @@ public class BrowseActivity extends AppCompatActivity implements
             for (Affirmation a : mSelectedAffirmations){
                 if (!CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getAffirmationList().contains(a)){ //if affirmation is not yet in playlist
                     CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getAffirmationList().add(a);
-
-                    //todo make playlist entries for playlist table here
-
                     insertPlaylistEntryToDb(CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos), a);
                 }
-
-
 
                 Toast.makeText(getApplicationContext(), "All selected affirmations added to playlist.", Toast.LENGTH_LONG).show();
 
@@ -560,6 +557,7 @@ public class BrowseActivity extends AppCompatActivity implements
 
             data.moveToNext();
         }
+        updateAffirmationList();
     }
 
     @Override
