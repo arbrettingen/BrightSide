@@ -36,6 +36,7 @@ import com.soapbox.brightside.data.AffirmationContract;
 import com.soapbox.brightside.data.PlaylistContract.PlaylistEntry;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Alex on 4/11/2017.
@@ -413,10 +414,23 @@ public class BrowseActivity extends AppCompatActivity implements
                         if (i.hasExtra("Browse Playlist")){
                             int pos = i.getIntExtra("Browse Playlist", -1);
                             CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getAffirmationList().remove(position);
-                            //todo delete playlist entry
+                            //delete playlist entry from database as well
+                            deletePlaylistEntryFromDb(CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos),
+                                    CustomPlaylistActivity.masterAffirmationPlaylistList.get(pos).getAffirmationList().get(position));
                         }else {
                             MainMenuActivity.masterAffirmationList.remove(position);
-                            //todo delete affirmation
+                            //delete affirmation from all playlists as well
+                            for (AffirmationPlaylist ap : CustomPlaylistActivity.masterAffirmationPlaylistList){
+                                List<Affirmation> found = new ArrayList<>();
+                                for (Affirmation a : ap.getAffirmationList()){
+                                    if (a.getAffirmationBody().equals(MainMenuActivity.masterAffirmationList.get(position).getAffirmationBody())){
+                                        found.add(a);
+                                    }
+                                }
+                                ap.getAffirmationList().removeAll(found);
+                            }
+                            //delete affirmation from affirmation table and all playlist entries in database
+                            deleteAffirmationFromDb(MainMenuActivity.masterAffirmationList.get(position));
                         }
                         updateAffirmationList();
                         dialog.dismiss();
@@ -509,6 +523,14 @@ public class BrowseActivity extends AppCompatActivity implements
         // Receive the new content URI that will allow us to access row's data in the future.
         Uri newUri = getContentResolver().insert(PlaylistEntry.CONTENT_URI, values);
 
+    }
+
+    private void deletePlaylistEntryFromDb(AffirmationPlaylist playlist, Affirmation a){
+        //todo implement
+    }
+
+    private void deleteAffirmationFromDb(Affirmation a){
+        //todo implement make sure to delete from all playlists as well
     }
 
     @Override
