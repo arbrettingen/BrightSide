@@ -1,11 +1,16 @@
 package com.soapbox.brightside;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,14 +23,22 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.CursorAdapter;
+import com.soapbox.brightside.data.AffirmationContract.AffirmationEntry;
 
+import com.soapbox.brightside.data.AffirmationContract;
+import com.soapbox.brightside.data.AffirmationDbHelper;
 import com.soapbox.brightside.data.PlaylistContract.PlaylistEntry;
 
 /**
  * Created by Alex on 2/28/2017.
  */
 
-public class DisplayAffirmationActivity extends AppCompatActivity {
+public class DisplayAffirmationActivity extends AppCompatActivity implements
+        android.app.LoaderManager.LoaderCallbacks<Cursor>{
 
     private String[] mNavChoices;
     private ListView mDrawerList;
@@ -42,6 +55,10 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
     private ImageView mFavImage;
     private ImageView mBottomRightImage;
     public static ArrayAdapter<Affirmation> mCurrListAdapter;
+
+    public static final int AFFIRMATION_LOADER = 0;
+    public static final int PLAYLIST_LOADER = 1;
+    public static final int PLAYLIST_FAVORITE_UPDATE = 2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -380,7 +397,36 @@ public class DisplayAffirmationActivity extends AppCompatActivity {
     }
 
     private void removeFromFavoritesPlaylist(Affirmation a){
-        //todo implement
+
+        Bundle playlist_update_bundle = new Bundle(getClassLoader());
+        playlist_update_bundle.putInt("Affirmation ID", a.getM_ID());
+
+        getLoaderManager().initLoader(PLAYLIST_FAVORITE_UPDATE, playlist_update_bundle, this);
+
     }
 
+    @Override
+    public android.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        if (id == PLAYLIST_FAVORITE_UPDATE){ //remove given affirmation from favorites playlist
+            AffirmationDbHelper mDbHelper = new AffirmationDbHelper(getApplicationContext());
+            SQLiteDatabase database = mDbHelper.getReadableDatabase();
+            int affirmation_ID = args.getInt("Affirmation ID");
+
+            String whereClause = PlaylistEntry.COLUMN_PLAYLIST_NAME + "=? and " + PlaylistEntry.COLUMN_PLAYLIST_AFFIRMATION_ID + "=?";
+            String[] whereArgs = { "Favorites" , String.valueOf(affirmation_ID)};
+
+            database.delete(PlaylistEntry.TABLE_NAME, whereClause, whereArgs);
+        }
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(android.content.Loader<Cursor> loader) {
+
+    }
 }

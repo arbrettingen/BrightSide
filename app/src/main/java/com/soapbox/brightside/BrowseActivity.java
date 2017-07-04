@@ -61,6 +61,9 @@ public class BrowseActivity extends AppCompatActivity implements
     private ArrayList<Affirmation> mSelectedAffirmations = new ArrayList<>();
     private ArrayList<Affirmation> mAddableAffirmations;
 
+    public static final int AFFIRMATION_LOADER = 0;
+    public static final int PLAYLIST_LOADER = 1;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -176,6 +179,10 @@ public class BrowseActivity extends AppCompatActivity implements
         mSearchBtn = (ImageView) findViewById(R.id.btn_action_search);
 
         mSearchBtn.setOnClickListener(new searchButtonClickListener());
+
+        //loader
+
+        getLoaderManager().initLoader(AFFIRMATION_LOADER, null, this);
 
     }
 
