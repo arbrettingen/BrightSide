@@ -537,12 +537,28 @@ public class BrowseActivity extends AppCompatActivity implements
     }
 
     private void deleteAffirmationFromDb(Affirmation a){
-        //todo implement make sure to delete from all playlists as well
+        Bundle delete_affirmation_bundle = new Bundle(getClassLoader());
+        delete_affirmation_bundle.putInt("Affirmation ID", a.getM_ID());
+
+        getLoaderManager().initLoader(DELETE_AFFIRMATION, delete_affirmation_bundle, this);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        // Define a projection that specifies the columns from the table we care about.
+        if (id == DELETE_AFFIRMATION){
+            AffirmationDbHelper mDbHelper = new AffirmationDbHelper(getApplicationContext());
+            SQLiteDatabase database = mDbHelper.getReadableDatabase();
+            int affirmation_ID = args.getInt("Affirmation ID");
+
+            String whereClause = AffirmationContract.AffirmationEntry._ID + "=?";
+            String[] whereArgs = {String.valueOf(affirmation_ID)};
+
+            database.delete(AffirmationContract.AffirmationEntry.TABLE_NAME, whereClause, whereArgs);
+
+            whereClause = PlaylistEntry.COLUMN_PLAYLIST_AFFIRMATION_ID + "=?";
+
+            database.delete(PlaylistEntry.TABLE_NAME, whereClause, whereArgs);
+        }
         if (id == DELETE_PLAYLIST_ENTRY){
 
             AffirmationDbHelper mDbHelper = new AffirmationDbHelper(getApplicationContext());
@@ -557,6 +573,7 @@ public class BrowseActivity extends AppCompatActivity implements
 
         }
         if (id == AFFIRMATION_LOADER) {
+            // Define a projection that specifies the columns from the table we care about.
             String[] projection = {
                     AffirmationContract.AffirmationEntry._ID,
                     AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY,
