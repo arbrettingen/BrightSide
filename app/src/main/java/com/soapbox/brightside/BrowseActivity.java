@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -33,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.soapbox.brightside.data.AffirmationContract;
+import com.soapbox.brightside.data.AffirmationDbHelper;
 import com.soapbox.brightside.data.PlaylistContract.PlaylistEntry;
 
 import java.util.ArrayList;
@@ -63,7 +65,8 @@ public class BrowseActivity extends AppCompatActivity implements
     private ArrayList<Affirmation> mAddableAffirmations;
 
     public static final int AFFIRMATION_LOADER = 0;
-    public static final int PLAYLIST_LOADER = 1;
+    public static final int DELETE_PLAYLIST_ENTRY = 1;
+    public static final int DELETE_AFFIRMATION = 2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -526,7 +529,11 @@ public class BrowseActivity extends AppCompatActivity implements
     }
 
     private void deletePlaylistEntryFromDb(AffirmationPlaylist playlist, Affirmation a){
-        //todo implement
+        Bundle delete_playlist_entry_bundle = new Bundle(getClassLoader());
+        delete_playlist_entry_bundle.putString("Playlist Name", playlist.getPlaylistName());
+        delete_playlist_entry_bundle.putInt("Affirmation ID", a.getM_ID());
+
+        getLoaderManager().initLoader(DELETE_PLAYLIST_ENTRY, delete_playlist_entry_bundle, this);
     }
 
     private void deleteAffirmationFromDb(Affirmation a){
@@ -536,57 +543,75 @@ public class BrowseActivity extends AppCompatActivity implements
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         // Define a projection that specifies the columns from the table we care about.
-        String[] projection = {
-                AffirmationContract.AffirmationEntry._ID,
-                AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY,
-                AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_FAVORITED,
-                AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_IMAGE,
-                AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_CREDIT,
-                AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_SATISFACTION_FLAG,
-                AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_MOTIVATION_FLAG,
-                AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_CONFIDENCE_FLAG};
+        if (id == DELETE_PLAYLIST_ENTRY){
 
-        // This loader will execute the ContentProvider's query method on a background thread
-        return new CursorLoader(this,   // Parent activity context
-                AffirmationContract.AffirmationEntry.CONTENT_URI,   // Provider content URI to query
-                projection,             // Columns to include in the resulting Cursor
-                null,                   // No selection clause
-                null,                   // No selection arguments
-                null);                  // Default sort order
+            AffirmationDbHelper mDbHelper = new AffirmationDbHelper(getApplicationContext());
+            SQLiteDatabase database = mDbHelper.getReadableDatabase();
+            int affirmation_ID = args.getInt("Affirmation ID");
+            String playlistName = args.getString("Playlist Name");
+
+            String whereClause = PlaylistEntry.COLUMN_PLAYLIST_NAME + "=? and " + PlaylistEntry.COLUMN_PLAYLIST_AFFIRMATION_ID + "=?";
+            String[] whereArgs = {playlistName, String.valueOf(affirmation_ID)};
+
+            database.delete(PlaylistEntry.TABLE_NAME, whereClause, whereArgs);
+
+        }
+        if (id == AFFIRMATION_LOADER) {
+            String[] projection = {
+                    AffirmationContract.AffirmationEntry._ID,
+                    AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY,
+                    AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_FAVORITED,
+                    AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_IMAGE,
+                    AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_CREDIT,
+                    AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_SATISFACTION_FLAG,
+                    AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_MOTIVATION_FLAG,
+                    AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_CONFIDENCE_FLAG};
+
+            // This loader will execute the ContentProvider's query method on a background thread
+            return new CursorLoader(this,   // Parent activity context
+                    AffirmationContract.AffirmationEntry.CONTENT_URI,   // Provider content URI to query
+                    projection,             // Columns to include in the resulting Cursor
+                    null,                   // No selection clause
+                    null,                   // No selection arguments
+                    null);                  // Default sort order
+        }
+        return null;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        MainMenuActivity.masterAffirmationList.clear();
-        if (data == null){
-            return;
+        if (loader.getId() == AFFIRMATION_LOADER) {
+            MainMenuActivity.masterAffirmationList.clear();
+            if (data == null) {
+                return;
+            }
+            if (data.getCount() == 0) {
+                return;
+            }
+
+            data.moveToFirst();
+            while (!data.isAfterLast()) {
+
+                int affirmationBodyIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+                int affirmationCreditIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+                int affirmationFavoriteIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+                int affirmationImageIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+                int affirmationSatisfactionIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+                int affirmationMotivationIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+                int affirmationConfidenceIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
+                int affirmationID = data.getColumnIndex(AffirmationContract.AffirmationEntry._ID);
+
+                boolean dFavorited = data.getInt(affirmationFavoriteIndex) == 1;
+                boolean dSatisfaction = data.getInt(affirmationSatisfactionIndex) == 1;
+                boolean dMotivation = data.getInt(affirmationMotivationIndex) == 1;
+                boolean dConfidence = data.getInt(affirmationConfidenceIndex) == 1;
+
+                MainMenuActivity.masterAffirmationList.add(new Affirmation(data.getString(affirmationBodyIndex), data.getString(affirmationImageIndex), data.getString(affirmationCreditIndex), dFavorited, dSatisfaction, dConfidence, dMotivation, data.getInt(affirmationID)));
+
+                data.moveToNext();
+            }
+            updateAffirmationList();
         }
-        if (data.getCount() == 0){
-            return;
-        }
-
-        data.moveToFirst();
-        while (!data.isAfterLast()){
-
-            int  affirmationBodyIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
-            int  affirmationCreditIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
-            int  affirmationFavoriteIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
-            int  affirmationImageIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
-            int  affirmationSatisfactionIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
-            int  affirmationMotivationIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
-            int  affirmationConfidenceIndex = data.getColumnIndex(AffirmationContract.AffirmationEntry.COLUMN_AFFIRMATION_BODY);
-            int  affirmationID = data.getColumnIndex(AffirmationContract.AffirmationEntry._ID);
-
-            boolean dFavorited = data.getInt(affirmationFavoriteIndex) == 1;
-            boolean dSatisfaction = data.getInt(affirmationSatisfactionIndex) == 1;
-            boolean dMotivation = data.getInt(affirmationMotivationIndex) == 1;
-            boolean dConfidence = data.getInt(affirmationConfidenceIndex) == 1;
-
-            MainMenuActivity.masterAffirmationList.add(new Affirmation(data.getString(affirmationBodyIndex), data.getString(affirmationImageIndex), data.getString(affirmationCreditIndex), dFavorited, dSatisfaction, dConfidence, dMotivation, data.getInt(affirmationID)));
-
-            data.moveToNext();
-        }
-        updateAffirmationList();
     }
 
     @Override

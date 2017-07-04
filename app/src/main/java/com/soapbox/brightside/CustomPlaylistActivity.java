@@ -44,6 +44,8 @@ public class CustomPlaylistActivity extends AppCompatActivity {
     private ListView mPlaylistListView;
     private Button mNewPlaylistButton;
 
+    //todo playlist loader
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
